@@ -6,6 +6,7 @@ var TimePolySchema = new Schema({
   ll: { type: [Number], index: '2d' },
   start: Date,
   end: Date,
+  name: String,
   address: String,
   points: Array,
   src: String

@@ -93,6 +93,9 @@ var init = exports.init = function (config) {
       // use [ lng , lat ] format to be consistent with GeoJSON
       "ll": [ req.body['lng'] * 1.0, req.body['lat'] * 1.0 ]
     };
+    if(req.body.name){
+      savedata["name"] = req.body.name;
+    }
     if(req.body.address){
       savedata["address"] = req.body.address;
     }
@@ -137,7 +140,7 @@ var init = exports.init = function (config) {
         coordstring = coordstring.join(" ");
         
         kmlpts += '	<Placemark>\n';
-        kmlpts += '		<name>' + ( timepolys[t].address || timepolys[t]._id ) + '</name>';
+        kmlpts += '		<name>' + ( timepolys[t].name || timepolys[t].address || timepolys[t]._id ) + '</name>';
         kmlpts += '		<styleUrl>#poly</styleUrl>\n';
         
         // time-enabled KML?
@@ -169,6 +172,9 @@ var init = exports.init = function (config) {
       // GeoJSON output
       for(var t=0; t<timepolys.length; t++){
         var proplist = { };
+        if(timepolys[t].name){
+          proplist["name"] = timepolys[t].name;
+        }
         if(timepolys[t].address){
           proplist["address"] = timepolys[t].address;
         }
