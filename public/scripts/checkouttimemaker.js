@@ -1,5 +1,50 @@
 var map, footprint;
 
+var city_options = {
+  allegheny: {
+    lat: 40,
+    lng: -70,
+    zoom: 14,
+    time: false
+  },
+  chicago: {
+    lat: 41.888476,
+    lng: -87.624034,
+    zoom: 14,
+    time: true
+  },
+  lancaster: {
+    lat: 40,
+    lng: -70,
+    zoom: 14,
+    time: false
+  },
+  oakland: {
+    lat: 34,
+    lng: -100,
+    zoom: 14,
+    time: false
+  },
+  philadelphia: {
+    lat: 39.938435,
+    lng: -75.136528,
+    zoom: 14,
+    time: false
+  },
+  savannah: {
+    lat: 32.076175,
+    lng: -81.095238,
+    zoom: 14,
+    time: false
+  },
+  seattle: {
+    lat: 34,
+    lng: -100,
+    zoom: 14,
+    time: false
+  }
+};
+
 $(document).ready(function(){
   // make a Leaflet map
   map = new L.Map('map', { zoomControl: false, panControl: false });
@@ -10,19 +55,30 @@ $(document).ready(function(){
   var tonerAttrib = 'Map data &copy; 2012 OpenStreetMap contributors, Tiles &copy; 2012 Stamen Design';
   terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
   map.addLayer(terrainLayer);
-  map.setView(new L.LatLng(39.938435,-75.136528), 14);
-  
+
+  // set defaults for city
+  var lat = 39.938435;
+  var lng = -75.136528;
+  var zoom = 14;
+
+  if( getURLParameter("src") && city_options[ getURLParameter("src") ] ){
+    lat = city_options[ getURLParameter("src") ].lat;
+    lng = city_options[ getURLParameter("src") ].lng;
+    zoom = city_options[ getURLParameter("src") ].zoom;
+    // add timeline option if available ( currently just Chicago )
+    if( city_options[ getURLParameter("src") ].time ){
+      $(".timeline").css({ "display": "inline" });
+    }
+  }
+
+  // center on this city
+  map.setView(new L.LatLng(lat,lng), zoom);  
+
   // add a sample neighborhood area and make it editable
-  var wll = [ new L.LatLng(39.935539, -75.156698), new L.LatLng(39.934618,-75.144081), new L.LatLng(39.941923,-75.150776) ];
+  var wll = [ new L.LatLng(lat - 0.002896, lng - 0.07983), new L.LatLng(lat - 0.003817, lng - 0.092447), new L.LatLng(lat + 0.003508, lng - 0.026852) ];
   footprint = new L.Polygon( wll, { color: "#00f", fillOpacity: 0.3, opacity: 0.65 } );
   footprint.editing.enable();
   map.addLayer(footprint);
-  
-  // add timeline option if available ( currently, just Chicago )
-  var timecities = [ "chicago" ];
-  if(getURLParameter("src") && timecities.indexOf( getURLParameter("src") ) > -1){
-    $(".timeline").css({ "display": "inline" });
-  }
 });
 
 function llserial(latlngs){
