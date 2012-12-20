@@ -62,10 +62,17 @@ var init = exports.init = function (config) {
       res.send({ id: shape._id });
     });
   });
-  app.get('/timeline', function(req, res){
-    // show map
+
+  app.get('/build', function(req, res){
+    // show map and editor
     res.render('custombuild', { customgeo: req.query['customgeo'] });
   });
+  
+  app.get('/timeline', function(req, res){
+    // show timeline
+    res.render('checkouttime', { customgeo: req.query['customgeo'] });
+  });
+
   app.get('/explore3d', function(req, res){
     // show map in 3D
     res.render('explore3d', { customgeo: req.query['customgeo'], lng: req.query['lng'], lat: req.query['lat'] });

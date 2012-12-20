@@ -1,13 +1,13 @@
 head
   meta(name="viewport", content="initial-scale=1.0, user-scalable=no")
-  title Philly Data Check-Out
+  title MajuroJS Custom Builder
   link(rel='stylesheet', href='/stylesheets/leaflet.css', type='text/css')
   link(rel='stylesheet', href='/pancontrol/stylesheets/L.Control.Pan.css', type='text/css')
   // [if lte IE 8]
     link(rel='stylesheet', href='/stylesheets/leaflet.ie.css', type='text/css')
     link(rel='stylesheet', href='/pancontrol/stylesheets/L.Control.Pan.ie.css', type='text/css')
   link(href='/stylesheets/bootstrap-mini.css', rel='stylesheet', type='text/css')
-  link(href='/stylesheets/checkouttime.css', rel='stylesheet', type='text/css')
+  link(href='/stylesheets/custombuild.css', rel='stylesheet', type='text/css')
   script(src='/scripts/leaflet.js', type='text/javascript')
   script(src='/scripts/jquery-1.6.2.min.js', type='text/javascript')
   script(type="text/javascript", src="/pancontrol/scripts/L.Control.Pan.js")
@@ -19,7 +19,7 @@ body
   div.container-fluid
     div.row-fluid
       div.span2(style="padding-top:28px;")
-        h3 Philly Builder
+        h3 Majuro.JS
         p
           span Make your own maps with public building data!
           ol
@@ -40,11 +40,17 @@ body
         br
         p
           span Data downloaded from&nbsp;
-          a(href="http://www.opendataphilly.org/opendata/resource/6/buildings/") OpenDataPhilly
+          a.allegheny(href="#") Allegheny County / PAGIS
+          a.chicago(href="#") City of Chicago
+          a.lancaster(href="#") Lancaster County / PAGIS
+          a.oakland(href="#") City of Oakland
+          a.philadelphia(href="http://www.opendataphilly.org/opendata/resource/6/buildings/") OpenDataPhilly
+          a.savannah(href="http://www.thempc.org/SAGIS.htm") SAGIS
+          a.seattle(href="#") City of Seattle
           br
           br
           span Source code on&nbsp;
-          a(href="https://github.com/mapmeld/savannah-builder") Github
+          a(href="https://github.com/mapmeld/majurojs") Github
         div.arrow-right
 
       div#map(ondragend="dragended(event)", ondrop="dropped(event)", ondragover="allowDrop(event)")
