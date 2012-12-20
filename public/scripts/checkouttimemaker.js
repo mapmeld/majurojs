@@ -15,7 +15,7 @@ var city_options = {
   },
   lancaster: {
     lat: 40.011839,
-    lng: -76.172333
+    lng: -76.172333,
     zoom: 14,
     time: false
   },
