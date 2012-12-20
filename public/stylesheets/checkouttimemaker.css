@@ -43,3 +43,6 @@ body {
 #timeline a.timeline{
   display: none;
 }
+#timeline span.timeline{
+  display: none;
+}
