@@ -2,8 +2,8 @@ var map, footprint;
 
 var city_options = {
   allegheny: {
-    lat: 40,
-    lng: -70,
+    lat: 40.440676,
+    lng: -79.984589,
     zoom: 14,
     time: false
   },
@@ -14,14 +14,14 @@ var city_options = {
     time: true
   },
   lancaster: {
-    lat: 40,
-    lng: -70,
+    lat: 40.011839,
+    lng: -76.172333
     zoom: 14,
     time: false
   },
   oakland: {
-    lat: 34,
-    lng: -100,
+    lat: 37.795135,
+    lng: -122.255173,
     zoom: 14,
     time: false
   },
@@ -38,8 +38,8 @@ var city_options = {
     time: false
   },
   seattle: {
-    lat: 34,
-    lng: -100,
+    lat: 47.605237,
+    lng: -122.325897
     zoom: 14,
     time: false
   }
