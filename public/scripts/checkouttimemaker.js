@@ -75,7 +75,7 @@ $(document).ready(function(){
   map.setView(new L.LatLng(lat,lng), zoom);  
 
   // add a sample neighborhood area and make it editable
-  var wll = [ new L.LatLng(lat - 0.002896, lng - 0.07983), new L.LatLng(lat - 0.003817, lng - 0.092447), new L.LatLng(lat + 0.003508, lng - 0.026852) ];
+  var wll = [ new L.LatLng(lat - 0.002896, lng - 0.02983), new L.LatLng(lat - 0.003817, lng + 0.022447), new L.LatLng(lat + 0.003508, lng - 0.026852) ];
   footprint = new L.Polygon( wll, { color: "#00f", fillOpacity: 0.3, opacity: 0.65 } );
   footprint.editing.enable();
   map.addLayer(footprint);
