@@ -44,8 +44,12 @@ var init = exports.init = function (config) {
   });
   
   // Routes
-
   app.get('/', function(req, res){
+    // show homepage
+    res.render('homepage');
+  });
+
+  app.get('/draw', function(req, res){
     // show timeline editor (not yet designed)
     res.render('checkouttimemaker');
   });

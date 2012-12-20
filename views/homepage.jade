@@ -1,0 +1,145 @@
+head
+  meta(charset="utf-8")
+  title Majuro.js
+  link(href="stylesheets/style.css", rel="stylesheet", type="text/css")
+  // [if lt IE 9]
+    script(src="http://html5shim.googlecode.com/svn/trunk/html5.js", type="text/javascript")
+
+  link(href='http://fonts.googleapis.com/css?family=Alfa+Slab+One', rel='stylesheet', type='text/css')
+  link(href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300italic,300', rel='stylesheet', type='text/css')
+  link(href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic', rel='stylesheet', type='text/css')
+
+body(data-spy="scroll", data-target=".subnav", data-offset="100")
+  div#banner_bg"
+    h1 MAJURO.JS
+    h3
+      span Many websites have data.
+      br
+      span At MajuroJS.org,
+      em you
+      span have data.
+
+  div#information
+    div#main_nav_cont.subnav
+      div#nav_cont
+        ul.nav.nav-pills
+          li
+            a(href="#app") App
+          li
+            a(href="#cities") Cities
+          li
+            a(href="#faq") FAQ
+            
+  div#wrapper
+    div#main_container.info
+      div#app.main_cont
+        div
+          p Majuro.JS helps you make detailed, interactive maps with open buildings data.
+          p It's free and open source.
+        
+        h2 It couldn't be easier
+        div
+          ol
+            li
+              h3 Draw a neighborhood.
+              p Drag points on the blue shape to cover any part of the city.
+              img(src="images/draw_shot.png", width="700")
+              br
+
+            li
+              h3 Drop markers to color-code buildings.
+              p Click a building to add a photo or description.
+              img(src="images/editor_shot.png", width="700")
+              br
+              img(src="images/click_editor.png", width="400", style="margin-left:150px;")
+              br
+              p Your custom map is saved here on MajuroJS.org.
+
+            li
+              h3 Data for Download
+              p Download your map for Google Earth, share a KML or GeoJSON file, or set up your own site on Github Pages.
+              img(src="images/in_earth.png", width="400", style="margin-left:150px;")
+              br
+		div#finish_line_cont
+
+      div#cities.main_cont
+        h1 Cities
+        p Some sources include addresses, build dates, and height of buildings. You'll get that data, too.
+        ul
+          li
+            a(href="/make?src=allegheny") Allegheny County (Pittsburgh), PA
+          li
+            a(href="/make?src=chicago") Chicago, IL
+            span + (address, build date, height)
+          li
+            a(href="/make?src=lancaster") Lancaster County, PA
+          li
+            a(href="/make?src=oakland") Oakland (partial), CA
+            span + (name)
+          li
+            a(href="/make?src=philadelphia") Philadelphia, PA
+          li
+            a(href="/make?src=savannah") Savannah, GA
+          li
+            a(href="/make?src=seattle") Seattle, WA
+        p Buildings data was collected under open data licenses. There is no official endorsement or maintenance of this site by these cities and counties.
+        
+        div#finish_line_cont
+					
+      div#faq.main_cont
+        h1 FAQ
+        div
+          h4 How can I use the data?
+          p This site links to each city's open data policy.
+          p If you have questions or need the data for anything mission-critical, ask the city.
+          hr
+
+          h4 What if my city isn't included?
+          p Reach out to your city and county GIS departments. It's possible that they may not have buildings data, or that one may have better data than the other.</p>
+          p If you get permission to publish the data freely on this site, please have an official send a written data policy.</p>
+          hr
+
+          h4 How do I add my data?
+          p Send a shapefile, KML, or a link to your city's open data site.
+          hr
+
+          h4 Is this open source?
+          p The entire site is open source.
+          a(href="https://github.com/mapmeld/majurojs") Source code on Github
+          hr
+          
+          h4 Can I map a whole city with this?
+          p Maps on Majuro.js are vector-based, so several hundred or thousands of buildings can slow down web browsers.
+          p
+            span For large projects, try downloading the data as KML, then upload it to&nbsp;
+            a(href="http://cartodb.com") CartoDB
+            span &nbsp;and edit it through&nbsp;
+            a(href="https://github.com/codeforamerica/NeighborDiff") NeighborDiff
+            span .
+          hr
+
+          h4 How did this project get started?
+          p
+            span I am Nick Doiron, @mapmeld on&nbsp;
+            a(href="http://twitter.com/mapmeld") Twitter
+            span &nbsp;and&nbsp;
+            a(href="http://github.com/mapmeld") Github
+            span . Majuro.js is based on projects that I made for the City of Macon, GA during my Code for America fellowship, particularly:&nbsp;
+            a(href="https://github.com/codeforamerica/geodata-checkout") GeoData Checkout
+            span &nbsp;and&nbsp;
+            a(href="https://github.com/codeforamerica/NeighborDiff") NeighborDiff
+            span .
+        
+        div#finish_line_cont
+
+script(src="scripts/jquery-1.7.1.min.js", type="text/javascript")
+script(src="scripts/bootstrap-transition.js", type="text/javascript")
+script(src="scripts/bootstrap-modal.js", type="text/javascript")
+script(src="scripts/bootstrap-scrollspy.js", type="text/javascript")
+script(src="scripts/application.js", type="text/javascript")
+script(src="scripts/bootstrap-tooltip.js", type="text/javascript")
+script(src="scripts/bootstrap-popover.js", type="text/javascript")
+script(src="scripts/jquery.easing.1.2.js", type="text/javascript")
+script(src="scripts/jquery.scrollTo-1.4.2-min.js", type="text/javascript")
+script(src="scripts/jquery.localscroll-1.2.7-min.js", type="text/javascript")
+script(src="scripts/jquery.ba-hashchange.min.js", type="text/javascript")
