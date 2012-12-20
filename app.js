@@ -12,6 +12,8 @@ var express = require('express')
 
 var HOUR_IN_MILLISECONDS = 3600000;
 
+var included_sources = [ "allegheny", "chicago", "lancaster", "oakland", "philadelphia", "pittsburgh", "savannah", "seattle" ];
+
 var init = exports.init = function (config) {
   
   var db_uri = process.env.MONGOLAB_URI || process.env.MONGODB_URI || config.default_db_uri;
@@ -75,6 +77,8 @@ var init = exports.init = function (config) {
     }
     var savedata = {
       "points": coordinates,
+      // src is the name of the city, county, or other locality
+      "src": req.body.src,
       // use [ lng , lat ] format to be consistent with GeoJSON
       "ll": [ req.body['lng'] * 1.0, req.body['lat'] * 1.0 ]
     };
@@ -94,9 +98,22 @@ var init = exports.init = function (config) {
   });
   
   var processTimepolys = function(timepolys, req, res){
+    var src = "";
+    if(timepolys.length){
+      src = timepolys[0].src;
+    }
+    else{
+      if(req.query['src'] && included_sources.indexOf( req.query['src'] ) != -1){
+        src = req.query['src'];
+      }
+      else{
+        src = "Source unknown";
+      }
+    }
     if(req.url.indexOf('kml') > -1){
       // time-enabled KML output
-      var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://earth.google.com/kml/2.2">\n	<Document>\n		<name>Savannah KML</name>\n		<description>Savannah Buildings Export</description>\n		<Style id="dot-icon">\n			<IconStyle>\n					<scale>0.6</scale>\n        <Icon>\n          <href>http://homestatus.herokuapp.com/images/macon-marker-02.png</href>\n        </Icon>\n      </IconStyle>\n    </Style>\n    <Style>\n      <ListStyle>\n        <listItemType>checkHideChildren</listItemType>\n      </ListStyle>\n    </Style>\n';
+      var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://earth.google.com/kml/2.2">\n	<Document>\n		<name>Majuro Export</name>\n		<description>Buildings Export, Source: ' + src + '</description>\n';
+      kmlintro += '			<Style id="poly">\n				<LineStyle>\n					<color>aaff0000</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>88ff0000</color>\n				</PolyStyle>\n			</Style>\n';
       var kmlpts = '';
       for(var t=0; t<timepolys.length; t++){
         // create KML coordinate string
@@ -110,7 +127,7 @@ var init = exports.init = function (config) {
         
         kmlpts += '	<Placemark>\n';
         kmlpts += '		<name>' + ( timepolys[t].address || timepolys[t]._id ) + '</name>';
-        kmlpts += '		<styleUrl>#poly-url</styleUrl>\n';
+        kmlpts += '		<styleUrl>#poly</styleUrl>\n';
         
         // time-enabled KML?
         if(timepolys[t].start){
@@ -177,13 +194,25 @@ var init = exports.init = function (config) {
         }
         //res.send(poly);
         //return;
-        timepoly.TimePoly.find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
-          if(err){
-            res.send(err);
-            return;
-          }
-          processTimepolys(timepolys, req, res);
-        });
+        if(req.query['src']){
+          // speed up query with a specific city, county, or locality
+          timepoly.TimePoly.find({ src: req.query['src'], ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
+            if(err){
+              res.send(err);
+              return;
+            }
+            processTimepolys(timepolys, req, res);
+          });
+        }
+        else{
+          timepoly.TimePoly.find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
+            if(err){
+              res.send(err);
+              return;
+            }
+            processTimepolys(timepolys, req, res);
+          });
+        }
       });
     }
     else{
