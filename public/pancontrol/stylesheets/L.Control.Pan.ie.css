@@ -1,0 +1,37 @@
+
+.leaflet-control-pan > div {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#3F000000',EndColorStr='#3F000000');
+}
+.leaflet-control-pan a {
+	background-color: #eee;
+}
+.leaflet-control-pan a:hover {
+    background-color: #fff;
+}
+
+.leaflet-control-pan-up-wrap {
+	position:absolute;
+	left:29px;
+}
+.leaflet-control-pan-left-wrap {
+	position:absolute;
+	top:29px;
+}
+.leaflet-control-pan-right-wrap {
+	position:absolute;
+	left:58px;	
+	top:29px;
+}
+.leaflet-control-pan-down-wrap {
+	position:absolute;
+	left:29px;
+	top:58px;
+}
+
+.leaflet-control-zoom {
+	left:29px;
+}
+.leaflet-control-zoomslider {
+	position: relative;
+	left:29px;
+}

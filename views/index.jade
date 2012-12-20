@@ -1,0 +1,17 @@
+h1= app_name
+p Welcome to #{app_name}, a sample node.js / express / everyauth / mongodb app for use with Strider & Heroku (and Mongolab).
+hr
+h3 Add Comment:
+form(action='/add_comment', method='post')
+  div.clearfix
+    div.input
+      input(type='textarea', name='body')
+  div.actions
+    input.btn.primary(type='submit', value='submit')
+hr
+h3 Comments:
+each comment in comments    
+  p #{comment.date}  - #{comment.body}  
+hr
+p
+  a(href="/logout") Logout

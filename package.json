@@ -1,0 +1,31 @@
+{
+    "name": "poang"
+  , "version": "0.0.1"
+  , "private": false
+  , "dependencies": {
+      "express": "2.5.8"
+    , "jade": ">= 0.0.1"
+    , "mongoose-auth": "0.0.11"
+    , "mongoose": "2.5.1"
+    , "everyauth": "0.2.30"
+    , "bcrypt": ">=0.5.0"
+    , "connect-mongo": "0.1.9"
+    , "connect": ">= 1.8.5 < 2"
+    , "request": ">=0.10.0"
+    , "underscore"  : "1.1.x"
+    , "oauth": "0.9.5"
+    , "superagent": "0.4.x"
+  },
+  "engines": {
+        "node": "0.6.X",
+        "npm":  "1.0.x"
+  }, "devDependencies": {
+      "mocha": ">=0.11.0"
+    , "should": ">=0.5.1"
+    , "sinon": ">=1.3.1"
+    , "zombie": ">= 0.12.15"
+  }
+  , "scripts": {
+      "test": "mocha -R tap --ignore-leaks"
+  }
+}

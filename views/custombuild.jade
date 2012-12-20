@@ -1,0 +1,50 @@
+head
+  meta(name="viewport", content="initial-scale=1.0, user-scalable=no")
+  title Philly Data Check-Out
+  link(rel='stylesheet', href='/stylesheets/leaflet.css', type='text/css')
+  link(rel='stylesheet', href='/pancontrol/stylesheets/L.Control.Pan.css', type='text/css')
+  // [if lte IE 8]
+    link(rel='stylesheet', href='/stylesheets/leaflet.ie.css', type='text/css')
+    link(rel='stylesheet', href='/pancontrol/stylesheets/L.Control.Pan.ie.css', type='text/css')
+  link(href='/stylesheets/bootstrap-mini.css', rel='stylesheet', type='text/css')
+  link(href='/stylesheets/checkouttime.css', rel='stylesheet', type='text/css')
+  script(src='/scripts/leaflet.js', type='text/javascript')
+  script(src='/scripts/jquery-1.6.2.min.js', type='text/javascript')
+  script(type="text/javascript", src="/pancontrol/scripts/L.Control.Pan.js")
+  script(type="text/javascript", src="/scripts/BlobBuilder.min.js")  
+  script(type="text/javascript", src="/scripts/FileSaver.min.js")
+  script(type="text/javascript", src="/scripts/custombuild.js")
+
+body
+  div.container-fluid
+    div.row-fluid
+      div.span2(style="padding-top:28px;")
+        h3 Philly Builder
+        p
+          span Make your own maps with public building data!
+          ol
+            li Drag & drop to color buildings
+              br
+              img.marker#marker_Red(src="/images/redmarker.png", title="Red", alt="Red", draggable="true", ondragstart="dragstarted(event);")
+              img.marker#marker_Blue(src="/images/bluemarker.png", title="Blue", alt="Blue", draggable="true", ondragstart="dragstarted(event);")
+              img.marker#marker_Green(src="/images/greenmarker.png", title="Green", alt="Green", draggable="true", ondragstart="dragstarted(event);")
+              img.marker#marker_Orange(src="/images/orangemarker.png", title="Orange", alt="Orange", draggable="true", ondragstart="dragstarted(event);")
+            li Click to add a description or photo to buildings
+            li Export map:
+              ul
+                li
+                  a(href="#", onclick="downloadFile(0)") Google Earth / KML
+                li
+                  a(href="#", onclick="downloadFile(1)") GeoJSON
+        br
+        br
+        p
+          span Data downloaded from&nbsp;
+          a(href="http://www.opendataphilly.org/opendata/resource/6/buildings/") OpenDataPhilly
+          br
+          br
+          span Source code on&nbsp;
+          a(href="https://github.com/mapmeld/savannah-builder") Github
+        div.arrow-right
+
+      div#map(ondragend="dragended(event)", ondrop="dropped(event)", ondragover="allowDrop(event)")

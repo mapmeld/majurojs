@@ -1,0 +1,10 @@
+.popover{
+  position:absolute;
+  right:35px;
+  bottom:35px;
+  background-color:#fff;
+  border: 1px solid #000;
+  font-family: verdana, sanserif;
+  padding: 12px;
+  border-radius: 5px;
+}

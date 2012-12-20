@@ -1,0 +1,18 @@
+- if ('undefined' !== typeof errors && errors.length)
+  ul#errors
+    - each error in errors
+      li.error= error
+
+h2 Register
+br
+form(action='/register', method='POST')
+  div.clearfix
+    label(for=everyauth.password.loginFormFieldName) Email
+    div.input
+      input.xlarge(type='text', name=everyauth.password.loginFormFieldName)
+  div.clearfix
+    label(for=everyauth.password.passwordFormFieldName) Password
+    div.input
+      input.xlarge(type='password', name=everyauth.password.passwordFormFieldName)
+  div.actions
+    input.btn.primary(type='submit', value='Register', name='register', id='register')
