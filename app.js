@@ -176,7 +176,7 @@ var init = exports.init = function (config) {
           "properties": proplist
         };
       }
-      res.send({ "type": "FeatureCollection", "features": timepolys });
+      res.send({ "type": "FeatureCollection", "source": src, "features": timepolys });
     }
   };
   
@@ -213,17 +213,6 @@ var init = exports.init = function (config) {
             processTimepolys(timepolys, req, res);
           });
         }
-      });
-    }
-    else{
-      // do a query to return GeoJSON timeline near a point
-      timepoly.TimePoly.find({ ll: { "$nearSphere": [  req.query["lng"] || -83.645782, req.query['lat'] || 32.837026 ], "$maxDistance": 0.01 } }).limit(10000).exec(function(err, timepolys){
-        // convert all timepolys into GeoJSON format
-        if(err){
-          res.send(err);
-          return;
-        }
-        processTimepolys(timepolys, req, res);
       });
     }
   });
