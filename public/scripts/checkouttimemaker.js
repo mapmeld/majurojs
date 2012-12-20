@@ -17,6 +17,12 @@ $(document).ready(function(){
   footprint = new L.Polygon( wll, { color: "#00f", fillOpacity: 0.3, opacity: 0.65 } );
   footprint.editing.enable();
   map.addLayer(footprint);
+  
+  // add timeline option if available ( currently, just Chicago )
+  var timecities = [ "chicago" ];
+  if(getURLParameter("src") && timecities.indexOf( getURLParameter("src") ) > -1){
+    $(".timeline").css({ "display": "inline" });
+  }
 });
 
 function llserial(latlngs){
@@ -31,6 +37,9 @@ function postGeo(format){
   var poly = llserial(footprint.getLatLngs());
   $.post("/customgeo", { pts: poly }, function(data){
     if(format == "html"){
+      window.location = "/build?customgeo=" + data.id;
+    }
+    else if(format == "time"){
       window.location = "/timeline?customgeo=" + data.id;
     }
     else if(format == "3d"){
@@ -51,4 +60,8 @@ function postGeo(format){
       window.location = "/timeline-at.kml?customgeo=" + data.id;
     }
   });
+}
+
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }

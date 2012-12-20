@@ -40,3 +40,6 @@ body {
 #timeline a.visible{
   display: inline;
 }
+#timeline a.timeline{
+  display: none;
+}
