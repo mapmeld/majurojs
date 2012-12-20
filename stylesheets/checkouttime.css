@@ -1,0 +1,42 @@
+html, body, #map{
+  height: 100%;
+  width: 100%;
+  overflow: none;
+}
+body {
+  margin:0;
+  padding:0;
+  font-family: arial, sansserif;
+}
+#map {
+  position:absolute;
+  top:0;
+  bottom:0;
+}
+#sidebar {
+  position:absolute;
+  bottom:20px;
+  left:10px;
+  border-radius: 10px;
+  background:#fafafa;
+  padding: 15px;
+  z-index:999;
+  overflow:auto;
+}
+#timeline {
+  padding:10px;
+  width: 260px;
+}
+#controls{
+  margin-top: 18px;
+}
+#timeline a.ui-slider-handle{
+  display: block;
+}
+.icon-white{
+  margin-top: 4px !important;
+}
+.marker{
+  vertical-align:middle;
+  width: 26px;
+}
