@@ -39,7 +39,7 @@ var city_options = {
   },
   seattle: {
     lat: 47.605237,
-    lng: -122.325897
+    lng: -122.325897,
     zoom: 14,
     time: false
   }
