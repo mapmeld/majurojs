@@ -207,7 +207,7 @@ var init = exports.init = function (config) {
         //return;
         if(req.query['src']){
           // speed up query with a specific city, county, or locality
-          timepoly.TimePoly.find({ src: req.query['src'], ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
+          timepoly.TimePoly.find({ src: req.query['src'] }).find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
             if(err){
               res.send(err);
               return;
