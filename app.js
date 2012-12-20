@@ -1,5 +1,3 @@
-/*jshint laxcomma:true */
-
 /**
  * Module dependencies.
  */
@@ -52,7 +50,7 @@ var init = exports.init = function (config) {
   
   app.post('/customgeo', function(req, res){
     var shape = new customgeo.CustomGeo({
-      latlngs: req.body.pts.split("|")
+      "latlngs": req.body.pts.split("|")
     });
     shape.save(function (err){
       res.send({ id: shape._id });
@@ -75,11 +73,21 @@ var init = exports.init = function (config) {
       coordinates[c][0] *= 1.0;
       coordinates[c][1] *= 1.0;
     }
-    poly = new timepoly.TimePoly({
-      points: coordinates,
+    var savedata = {
+      "points": coordinates,
       // use [ lng , lat ] format to be consistent with GeoJSON
-      ll: [ req.body['lng'] * 1.0, req.body['lat'] * 1.0 ]
-    });
+      "ll": [ req.body['lng'] * 1.0, req.body['lat'] * 1.0 ]
+    };
+    if(req.body.address){
+      savedata["address"] = req.body.address;
+    }
+    if(req.body.start){
+      savedata["start"] = new Date(req.body.start * 1);
+    }
+    if(req.body.end){
+      savedata["end"] = new Date(req.body.end * 1);
+    }
+    poly = new timepoly.TimePoly( savedata );
     poly.save(function(err){
       res.send(err || 'success');
     });
@@ -91,6 +99,7 @@ var init = exports.init = function (config) {
       var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://earth.google.com/kml/2.2">\n	<Document>\n		<name>Savannah KML</name>\n		<description>Savannah Buildings Export</description>\n		<Style id="dot-icon">\n			<IconStyle>\n					<scale>0.6</scale>\n        <Icon>\n          <href>http://homestatus.herokuapp.com/images/macon-marker-02.png</href>\n        </Icon>\n      </IconStyle>\n    </Style>\n    <Style>\n      <ListStyle>\n        <listItemType>checkHideChildren</listItemType>\n      </ListStyle>\n    </Style>\n';
       var kmlpts = '';
       for(var t=0; t<timepolys.length; t++){
+        // create KML coordinate string
         var coordstring = [];
         for(var p=0;p<timepolys[t].points.length;p++){
           var lng = timepolys[t].points[p][0];
@@ -98,9 +107,22 @@ var init = exports.init = function (config) {
           coordstring.push(lng + "," + lat + ",0");
         }
         coordstring = coordstring.join(" ");
+        
         kmlpts += '	<Placemark>\n';
-        kmlpts += '		<name>' + timepolys[t]._id + '</name>';
+        kmlpts += '		<name>' + ( timepolys[t].address || timepolys[t]._id ) + '</name>';
         kmlpts += '		<styleUrl>#poly-url</styleUrl>\n';
+        
+        // time-enabled KML?
+        if(timepolys[t].start){
+          var startstamp = timepolys[t].start;
+          var endstamp = timepolys[t].end || (new Date());
+          kmlpts += '		<TimeSpan>\n';
+          kmlpts += '			<begin>' + startstamp + '</begin>\n';
+          kmlpts += '			<end>' + endstamp + '</end>\n';
+          kmlpts += '		</TimeSpan>\n';
+          kmlpts += '		<description>Begins ' + startstamp + ', ends ' + endstamp + '</description>\n';
+        }
+        
 		kmlpts += '		<Polygon>\n';
 		kmlpts += '			<tessellate>1</tessellate>\n';
 		kmlpts += '			<outerBoundaryIs>\n';
@@ -108,7 +130,7 @@ var init = exports.init = function (config) {
 		kmlpts += '					<coordinates>' + coordstring + '</coordinates>\n';
 		kmlpts += '				</LinearRing>\n';
 		kmlpts += '			</outerBoundaryIs>\n';
-		kmlpts += '		</Polygon>\n';
+		kmlpts += '		</Polygon>\n';		
         kmlpts += '	</Placemark>\n';
       }
       var kmlout = '  </Document>\n</kml>';
@@ -118,13 +140,23 @@ var init = exports.init = function (config) {
     else{
       // GeoJSON output
       for(var t=0; t<timepolys.length; t++){
+        var proplist = { };
+        if(timepolys[t].address){
+          proplist["address"] = timepolys[t].address;
+        }
+        if(timepolys[t].start){
+          proplist["start"] = timepolys[t].start * 1;
+        }
+        if(timepolys[t].end){
+          proplist["end"] = timepolys[t].end * 1;
+        }
         timepolys[t] = {
           "type": "Feature",
           "geometry": {
             "type": "Polygon",
             "coordinates": [ timepolys[t].points ]
           },
-          "properties": { }
+          "properties": proplist
         };
       }
       res.send({ "type": "FeatureCollection", "features": timepolys });
