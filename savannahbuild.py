@@ -1,14 +1,17 @@
-# HistoricChicago.py
+# SavannahBuild.py
 import urllib, urllib2
 
+server = 'http://majurojs.herokuapp.com';
+src = "philadelphia"
 cbuild = open('phillybuild.kml', 'r')
 
 count = 0
-skiptocount = 188765
+skiptocount = 0
 
 timepoint = {
   "lat": 0,
   "lng": 0,
+  "src": src,
   "points": ""
 }
 
@@ -46,10 +49,11 @@ for line in cbuild:
     print count
 
     data = urllib.urlencode(timepoint)
-    urllib2.urlopen(urllib2.Request('http://philly-builder.herokuapp.com/timeline', data)).read()
+    urllib2.urlopen(urllib2.Request(server + '/timeline', data)).read()
     
     timepoint = {
       "lat": 0,
       "lng": 0,
+      "src": src,
       "points": ""
     }
