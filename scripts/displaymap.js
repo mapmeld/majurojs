@@ -18,6 +18,34 @@ $(document).ready(function(){
 
   // load building geo from static JSON file (Github Pages)
   $.getJSON('mybuild.geojson', function(polys){
+    var src = polys.source;
+    var src_credits = "";
+    switch(src){
+      case "allegheny":
+      case "pittsburgh":
+        src_credits = ".allegheny";
+        break;
+      case "chicago":
+        src_credits = ".chicago";
+        break;
+      case "lancaster":
+        src_credits = ".lancaster";
+        break;
+      case "oakland":
+        src_credits = ".oakland";
+        break;
+      case "philadelphia":
+        src_credits = ".philadelphia";
+        break;
+      case "savannah":
+        src_credits = ".savannah";
+        break;
+      case "seattle":
+        src_credits = ".seattle";
+        break;
+    }
+    $(src_credits).css({ "display": "block" });
+
     //console.log(polys);
     var maxlat = -90;
     var minlat = 90;

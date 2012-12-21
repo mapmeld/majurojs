@@ -40,3 +40,10 @@ body {
   vertical-align:middle;
   width: 26px;
 }
+.allegheny{ display:none; }
+.chicago{ display:none; }
+.lancaster{ display:none; }
+.oakland{ display:none; }
+.philadelphia{ display:none; }
+.savannah{ display:none; }
+.seattle{ display:none; }
