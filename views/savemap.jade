@@ -7,7 +7,7 @@ head
     link(rel="stylesheet", href="/stylesheets/leaflet.ie.css", type="text/css")
     link(rel="stylesheet", href="/pancontrol/stylesheets/L.Control.Pan.ie.css", type="text/css")
   link(href="/stylesheets/bootstrap-mini.css", rel="stylesheet", type="text/css")
-  link(href="/stylesheets/checkouttime.css", rel="stylesheet", type="text/css")
+  link(href='/stylesheets/custombuild.css', rel='stylesheet', type='text/css')
   script(type="text/javascript", src="/scripts/leaflet.js")
   script(type="text/javascript", src="/scripts/jquery-1.6.2.min.js")
   script(type="text/javascript", src="/pancontrol/scripts/L.Control.Pan.js")
@@ -15,11 +15,19 @@ head
   script(type="text/javascript", src="/scripts/storedmap.js")
 
 body
-  div#sidebar(style="left:initial;right:12%;border:1px solid #000;")
+  div#sidebar(style="left:initial;right:12%;border:1px solid #000;background-color:#f8f8f8;")
     div#timeline
       h2 Majuro.js
       p
+        span Data downloaded from&nbsp;
+        a.allegheny(href="#") Allegheny County / PAGIS
+        a.chicago(href="#") City of Chicago
+        a.lancaster(href="#") Lancaster County / PAGIS
+        a.oakland(href="#") City of Oakland
+        a.philadelphia(href="http://www.opendataphilly.org/opendata/resource/6/buildings/") OpenDataPhilly
+        a.savannah(href="http://www.thempc.org/SAGIS.htm") SAGIS
+        a.seattle(href="#") City of Seattle
+      p
         span Make your own Google Earth or online map at&nbsp;
         a(href="http://www.majurojs.org") MajuroJS.org
-        span !
   div#map

@@ -1,4 +1,4 @@
-var map, dragtype, building_pop;
+var map, dragtype, building_pop, src;
 var footprints = [ ];
 var edited = { };
 
@@ -25,7 +25,7 @@ $(document).ready(function(){
     $.getJSON('/timeline-at.geojson?customgeo=' + getURLParameter("customgeo"), function(polys){
 
       // show the relevant city or county credit
-      var src = polys.source;
+      src = polys.source;
       var src_credits = "";
       switch(src){
         case "allegheny":
@@ -207,13 +207,13 @@ function downloadFile(format){
       geofeatures.push(geo);
     }
     // create a feature collection
-    var geojson = { "type": "FeatureCollection", "features": geofeatures };
+    var geojson = { "type": "FeatureCollection", "source": (src || ""), "features": geofeatures };
     // use BlobBuilder, FileSaver, and JSON.stringify to output
     bb.append( JSON.stringify( geojson ) );
     saveAs(bb.getBlob("application/json;charset=utf-8"), "mybuild.geojson");
   }
   else if(format == 0){ // KML
-    bb.append('<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://earth.google.com/kml/2.2">\n	<Document>\n		<name>Savannah KML</name>\n			<description>Savannah Buildings Export</description>\n');
+    bb.append('<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://earth.google.com/kml/2.2">\n	<Document>\n		<name>Majuro JS</name>\n			<description>Export from ' + (src || "") + '</description>\n');
     bb.append('			<Style id="red_poly">\n				<LineStyle>\n					<color>ff0000ff</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>880000ff</color>\n				</PolyStyle>\n			</Style>\n			<Style id="blue_poly">\n				<LineStyle>\n					<color>ffff0000</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>88ff0000</color>\n				</PolyStyle>\n			</Style>\n			<Style id="green_poly">\n				<LineStyle>\n					<color>ff00ff00</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>8800ff00</color>\n				</PolyStyle>\n			</Style>\n			<Style id="orange_poly">\n				<LineStyle>\n					<color>ff005aff</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>88005aff</color>\n				</PolyStyle>\n			</Style>\n');
     for(var f=0;f<footprints.length;f++){
       // generate point string
