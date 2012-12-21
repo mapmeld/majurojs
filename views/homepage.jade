@@ -23,6 +23,8 @@ body(data-spy="scroll", data-target=".subnav", data-offset="100")
           li
             a(href="#app") App
           li
+            a(href="#examples") Examples
+          li
             a(href="#cities") Cities
           li
             a(href="#faq") FAQ
@@ -57,10 +59,35 @@ body(data-spy="scroll", data-target=".subnav", data-offset="100")
               p Download your map for Google Earth, share a KML or GeoJSON file, or set up your own site on Github Pages.
               img(src="images/in_earth.png", width="400", style="margin-left:150px;")
               br
+        
+        h3 No projections, time series tools, or geoprocessing. Just data that works.
+        div#finish_line_cont
+      
+      div#examples.main_cont
+        h2 Examples
+        div
+          ol
+            li
+              h4 Habitat for Humanity in Bibb County, GA
+              p Buildings data from 2007 helped map the impact Habitat for Humanity had in their neighborhood. Houses were marked green (for renovations), red (for demolitions), and blue (for business development).
+              p 
+                a(href="http://maconmaps.herokuapp.com/everything.html?table=lynmore&user=mapmeld&lat=32.787338&lng=-83.646888&z=17") The final map
+                span &nbsp;was presented at a Code for America event at Mercer University's Center for Collaborative Journalism.
+            li
+              h4 Historic Chicago
+              p
+                span At an OpenGov Hack Night,&nbsp;
+                a(href="http://historicchicago.herokuapp.com") Historic Chicago
+                span &nbsp;was born. Instant timeline maps show when buildings in your neighborhood were built.
+              br
+              img(src="/images/timelinepic.png")
+              br
+        
         div#finish_line_cont
 
       div#cities.main_cont
         h1 Cities
+        p Right now you can download buildings from seven US cities or counties!
         p Some sources include addresses, build dates, and height of buildings. You'll get that data, too.
         ul
           li
