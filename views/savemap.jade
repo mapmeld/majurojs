@@ -1,0 +1,25 @@
+head
+  meta(name="viewport", content="initial-scale=1.0, user-scalable=no")
+  title Majuro.js Saved Map
+  link(rel="stylesheet", href="/stylesheets/leaflet.css", type="text/css")
+  link(rel="stylesheet", href="/pancontrol/stylesheets/L.Control.Pan.css", type="text/css")
+  // [if lte IE 8]
+    link(rel="stylesheet", href="/stylesheets/leaflet.ie.css", type="text/css")
+    link(rel="stylesheet", href="/pancontrol/stylesheets/L.Control.Pan.ie.css", type="text/css")
+  link(href="/stylesheets/bootstrap-mini.css", rel="stylesheet", type="text/css")
+  link(href="/stylesheets/checkouttime.css", rel="stylesheet", type="text/css")
+  script(type="text/javascript", src="/scripts/leaflet.js")
+  script(type="text/javascript", src="/scripts/jquery-1.6.2.min.js")
+  script(type="text/javascript", src="/pancontrol/scripts/L.Control.Pan.js")
+  script(type="text/javascript") var customgeo = #{customgeo}; var edited = #{edited};
+  script(type="text/javascript", src="/scripts/storedmap.js")
+
+body
+  div#sidebar(style="left:initial;right:12%;border:1px solid #000;")
+    div#timeline
+      h2 Majuro.js
+      p
+        span Make your own Google Earth or online map at&nbsp;
+        a(href="http://www.majurojs.org") MajuroJS.org
+        span !
+  div#map

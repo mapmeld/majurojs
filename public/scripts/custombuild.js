@@ -1,5 +1,6 @@
 var map, dragtype, building_pop;
 var footprints = [ ];
+var edited = { };
 
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
@@ -59,43 +60,24 @@ $(document).ready(function(){
       var minlng = 180;
       for(var f=0;f<polys.features.length;f++){
         var coords = polys.features[f].geometry.coordinates[0];
+        var avg = [0, 0];
         for(var c=0;c<coords.length;c++){
           maxlat = Math.max(maxlat, coords[c][1]);
           minlat = Math.min(minlat, coords[c][1]);
           maxlng = Math.max(maxlng, coords[c][0]);
           minlng = Math.min(minlng, coords[c][0]);
           coords[c] = new L.LatLng(coords[c][1], coords[c][0]);
+          avg[0] += coords[c][0];
+          avg[1] += coords[c][1];          
         }
+        avg[0] /= coords.length;
+        avg[0] = avg[0].toFixed(6);
+        avg[1] /= coords.length;
+        avg[1] = avg[1].toFixed(6);
+
         var poly = new L.polygon(coords, { weight: 2 });
         map.addLayer(poly);
-        footprints.push({ geo: poly, name: "", description: "" });
-        addPolyEdit(footprints.length-1);
-      }
-      if(polys.features.length){
-        map.fitBounds( new L.LatLngBounds( new L.LatLng(minlat, minlng), new L.LatLng(maxlat, maxlng) ) );
-      }
-    });
-  }
-  else{
-    // load building geo from static JSON file (Github Pages)
-    $.getJSON('mybuild.geojson', function(polys){
-      //console.log(polys);
-      var maxlat = -90;
-      var minlat = 90;
-      var maxlng = -180;
-      var minlng = 180;
-      for(var f=0;f<polys.features.length;f++){
-        var coords = polys.features[f].geometry.coordinates[0];
-        for(var c=0;c<coords.length;c++){
-          maxlat = Math.max(maxlat, coords[c][1]);
-          minlat = Math.min(minlat, coords[c][1]);
-          maxlng = Math.max(maxlng, coords[c][0]);
-          minlng = Math.min(minlng, coords[c][0]);
-          coords[c] = new L.LatLng(coords[c][1], coords[c][0]);
-        }
-        var poly = new L.polygon(coords, { weight: 2 });
-        map.addLayer(poly);
-        footprints.push({ geo: poly, name: "", description: "" });
+        footprints.push({ id: avg.join(',') + "," + coords.length, geo: poly, name: "", description: "" });
         addPolyEdit(footprints.length-1);
       }
       if(polys.features.length){
@@ -113,11 +95,23 @@ function addPolyEdit(polyindex){
 }
 function saveDetail(){
   // popup save
-  var id = $('#selectedid').val();
+  var id = $('#selectedid').val() * 1;
   var name = $('#poly_name').val();
   var description = $('#poly_detail').val();
-  footprints[ 1 * id ].name = name;
-  footprints[ 1 * id ].description = description;
+  footprints[ id ].name = name;
+  footprints[ id ].description = description;
+  if(edited[ footprints[ id ].id ]){
+    // update entry
+    edited[ footprints[ id ].id ].name = name;
+    edited[ footprints[ id ].id ].detail = description;
+  }
+  else{
+    // create entry
+    edited[ footprints[ id ].id ] = {
+      name: name
+      detail: description
+    };
+  }
   map.closePopup();
 }
 function dragstarted(e){
@@ -159,6 +153,14 @@ function dropped(e){
           break;
       }
       footprints[p].geo.setStyle({ color: setColor, opacity: 0.65 });
+      if(edited[footprints[p].id]){
+        // update entry
+        edited[ footprints[ p ].id ].color = setColor;
+      }
+      else{
+        // create entry
+        edited[ footprints[ p ].id ] = { color: setColor };
+      }
       break;
     }
   }
@@ -266,4 +268,25 @@ function describe(description){
     description = description.replace("photo:","");
   }
   return description;
+}
+function saveMap(){
+  var poly_id = getURLParameter("customgeo");
+  var arredited = [];
+  for(editShape in edited){
+    arredited.push({
+      id: edited[editShape].id
+    });
+    if(edited[editShape].color){
+      arredited[ arredited.length-1 ].color = edited[editShape].color;
+    }
+    if(edited[editShape].name){
+      arredited[ arredited.length-1 ].name = edited[editShape].name;
+    }
+    if(edited[editShape].detail){
+      arredited[ arredited.length-1 ].detail = edited[editShape].detail;
+    }
+  }
+  $.post("/savemap", { customgeo: poly_id, edited: JSON.stringify(arredited) }, function(data){
+    window.location = "/savemap?id=" + data.savedid;
+  });
 }

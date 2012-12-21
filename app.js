@@ -8,6 +8,7 @@ var express = require('express')
     , request = require('request')
     , timepoly = require('./timepoly')
     , customgeo = require('./customgeo')
+    , savemap = require('./savemap')
     ;
 
 var HOUR_IN_MILLISECONDS = 3600000;
@@ -76,6 +77,23 @@ var init = exports.init = function (config) {
   app.get('/explore3d', function(req, res){
     // show map in 3D
     res.render('explore3d', { customgeo: req.query['customgeo'], lng: req.query['lng'], lat: req.query['lat'] });
+  });
+  
+  app.post('/savemap', function(req, res){
+    // store map details as a SaveMap
+    var mymap = new savemap.SaveMap({
+      customgeo: req.body.customgeo,
+      edited: JSON.parse(req.body.edited)
+    });
+    mymap.save(function (err){
+      res.send({ saveid: mymap._id });
+    });
+  });
+  app.get('/savemap', function(req, res){
+    // show saved map
+    savemap.SaveMap.findById(req.query['id'], function(err, mymap){
+      res.render('savemap', mymap);
+    });
   });
   
   app.post('/timeline', function(req, res){
