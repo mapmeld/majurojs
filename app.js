@@ -9,6 +9,7 @@ var express = require('express')
     , timepoly = require('./timepoly')
     , customgeo = require('./customgeo')
     , savemap = require('./savemap')
+    , region = require('./region')
     ;
 
 var HOUR_IN_MILLISECONDS = 3600000;
