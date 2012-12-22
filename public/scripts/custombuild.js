@@ -1,6 +1,50 @@
 var map, dragtype, building_pop, src;
 var footprints = [ ];
 var edited = { };
+var city_options = {
+  allegheny: {
+    lat: 40.440676,
+    lng: -79.984589,
+    zoom: 14,
+    time: false
+  },
+  chicago: {
+    lat: 41.888476,
+    lng: -87.624034,
+    zoom: 14,
+    time: true
+  },
+  lancaster: {
+    lat: 40.011839,
+    lng: -76.172333,
+    zoom: 14,
+    time: false
+  },
+  oakland: {
+    lat: 37.795135,
+    lng: -122.255173,
+    zoom: 14,
+    time: false
+  },
+  philadelphia: {
+    lat: 39.938435,
+    lng: -75.136528,
+    zoom: 14,
+    time: false
+  },
+  savannah: {
+    lat: 32.076175,
+    lng: -81.095238,
+    zoom: 14,
+    time: false
+  },
+  seattle: {
+    lat: 47.605237,
+    lng: -122.325897,
+    zoom: 14,
+    time: false
+  }
+};
 
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
@@ -16,7 +60,13 @@ $(document).ready(function(){
   var tonerAttrib = 'Map data &copy; 2012 OpenStreetMap contributors, Tiles &copy; 2012 Stamen Design';
   terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
   map.addLayer(terrainLayer);
-  map.setView(new L.LatLng(39.938435,-75.136528), 14);
+  src = getURLParameter("src");
+  if(src && city_options[ src ]){
+    map.setView(new L.LatLng(city_options[ src ].lat, city_options[ src ].lng), city_options[ src ].zoom);  
+  }
+  else{
+    map.setView(new L.LatLng(39.938435,-75.136528), 14);
+  }
   
   building_pop = new L.Popup();
   

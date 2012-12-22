@@ -182,7 +182,7 @@ $(document).ready(function(){
   
   // generalize code to fit all markers
   var source = getURLParameter("src");
-  if(source){
+  if(src && city_options[ src ]){
     map.zoom(city_options[ source ].zoom).center({ lat: city_options[ source ].lat, lon: city_options[ source ].lng });  
   }
   else{

@@ -93,7 +93,7 @@ function postGeo(format){
   var poly = llserial(footprint.getLatLngs());
   $.post("/customgeo", { pts: poly }, function(data){
     if(format == "html"){
-      window.location = "/build?customgeo=" + data.id;
+      window.location = "/build?src=" + (getURLParameter("src") || "") + "&customgeo=" + data.id;
     }
     else if(format == "time"){
       window.location = "/timeline?src=" + (getURLParameter("src") || "") + "&customgeo=" + data.id;
