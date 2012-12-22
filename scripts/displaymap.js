@@ -14,7 +14,7 @@ $(document).ready(function(){
   var tonerAttrib = 'Map data &copy; 2012 OpenStreetMap contributors, Tiles &copy; 2012 Stamen Design';
   terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
   map.addLayer(terrainLayer);
-  map.setView(new L.LatLng(32.076175,-81.095238), 14);
+  map.setView(new L.LatLng(32.076175,-81.095238), 10);
 
   // load building geo from static JSON file (Github Pages)
   $.getJSON('mybuild.geojson', function(polys){
