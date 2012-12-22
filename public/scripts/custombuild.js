@@ -60,6 +60,8 @@ $(document).ready(function(){
   var tonerAttrib = 'Map data &copy; 2012 OpenStreetMap contributors, Tiles &copy; 2012 Stamen Design';
   terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
   map.addLayer(terrainLayer);
+  
+  // center map based on city or county source
   src = getURLParameter("src");
   if(src && city_options[ src ]){
     map.setView(new L.LatLng(city_options[ src ].lat, city_options[ src ].lng), city_options[ src ].zoom);  
