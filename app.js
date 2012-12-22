@@ -136,7 +136,7 @@ var init = exports.init = function (config) {
                       case "#f00":
                         timepolys[t].style = "#poly_red";
                         break;
-                      case "#0f0";
+                      case "#0f0":
                         timepolys[t].style = "#poly_green";
                         break;
                       case "#00f":

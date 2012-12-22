@@ -17,7 +17,7 @@ $(document).ready(function(){
   map.setView(new L.LatLng(32.076175,-81.095238), 14);
 
   // load same customgeo used to generate this map
-  $.getJSON('/timeline-at.geojson?customgeo=' + getURLParameter("customgeo"), function(polys){
+  $.getJSON('/timeline-at.geojson?customgeo=' + customgeo, function(polys){
     var src = polys.source;
     var src_credits = "";
     switch(src){
@@ -128,4 +128,15 @@ function describe(description){
     description = description.replace("photo:","");
   }
   return '<p>' + description + '</p>';
+}
+
+function downloadFile(format){
+  if(format == 1){ 
+    // GeoJSON
+    window.location = "/savemap.geojson?id=" + getURLParameter("id");
+  }
+  else if(format == 0){
+    // KML
+    window.location = "/savemap.kml?id=" + getURLParameter("id");
+  }
 }
