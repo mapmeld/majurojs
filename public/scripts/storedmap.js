@@ -59,9 +59,9 @@ $(document).ready(function(){
         minlat = Math.min(minlat, coords[c][1]);
         maxlng = Math.max(maxlng, coords[c][0]);
         minlng = Math.min(minlng, coords[c][0]);
-        coords[c] = new L.LatLng(coords[c][1], coords[c][0]);
         avg[0] += coords[c][0];
         avg[1] += coords[c][1];
+        coords[c] = new L.LatLng(coords[c][1], coords[c][0]);
       }
       avg[0] /= coords.length;
       avg[0] = avg[0].toFixed(6);
@@ -72,8 +72,8 @@ $(document).ready(function(){
       var poly = new L.polygon(coords, { weight: 2, color: "#0000ff" });
       for(var p=0;p<edited.length;p++){
         if(edited[p].id == myid){
-          if(edited[p].name || edited[p].detail){
-            poly.bindPopup( ('<h3>' + edited[p].name + '</h3>' || '') + describe( edited[p].detail ) );
+          if(edited[p].name || edited[p].description){
+            poly.bindPopup( '<h3>' + (edited[p].name || '') + '</h3>' + describe( ( edited[p].description || '') ) );
           }
           if(edited[p].color){
             poly.setStyle({ color: edited[p].color, opacity: 0.65 });

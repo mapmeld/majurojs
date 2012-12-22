@@ -90,10 +90,82 @@ var init = exports.init = function (config) {
       res.send({ saveid: mymap._id });
     });
   });
-  app.get('/savemap', function(req, res){
-    // show saved map
+  app.get('/savemap*', function(req, res){
     savemap.SaveMap.findById(req.query['id'], function(err, mymap){
-      res.render('savemap', mymap);
+      if(err){
+        return res.send(err);
+      }
+      if(req.url.indexOf('kml') > -1 || req.url.indexOf('json') > -1){
+        // return saved map as KML or GeoJSON
+        // first, fetch custom geo area
+        customgeo.CustomGeo.findById(mymap.customgeo, function(err, geo){
+          if(err){
+            return res.send(err);
+          }
+          // format polygon for query
+          var poly = geo.latlngs;
+          for(var pt=0;pt<poly.length;pt++){
+            poly[pt] = [ poly[pt].split(",")[1] * 1.0, poly[pt].split(",")[0] * 1.0 ];
+          }
+          // get buildings at this point
+          timepoly.TimePoly.find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
+            if(err){
+              return res.send(err);
+            }
+            // pre-process timepolys to add edits
+            for(var t=0;t<timepolys.length;t++){
+              // stored maps = custom building edits, not timeline
+              timepolys[t].start = null;
+              timepolys[t].end = null;
+              var coords = timepolys[t].geometry.coordinates[0];
+              var avg = [0, 0];
+              for(var c=0;c<coords.length;c++){
+                avg[0] += coords[c][0];
+                avg[1] += coords[c][1];
+              }
+              avg[0] /= coords.length;
+              avg[0] = avg[0].toFixed(6);
+              avg[1] /= coords.length;
+              avg[1] = avg[1].toFixed(6);
+              var myid = avg.join(',') + "," + coords.length;
+              for(var e=0;e<mymap.edited.length;e++){
+                if(mymap.edited[e].id == myid){
+                  if(mymap.edited[e].color){
+                    timepolys[t].color = mymap.edited[e].color;
+                    switch(mymap.edited[e].color){
+                      case "#f00":
+                        timepolys[t].style = "#poly_red";
+                        break;
+                      case "#0f0";
+                        timepolys[t].style = "#poly_green";
+                        break;
+                      case "#00f":
+                        timepolys[t].style = "#poly_blue";
+                        break;
+                      case "#ff5a00":
+                        timepolys[t].style = "#poly_orange";
+                        break;
+                    }
+                  }
+                  if(mymap.edited[e].name){
+                    timepolys[t].name = mymap.edited[e].name;
+                  }
+                  if(mymap.edited[e].description){
+                    timepolys[t].description = mymap.edited[e].description;
+                  }
+                  mymap.edited.splice(e,1);
+                  break;
+                } 
+              }
+            }
+            processTimePolys(timepolys, req, res);
+          });
+        });
+      }
+      else{
+        // show saved map
+        res.render('savemap', mymap);
+      }
     });
   });
   
@@ -130,6 +202,41 @@ var init = exports.init = function (config) {
     });
   });
   
+  var describe = function(description){
+    if((typeof description == 'undefined') || (!description)){
+      return "";
+    }
+    // allow link:http://example.com
+    while(description.indexOf("link:") > -1){
+      description = description.split("link:");
+      if(description[1].indexOf(" ") > -1){
+        description[1] = "<a href='" + description[1].split(" ")[0] + "'>" + description[1].split(" ")[0] + "</a> " + description[1].split(" ")[1];
+      }
+      else{
+        description[1] = "<a href='" + description[1] + "'>" + description[1] + "</a>";
+      }
+      description = description.join("link:");
+      description = description.replace("link:","");
+    }
+    // allow photo:http://example.com/image.jpg
+    // or img:http://example.com/image.jpg
+    // or pic:http://example.com/image.jpg
+    description = replaceAll(description, "img:", "photo:");
+    description = replaceAll(description, "pic:", "photo:");
+    while(description.indexOf("photo:") > -1){
+      description = description.split("photo:");
+      if(description[1].indexOf(" ") > -1){
+        description[1] = "<br/><img src='" + description[1].split(" ")[0] + "' width='250'/><br/>" + description[1].split(" ")[1];
+      }
+      else{
+        description[1] = "<br/><img src='" + description[1] + "' width='250'/>";
+      }
+      description = description.join("photo:");
+      description = description.replace("photo:","");
+    }
+    return description;
+  };
+  
   var processTimepolys = function(timepolys, req, res){
     var src = "";
     if(timepolys.length){
@@ -144,9 +251,11 @@ var init = exports.init = function (config) {
       }
     }
     if(req.url.indexOf('kml') > -1){
-      // time-enabled KML output
+      // KML output
       var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://earth.google.com/kml/2.2">\n	<Document>\n		<name>Majuro Export</name>\n		<description>Buildings Export, Source: ' + src + '</description>\n';
       kmlintro += '			<Style id="poly">\n				<LineStyle>\n					<color>aaff0000</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>88ff0000</color>\n				</PolyStyle>\n			</Style>\n';
+      kmlintro += '			<Style id="red_poly">\n				<LineStyle>\n					<color>ff0000ff</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>880000ff</color>\n				</PolyStyle>\n			</Style>\n			<Style id="blue_poly">\n				<LineStyle>\n					<color>ffff0000</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>88ff0000</color>\n				</PolyStyle>\n			</Style>\n			<Style id="green_poly">\n				<LineStyle>\n					<color>ff00ff00</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>8800ff00</color>\n				</PolyStyle>\n			</Style>\n			<Style id="orange_poly">\n				<LineStyle>\n					<color>ff005aff</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>88005aff</color>\n				</PolyStyle>\n			</Style>\n';
+
       var kmlpts = '';
       for(var t=0; t<timepolys.length; t++){
         // create KML coordinate string
@@ -160,8 +269,8 @@ var init = exports.init = function (config) {
         
         kmlpts += '	<Placemark>\n';
         kmlpts += '		<name>' + ( timepolys[t].name || timepolys[t].address || timepolys[t]._id ) + '</name>';
-        kmlpts += '		<styleUrl>#poly</styleUrl>\n';
-        
+        kmlpts += '		<styleUrl>' + ( timepolys[t].style || '#poly' ) + '</styleUrl>\n';
+
         // time-enabled KML?
         if(timepolys[t].start){
           var startstamp = timepolys[t].start;
@@ -171,6 +280,11 @@ var init = exports.init = function (config) {
           kmlpts += '			<end>' + endstamp + '</end>\n';
           kmlpts += '		</TimeSpan>\n';
           kmlpts += '		<description>Begins ' + startstamp + ', ends ' + endstamp + '</description>\n';
+        }
+        
+        // description (will only occur if timepolys sent from a stored map)
+        if(timepolys[t].description){
+          kmlpts += '		<description><![CDATA[<div>' + describe(timepolys[t].description) + '</div>]]></description>\n';
         }
         
 		kmlpts += '		<Polygon>\n';
@@ -193,6 +307,12 @@ var init = exports.init = function (config) {
         var proplist = { };
         if(timepolys[t].name){
           proplist["name"] = timepolys[t].name;
+        }
+        if(timepolys[t].description){
+          proplist["description"] = timepolys[t].description;
+        }
+        if(timepolys[t].color){
+          proplist["fill"] = timepolys[t].color;
         }
         if(timepolys[t].address){
           proplist["address"] = timepolys[t].address;

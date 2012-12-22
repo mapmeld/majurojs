@@ -117,9 +117,9 @@ $(document).ready(function(){
           minlat = Math.min(minlat, coords[c][1]);
           maxlng = Math.max(maxlng, coords[c][0]);
           minlng = Math.min(minlng, coords[c][0]);
-          coords[c] = new L.LatLng(coords[c][1], coords[c][0]);
           avg[0] += coords[c][0];
-          avg[1] += coords[c][1];          
+          avg[1] += coords[c][1];  
+          coords[c] = new L.LatLng(coords[c][1], coords[c][0]);        
         }
         avg[0] /= coords.length;
         avg[0] = avg[0].toFixed(6);
@@ -342,7 +342,7 @@ function saveMap(){
       arredited[ arredited.length-1 ].name = footprints[editShape].name;
     }
     if(footprints[editShape].description){
-      arredited[ arredited.length-1 ].detail = footprints[editShape].description;
+      arredited[ arredited.length-1 ].description = footprints[editShape].description;
     }
   });
   $.post("/savemap", { customgeo: poly_id, edited: JSON.stringify(arredited) }, function(data){
