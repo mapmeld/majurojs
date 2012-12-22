@@ -332,7 +332,7 @@ var init = exports.init = function (config) {
           "properties": proplist
         };
       }
-      res.send({ "type": "FeatureCollection", "source": src, "features": timepolys });
+      res.json({ "type": "FeatureCollection", "source": src, "features": timepolys });
     }
   };
   
