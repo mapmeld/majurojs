@@ -96,7 +96,7 @@ function postGeo(format){
       window.location = "/build?customgeo=" + data.id;
     }
     else if(format == "time"){
-      window.location = "/timeline?customgeo=" + data.id;
+      window.location = "/timeline?src=" + (getURLParameter("src") || "") + "&customgeo=" + data.id;
     }
     else if(format == "3d"){
       var minlat = 90;
