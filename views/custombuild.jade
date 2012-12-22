@@ -6,6 +6,8 @@ head
   // [if lte IE 8]
     link(rel='stylesheet', href='/stylesheets/leaflet.ie.css', type='text/css')
     link(rel='stylesheet', href='/pancontrol/stylesheets/L.Control.Pan.ie.css', type='text/css')
+    link(rel='stylesheet', href='/stylesheets/editor.ie.css', type='text/css')
+    script(type='text/javascript') var IE_EDITOR = true;
   link(href='/stylesheets/bootstrap-mini.css', rel='stylesheet', type='text/css')
   link(href='/stylesheets/custombuild.css', rel='stylesheet', type='text/css')
   script(src='/scripts/leaflet.js', type='text/javascript')
@@ -30,13 +32,16 @@ body
               img.marker#marker_Green(src="/images/greenmarker.png", title="Green", alt="Green", draggable="true", ondragstart="dragstarted(event);")
               img.marker#marker_Orange(src="/images/orangemarker.png", title="Orange", alt="Orange", draggable="true", ondragstart="dragstarted(event);")
             li Click to add a description or photo to buildings
-            li Export map:
+            li.exportmap Export map:
               ul
                 li
-                  a.btn(href="#", onclick="downloadFile(0)") Google Earth / KML
+                  a(href="#", onclick="downloadFile(0)") Google Earth / KML
                 li
-                  a.btn(href="#", onclick="downloadFile(1)") GeoJSON
-            li or a.btn(href="#", onclick="saveMap()") Save on MajuroJS.org
+                  a(href="#", onclick="downloadFile(1)") GeoJSON
+              br
+            li
+              span.exportmap or&nbsp;
+              a(href="#", onclick="saveMap()") Save on MajuroJS.org
         br
         br
         p

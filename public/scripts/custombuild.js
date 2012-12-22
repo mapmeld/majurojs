@@ -1,6 +1,5 @@
 var map, dragtype, building_pop, src;
 var footprints = [ ];
-var edited = { };
 var city_options = {
   allegheny: {
     lat: 40.440676,
@@ -129,7 +128,7 @@ $(document).ready(function(){
 
         var poly = new L.polygon(coords, { weight: 2 });
         map.addLayer(poly);
-        footprints.push({ id: avg.join(',') + "," + coords.length, geo: poly, name: "", description: "" });
+        footprints.push({ id: avg.join(',') + "," + coords.length, geo: poly, name: "", description: "", color: "" });
         addPolyEdit(footprints.length-1);
       }
       if(polys.features.length){
@@ -141,7 +140,20 @@ $(document).ready(function(){
 function addPolyEdit(polyindex){
   //poly.bindPopup("<input type='hidden' id='selectedid' value='" + footprints.length + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value=''/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'></textarea><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");
   footprints[polyindex].geo.on('click', function(e){
-    building_pop.setLatLng( footprints[polyindex].geo.getBounds().getCenter() ).setContent("<input type='hidden' id='selectedid' value='" + polyindex + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value='" + replaceAll((footprints[polyindex].name || ""),"'","\\'") + "'/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'>" + replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;") + "</textarea><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");
+    if(typeof IE_EDITOR != "undefined" && IE_EDITOR){
+      // old IE: need to add color selector
+      var selcolor;
+      if( footprints[polyindex].color ){
+        selcolor = footprints[polyindex].geo.options.color;
+      }
+      else{
+        selcolor = "#00f";
+      }
+      building_pop.setLatLng( footprints[polyindex].geo.getBounds().getCenter() ).setContent("<input type='hidden' id='selectedid' value='" + polyindex + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value='" + replaceAll((footprints[polyindex].name || ""),"'","\\'") + "'/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'>" + replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;") + "</textarea><br/><select id='poly_color'>" + ("<option value='#f00'>red</option><option value='#ff5a00'>orange</option><option value='#0f0'>green</option><option value='#00f'>blue</option>").replace("value='" + selcolor + "'", "value='" + selcolor + "' selected='selected'") + "</select><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");    
+    }
+    else{
+      building_pop.setLatLng( footprints[polyindex].geo.getBounds().getCenter() ).setContent("<input type='hidden' id='selectedid' value='" + polyindex + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value='" + replaceAll((footprints[polyindex].name || ""),"'","\\'") + "'/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'>" + replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;") + "</textarea><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");
+    }
     map.openPopup(building_pop);
   });
 }
@@ -150,19 +162,18 @@ function saveDetail(){
   var id = $('#selectedid').val() * 1;
   var name = $('#poly_name').val();
   var description = $('#poly_detail').val();
+  var selcolor;
   footprints[ id ].name = name;
   footprints[ id ].description = description;
-  if(edited[ footprints[ id ].id ]){
-    // update entry
-    edited[ footprints[ id ].id ].name = name;
-    edited[ footprints[ id ].id ].detail = description;
-  }
-  else{
-    // create entry
-    edited[ footprints[ id ].id ] = {
-      name: name
-      detail: description
-    };
+  if(IE_EDITOR){
+    selcolor = $('#poly_color').val();
+    if(selcolor == "#00f"){
+      footprints[ id ].color = "";
+    }
+    else{
+      footprints[ id ].color = selcolor;
+    }
+    footprints[ id ].geo.setStyle({ color: selcolor, opacity: 0.65 });
   }
   map.closePopup();
 }
@@ -205,14 +216,6 @@ function dropped(e){
           break;
       }
       footprints[p].geo.setStyle({ color: setColor, opacity: 0.65 });
-      if(edited[footprints[p].id]){
-        // update entry
-        edited[ footprints[ p ].id ].color = setColor;
-      }
-      else{
-        // create entry
-        edited[ footprints[ p ].id ] = { color: setColor };
-      }
       break;
     }
   }
@@ -324,20 +327,24 @@ function describe(description){
 function saveMap(){
   var poly_id = getURLParameter("customgeo");
   var arredited = [];
-  for(editShape in edited){
+  $.each(footprints, function(editShape, e){
+    if(!footprints[editShape].color && !footprints[editShape].name && !footprints[editShape].description){
+      // shape is unedited
+      continue;
+    }
     arredited.push({
-      id: edited[editShape].id
+      id: footprints[editShape].id
     });
-    if(edited[editShape].color){
-      arredited[ arredited.length-1 ].color = edited[editShape].color;
+    if(footprints[editShape].color){
+      arredited[ arredited.length-1 ].color = footprints[editShape].color;
     }
-    if(edited[editShape].name){
-      arredited[ arredited.length-1 ].name = edited[editShape].name;
+    if(footprints[editShape].name){
+      arredited[ arredited.length-1 ].name = footprints[editShape].name;
     }
-    if(edited[editShape].detail){
-      arredited[ arredited.length-1 ].detail = edited[editShape].detail;
+    if(footprints[editShape].description){
+      arredited[ arredited.length-1 ].detail = footprints[editShape].description;
     }
-  }
+  });
   $.post("/savemap", { customgeo: poly_id, edited: JSON.stringify(arredited) }, function(data){
     window.location = "/savemap?id=" + data.savedid;
   });
