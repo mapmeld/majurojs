@@ -117,7 +117,7 @@ var init = exports.init = function (config) {
               // stored maps = custom building edits, not timeline
               timepolys[t].start = null;
               timepolys[t].end = null;
-              var coords = timepolys[t].geometry.coordinates[0];
+              var coords = timepolys[t].points;
               var avg = [0, 0];
               for(var c=0;c<coords.length;c++){
                 avg[0] += coords[c][0];
