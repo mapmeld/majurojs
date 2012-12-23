@@ -32,6 +32,10 @@ ol li{
   margin-top: 8px;
   margin-bottom: 8px;
 }
+ul li{
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
 .arrow-right {
   width: 0; 
   height: 0; 
