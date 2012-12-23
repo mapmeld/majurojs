@@ -79,7 +79,129 @@ var init = exports.init = function (config) {
     // show map in 3D
     res.render('explore3d', { customgeo: req.query['customgeo'], lng: req.query['lng'], lat: req.query['lat'] });
   });
-
+  
+  app.post('/savemap', function(req, res){
+    // store map details as a SaveMap
+    var mymap = new savemap.SaveMap({
+      customgeo: req.body.customgeo,
+      edited: JSON.parse(req.body.edited)
+    });
+    mymap.save(function (err){
+      res.send({ saveid: mymap._id });
+    });
+  });
+  app.get('/savemap*', function(req, res){
+    savemap.SaveMap.findById(req.query['id'], function(err, mymap){
+      if(err){
+        return res.send(err);
+      }
+      if(req.url.indexOf('kml') > -1 || req.url.indexOf('json') > -1){
+        // return saved map as KML or GeoJSON
+        // first, fetch custom geo area
+        customgeo.CustomGeo.findById(mymap.customgeo, function(err, geo){
+          if(err){
+            return res.send(err);
+          }
+          // format polygon for query
+          var poly = geo.latlngs;
+          for(var pt=0;pt<poly.length;pt++){
+            poly[pt] = [ poly[pt].split(",")[1] * 1.0, poly[pt].split(",")[0] * 1.0 ];
+          }
+          // get buildings at this point
+          timepoly.TimePoly.find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
+            if(err){
+              return res.send(err);
+            }
+            // pre-process timepolys to add edits
+            for(var t=0;t<timepolys.length;t++){
+              // stored maps = custom building edits, not timeline
+              timepolys[t].start = null;
+              timepolys[t].end = null;
+              var coords = timepolys[t].points;
+              var avg = [0, 0];
+              for(var c=0;c<coords.length;c++){
+                avg[0] += coords[c][0];
+                avg[1] += coords[c][1];
+              }
+              avg[0] /= coords.length;
+              avg[0] = avg[0].toFixed(6);
+              avg[1] /= coords.length;
+              avg[1] = avg[1].toFixed(6);
+              var myid = avg.join(',') + "," + coords.length;
+              for(var e=0;e<mymap.edited.length;e++){
+                if(mymap.edited[e].id == myid){
+                  if(mymap.edited[e].color){
+                    timepolys[t].color = mymap.edited[e].color;
+                    switch(mymap.edited[e].color){
+                      case "#f00":
+                        timepolys[t].style = "#poly_red";
+                        break;
+                      case "#0f0":
+                        timepolys[t].style = "#poly_green";
+                        break;
+                      case "#00f":
+                        timepolys[t].style = "#poly_blue";
+                        break;
+                      case "#ff5a00":
+                        timepolys[t].style = "#poly_orange";
+                        break;
+                    }
+                  }
+                  if(mymap.edited[e].name){
+                    timepolys[t].name = mymap.edited[e].name;
+                  }
+                  if(mymap.edited[e].description){
+                    timepolys[t].description = mymap.edited[e].description;
+                  }
+                  mymap.edited.splice(e,1);
+                  break;
+                } 
+              }
+            }
+            processTimepolys(timepolys, req, res);
+          });
+        });
+      }
+      else{
+        // show saved map
+        res.render('savemap', { "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ) });
+      }
+    });
+  });
+  
+  app.post('/timeline', function(req, res){
+    // load this point into MongoDB
+    coordinates = req.body['points'].split('||');
+    for(var c=0;c<coordinates.length;c++){
+      coordinates[c] = coordinates[c].split('|');
+      coordinates[c][0] *= 1.0;
+      coordinates[c][1] *= 1.0;
+    }
+    var savedata = {
+      "points": coordinates,
+      // src is the name of the city, county, or other locality
+      "src": req.body.src,
+      // use [ lng , lat ] format to be consistent with GeoJSON
+      "ll": [ req.body['lng'] * 1.0, req.body['lat'] * 1.0 ]
+    };
+    if(req.body.name){
+      savedata["name"] = req.body.name;
+    }
+    if(req.body.address){
+      savedata["address"] = req.body.address;
+    }
+    if(req.body.start){
+      savedata["start"] = new Date(req.body.start * 1);
+    }
+    if(req.body.end){
+      savedata["end"] = new Date(req.body.end * 1);
+    }
+    poly = new timepoly.TimePoly( savedata );
+    poly.save(function(err){
+      res.send(err || 'success');
+    });
+  });
+  
   var describe = function(description){
     if((typeof description == 'undefined') || (!description)){
       return "";
@@ -213,128 +335,6 @@ var init = exports.init = function (config) {
       res.json({ "type": "FeatureCollection", "source": src, "features": timepolys });
     }
   };
-  
-  app.post('/savemap', function(req, res){
-    // store map details as a SaveMap
-    var mymap = new savemap.SaveMap({
-      customgeo: req.body.customgeo,
-      edited: JSON.parse(req.body.edited)
-    });
-    mymap.save(function (err){
-      res.send({ saveid: mymap._id });
-    });
-  });
-  app.get('/savemap*', function(req, res){
-    savemap.SaveMap.findById(req.query['id'], function(err, mymap){
-      if(err){
-        return res.send(err);
-      }
-      if(req.url.indexOf('kml') > -1 || req.url.indexOf('json') > -1){
-        // return saved map as KML or GeoJSON
-        // first, fetch custom geo area
-        customgeo.CustomGeo.findById(mymap.customgeo, function(err, geo){
-          if(err){
-            return res.send(err);
-          }
-          // format polygon for query
-          var poly = geo.latlngs;
-          for(var pt=0;pt<poly.length;pt++){
-            poly[pt] = [ poly[pt].split(",")[1] * 1.0, poly[pt].split(",")[0] * 1.0 ];
-          }
-          // get buildings at this point
-          timepoly.TimePoly.find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
-            if(err){
-              return res.send(err);
-            }
-            // pre-process timepolys to add edits
-            for(var t=0;t<timepolys.length;t++){
-              // stored maps = custom building edits, not timeline
-              timepolys[t].start = null;
-              timepolys[t].end = null;
-              var coords = timepolys[t].points;
-              var avg = [0, 0];
-              for(var c=0;c<coords.length;c++){
-                avg[0] += coords[c][0];
-                avg[1] += coords[c][1];
-              }
-              avg[0] /= coords.length;
-              avg[0] = avg[0].toFixed(6);
-              avg[1] /= coords.length;
-              avg[1] = avg[1].toFixed(6);
-              var myid = avg.join(',') + "," + coords.length;
-              for(var e=0;e<mymap.edited.length;e++){
-                if(mymap.edited[e].id == myid){
-                  if(mymap.edited[e].color){
-                    timepolys[t].color = mymap.edited[e].color;
-                    switch(mymap.edited[e].color){
-                      case "#f00":
-                        timepolys[t].style = "#poly_red";
-                        break;
-                      case "#0f0":
-                        timepolys[t].style = "#poly_green";
-                        break;
-                      case "#00f":
-                        timepolys[t].style = "#poly_blue";
-                        break;
-                      case "#ff5a00":
-                        timepolys[t].style = "#poly_orange";
-                        break;
-                    }
-                  }
-                  if(mymap.edited[e].name){
-                    timepolys[t].name = mymap.edited[e].name;
-                  }
-                  if(mymap.edited[e].description){
-                    timepolys[t].description = mymap.edited[e].description;
-                  }
-                  mymap.edited.splice(e,1);
-                  break;
-                } 
-              }
-            }
-            processTimepolys(timepolys, req, res);
-          });
-        });
-      }
-      else{
-        // show saved map
-        res.render('savemap', { "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ) });
-      }
-    });
-  });
-  
-  app.post('/timeline', function(req, res){
-    // load this point into MongoDB
-    coordinates = req.body['points'].split('||');
-    for(var c=0;c<coordinates.length;c++){
-      coordinates[c] = coordinates[c].split('|');
-      coordinates[c][0] *= 1.0;
-      coordinates[c][1] *= 1.0;
-    }
-    var savedata = {
-      "points": coordinates,
-      // src is the name of the city, county, or other locality
-      "src": req.body.src,
-      // use [ lng , lat ] format to be consistent with GeoJSON
-      "ll": [ req.body['lng'] * 1.0, req.body['lat'] * 1.0 ]
-    };
-    if(req.body.name){
-      savedata["name"] = req.body.name;
-    }
-    if(req.body.address){
-      savedata["address"] = req.body.address;
-    }
-    if(req.body.start){
-      savedata["start"] = new Date(req.body.start * 1);
-    }
-    if(req.body.end){
-      savedata["end"] = new Date(req.body.end * 1);
-    }
-    poly = new timepoly.TimePoly( savedata );
-    poly.save(function(err){
-      res.send(err || 'success');
-    });
-  });
   
   app.get('/timeline-at*', function(req, res){
     if(req.query['customgeo'] && req.query['customgeo'] != ""){
