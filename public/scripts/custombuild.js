@@ -346,6 +346,6 @@ function saveMap(){
     }
   });
   $.post("/savemap", { customgeo: poly_id, edited: JSON.stringify(arredited) }, function(data){
-    window.location = "/savemap?id=" + data.savedid;
+    window.location = "/savemap?id=" + data.saveid;
   });
 }
