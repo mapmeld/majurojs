@@ -330,7 +330,7 @@ function saveMap(){
   $.each(footprints, function(editShape, e){
     if(!footprints[editShape].color && !footprints[editShape].name && !footprints[editShape].description){
       // shape is unedited
-      continue;
+      return;
     }
     arredited.push({
       id: footprints[editShape].id
