@@ -202,6 +202,13 @@ var init = exports.init = function (config) {
     });
   });
   
+  var replaceAll = function(src, oldr, newr){
+    while(src.indexOf(oldr) > -1){
+      src = src.replace(oldr, newr);
+    }
+    return src;
+  };
+  
   var describe = function(description){
     if((typeof description == 'undefined') || (!description)){
       return "";
