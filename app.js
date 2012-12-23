@@ -164,7 +164,7 @@ var init = exports.init = function (config) {
       }
       else{
         // show saved map
-        res.render('savemap', mymap);
+        res.render('savemap', { "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ) });
       }
     });
   });
