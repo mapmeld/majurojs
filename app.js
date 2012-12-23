@@ -134,16 +134,16 @@ var init = exports.init = function (config) {
                     timepolys[t].color = mymap.edited[e].color;
                     switch(mymap.edited[e].color){
                       case "#f00":
-                        timepolys[t].style = "#poly_red";
+                        timepolys[t].style = "#red_poly";
                         break;
                       case "#0f0":
-                        timepolys[t].style = "#poly_green";
+                        timepolys[t].style = "#green_poly";
                         break;
                       case "#00f":
-                        timepolys[t].style = "#poly_blue";
+                        timepolys[t].style = "#blue_poly";
                         break;
                       case "#ff5a00":
-                        timepolys[t].style = "#poly_orange";
+                        timepolys[t].style = "#orange_poly";
                         break;
                     }
                   }
