@@ -64,6 +64,12 @@ var init = exports.init = function (config) {
       res.send({ id: shape._id });
     });
   });
+  
+  app.get('/regions/:city', function(req, res){
+    res.render('regions', { city: req.params.city });
+  });
+  //app.get('/namedgeo', function(req, res){
+  //});
 
   app.get('/build', function(req, res){
     // show map and editor
