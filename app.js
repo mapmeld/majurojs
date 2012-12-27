@@ -65,8 +65,10 @@ var init = exports.init = function (config) {
     });
   });
   
-  app.get('/regions/:city', function(req, res){
-    res.render('regions', { city: req.params.city });
+  app.get('/regions/:regionname', function(req, res){
+    region.Region.findOne({ "name": req.params.regionname }).exec(function(err, myregion){
+      res.render('regions', { region: myregion });
+    });
   });
   //app.get('/namedgeo', function(req, res){
   //});

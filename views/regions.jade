@@ -1,5 +1,5 @@
 head
-  title Regions of City/County
+  title Regions of #{region.fullname}
   link(href="/stylesheets/bootstrap-mini.css", type="text/css", rel="stylesheet")
   script(type="text/javascript" src="/scripts/localregions.js")
 body
@@ -14,25 +14,23 @@ body
   div.container
     .row
       .span8
-        .hero-unit(style="background-color:#C2F23C;")
+        .hero-unit(style="background-color:#C2F23C;background-image:'#{region.images[0]}';background-repeat:no-repeat;")
           h1 MajuroJS.org
           h3
             span Regions of
-            span(style="text-transform:capitalize;") #{city}
+            span(style="text-transform:capitalize;") #{region.fullname}
         div
           h3 Lists of regions:
-          table
-            tr
-              td
-              td
-              td
-              td
-            tr
-              td
-              td
-              td
-              td
-          
+          for division in region.divisions
+            h4 division.category
+            ul
+              for district in division.districts
+                li
+                  a("/build?src=#{division.name}&customgeo=#{district.geo}") district.name
+
       .span4
+        img.govlogo(src="#{region.images[1]}")
+        br
+        br
         h2 Look up a Region
         div.regionlists
