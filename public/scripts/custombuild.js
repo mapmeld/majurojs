@@ -349,3 +349,6 @@ function saveMap(){
     window.location = "/savemap?id=" + data.saveid;
   });
 }
+function showDataSource(){
+  $("#creditmessage").modal("toggle");
+}

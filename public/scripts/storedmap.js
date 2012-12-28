@@ -1,9 +1,7 @@
 var map;
-
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
-
 $(document).ready(function(){
   // make a Leaflet map
   map = new L.Map('map', { zoomControl: false, panControl: false });
@@ -129,7 +127,6 @@ function describe(description){
   }
   return '<p>' + description + '</p>';
 }
-
 function downloadFile(format){
   if(format == 1){ 
     // GeoJSON
@@ -139,4 +136,7 @@ function downloadFile(format){
     // KML
     window.location = "/savemap.kml?id=" + getURLParameter("id");
   }
+}
+function showDataSource(){
+  $("#creditmessage").modal("toggle");
 }

@@ -13,6 +13,7 @@ head
   script(type="text/javascript", src="/pancontrol/scripts/L.Control.Pan.js")
   script(type="text/javascript") var customgeo = "#{customgeo}"; var edited = !{edited};
   script(type="text/javascript", src="/scripts/storedmap.js")
+  script(type="text/javascript", src="/scripts/bootstrap.min.js")
 
 body
   div#sidebar
@@ -20,9 +21,9 @@ body
       h2 Majuro.js
       p
         span Data downloaded from&nbsp;
-        a.allegheny(href="#") Allegheny County / PAGIS
+        a.allegheny(href="#") Allegheny County
         a.chicago(href="#") City of Chicago
-        a.lancaster(href="#") Lancaster County / PAGIS
+        a.lancaster(href="#") Lancaster County
         a.oakland(href="#") City of Oakland
         a.philadelphia(href="http://www.opendataphilly.org/opendata/resource/6/buildings/") OpenDataPhilly
         a.savannah(href="http://www.thempc.org/SAGIS.htm", target="_blank") SAGIS
@@ -38,3 +39,48 @@ body
         br
         a(href="http://www.majurojs.org") MajuroJS.org
   div#map
+
+  div#creditmessage.modal.hide.fade
+    div.modal-header
+      button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
+      h3 Data Source
+    div.modal-body
+      p.allegheny
+        span Buildings data from Allegheny County, Pennsylvania via&nbsp;
+        a(href="http://www.pasda.psu.edu/", target="_blank") PASDA
+        br
+        a(href="http://www.alleghenycounty.us/dcs/gis/acquisition.aspx", target="_blank") Data Use Policy - if known
+      p.chicago
+        span Buildings data from the City of Chicago via&nbsp;
+        a(href="https://data.cityofchicago.org/Buildings/Building-Footprints/w2v3-isjw", target="_blank") data.cityofchicago.org
+        br
+        a(href="#") Data Use Policy - if known
+      p.lancaster
+        span Buildings data from Lancaster County, Pennsylvania via&nbsp;
+        a(href="http://www.pasda.psu.edu/", target="_blank") PASDA
+        br
+        a(href="http://www.pasda.psu.edu/uci/LancasterAgreement.asp?File=http://www.pasda.psu.edu/lancco/data/LancasterCountyBuildings200812.zip", target="_blank") Data Use Policy
+      p.oakland
+        span Buildings data from the City of Oakland via&nbsp;
+        a(href="http://www2.oaklandnet.com/w/oak029076", target="_blank") OaklandNet.com
+        br
+        a(href="#") Data Use Policy - if known
+      p.philadelphia
+        span Buildings data from the City of Philadelphia via&nbsp;
+        a(href="http://www.opendataphilly.org/opendata/resource/6/buildings/", target="_blank") OpenDataPhilly.org
+        br
+        a(href="#") Data Use Policy - if known
+      p.savannah
+        span Buildings data from the Metropolitan Planning Commission and Savannah Area GIS. Visit&nbsp;
+        a(href="http://www.thempc.org/SAGIS.htm", target="_blank") thempc.org
+        span &nbsp;and&nbsp;
+        a(href="http://www.sagis.org", target="_blank") SAGIS.org
+        br
+        a(href="#") Data Use Policy - if known
+      p.seattle
+        span Buildings data from the City of Seattle via&nbsp;
+        a(href="https://data.seattle.gov", target="_blank") data.seattle.gov
+        br
+        a(href="#") Data Use Policy - if known
+    div.modal-footer
+      a.btn.btn-primary(href="#", onclick="$('.modal').modal('toggle');") Close
