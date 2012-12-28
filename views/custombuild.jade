@@ -26,22 +26,21 @@ body
         p
           span Make your own maps with public building data!
           ul
-            li.dragdrop Drag & drop to color buildings
+            li.dragdrop(style="margin-left:-10px;") Drag & drop to color buildings
               br
               img.marker#marker_Red(src="/images/redmarker.png", title="Red", alt="Red", draggable="true", ondragstart="dragstarted(event);")
               img.marker#marker_Blue(src="/images/bluemarker.png", title="Blue", alt="Blue", draggable="true", ondragstart="dragstarted(event);")
               img.marker#marker_Green(src="/images/greenmarker.png", title="Green", alt="Green", draggable="true", ondragstart="dragstarted(event);")
               img.marker#marker_Orange(src="/images/orangemarker.png", title="Orange", alt="Orange", draggable="true", ondragstart="dragstarted(event);")
-            li Click to add a description or photo to buildings
-            li.exportmap Download map:
+            li(style="margin-left:-10px;") Click to add a description or photo to buildings
+            li.exportmap(style="margin-left:-10px;") Download map:
               ul
-                li
+                li(style="list-style-type:none;margin-left:-25px;")
                   a(href="#", onclick="downloadFile(0)") Google Earth / KML
-                li
+                li(style="list-style-type:none;margin-left:-25px;")
                   a(href="#", onclick="downloadFile(1)") GeoJSON
               br
-            li
-              span.exportmap or&nbsp;
+            li(style="margin-left:-10px;")
               a(href="#", onclick="saveMap()") Save on MajuroJS.org
         br
         br
