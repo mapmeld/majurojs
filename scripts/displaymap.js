@@ -1,9 +1,5 @@
 var map;
 
-function getURLParameter(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
-}
-
 $(document).ready(function(){
   // make a Leaflet map
   map = new L.Map('map', { zoomControl: false, panControl: false });
