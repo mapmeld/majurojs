@@ -318,3 +318,7 @@ function describe(description){
   }
   return description;
 }
+
+function showDataSource(){
+  $("#creditmessage").modal("toggle");
+}
