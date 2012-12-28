@@ -82,7 +82,37 @@ var meshes = []; // for later rotations etc
 function loadBuildings (jsonData) {
 d3.json(jsonData, function (err, footprints) {
   if (err) { console.log(err); return; }
-  var footprints = footprints.features
+  try{
+    var src = footprints.source;
+    var src_credits = "";
+    switch(src){
+      case "allegheny":
+      case "pittsburgh":
+        src_credits = ".allegheny";
+        break;
+      case "chicago":
+        src_credits = ".chicago";
+        break;
+      case "lancaster":
+        src_credits = ".lancaster";
+        break;
+      case "oakland":
+        src_credits = ".oakland";
+        break;
+      case "philadelphia":
+        src_credits = ".philadelphia";
+        break;
+      case "savannah":
+        src_credits = ".savannah";
+        break;
+      case "seattle":
+        src_credits = ".seattle";
+        break;
+    }
+    $(src_credits).css({ "display": "block" });
+  }
+  catch(e){}
+  var footprints = footprints.features;
   var floorGeom;
   footprints.forEach(function (e0, i0, c0) {
     floorGeom = []
@@ -246,3 +276,7 @@ function keydown(event){
 }
 
 document.addEventListener('keydown',keydown,false);
+
+function showDataSource(){
+  $("#creditmessage").modal("toggle");
+}

@@ -54,3 +54,7 @@ ul li{
 .philadelphia{ display:none; }
 .savannah{ display:none; }
 .seattle{ display:none; }
+.modal-body p{
+  font-size: 13pt !important;
+  line-height: 25pt !important;
+}

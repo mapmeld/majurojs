@@ -8,3 +8,14 @@
   padding: 12px;
   border-radius: 5px;
 }
+.modal-body p{
+  font-size: 13pt !important;
+  line-height: 25pt !important;
+}
+.allegheny{ display:none; }
+.chicago{ display:none; }
+.lancaster{ display:none; }
+.oakland{ display:none; }
+.philadelphia{ display:none; }
+.savannah{ display:none; }
+.seattle{ display:none; }
