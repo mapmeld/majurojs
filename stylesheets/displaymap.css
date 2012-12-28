@@ -51,3 +51,7 @@ ul li{
   height: 97%;
   overflow: none;
 }
+.modal-body p{
+  font-size: 13pt !important;
+  line-height: 25pt !important;
+}
