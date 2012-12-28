@@ -21,13 +21,13 @@ body
       h2 Majuro.js
       p
         span Data downloaded from&nbsp;
-        a.allegheny(href="#") Allegheny County
-        a.chicago(href="#") City of Chicago
-        a.lancaster(href="#") Lancaster County
-        a.oakland(href="#") City of Oakland
-        a.philadelphia(href="http://www.opendataphilly.org/opendata/resource/6/buildings/") OpenDataPhilly
-        a.savannah(href="http://www.thempc.org/SAGIS.htm", target="_blank") SAGIS
-        a.seattle(href="#") City of Seattle
+        a.allegheny(href="#", onclick="showDataSource()") Allegheny County
+        a.chicago(href="#", onclick="showDataSource()") City of Chicago
+        a.lancaster(href="#", onclick="showDataSource()") Lancaster County
+        a.oakland(href="#", onclick="showDataSource()") City of Oakland
+        a.philadelphia(href="#", onclick="showDataSource()") City of Philadelphia
+        a.savannah(href="#", onclick="showDataSource()") SAGIS
+        a.seattle(href="#", onclick="showDataSource()") City of Seattle
         br
         span Save as&nbsp;
         a(href="#", onclick="downloadFile(0)") Google Earth / KML
