@@ -46,11 +46,19 @@ Rendering 3D buildings with D3.js and three.js is an option for users of Firefox
 
 <img src="http://i.imgur.com/aWWvI.png"/>
 
-A 3D View is available directly from the neighborhood drawing map, or at <em>USERNAME.github.com/majurojs/3d</em> after you fork this repo.
+A 3D View is available directly from the neighborhood-drawing map on MajuroJS.org, or at <em>USERNAME.github.com/majurojs/3d</em> after you fork this repo.
 
-<strong>Customization</strong>: Use Github's online editing to set /3d/3dscene.js to the center of your map.
+<strong>Customization</strong>: Put your buildings data into mybuild.geojson, then use Github's online editing to set /3d/3dscene.js to the center of your map.
 
 <strong>Tips</strong>: Use arrow keys to pan, < and > to zoom, d and x to tilt, z and s to roll.
+
+# How to create a neighborhood editor
+
+A mini map editor will appear at <em>USERNAME.github.com/majurojs/editor</em> after you fork this repo.
+
+<strong>Customization</strong>: Put your buildings data into mybuild.geojson.
+
+<strong>Downloads</strong>: Users of Firefox, Chrome, Opera, and IE10+ can work with your map and add details, then download Google Earth / KML or GeoJSON files. They won't be able to save their changes on your site.
 
 # Server
 
