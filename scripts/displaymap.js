@@ -17,60 +17,62 @@ $(document).ready(function(){
   map.setView(new L.LatLng(32.076175,-81.095238), 10);
 
   // load building geo from static JSON file (Github Pages)
-  $.getJSON('mybuild.geojson', function(polys){
-    var src = polys.source;
-    var src_credits = "";
-    switch(src){
-      case "allegheny":
-      case "pittsburgh":
-        src_credits = ".allegheny";
-        break;
-      case "chicago":
-        src_credits = ".chicago";
-        break;
-      case "lancaster":
-        src_credits = ".lancaster";
-        break;
-      case "oakland":
-        src_credits = ".oakland";
-        break;
-      case "philadelphia":
-        src_credits = ".philadelphia";
-        break;
-      case "savannah":
-        src_credits = ".savannah";
-        break;
-      case "seattle":
-        src_credits = ".seattle";
-        break;
-    }
-    $(src_credits).css({ "display": "block" });
-
-    //console.log(polys);
-    var maxlat = -90;
-    var minlat = 90;
-    var maxlng = -180;
-    var minlng = 180;
-    for(var f=0;f<polys.features.length;f++){
-      var coords = polys.features[f].geometry.coordinates[0];
-      for(var c=0;c<coords.length;c++){
-        maxlat = Math.max(maxlat, coords[c][1]);
-        minlat = Math.min(minlat, coords[c][1]);
-        maxlng = Math.max(maxlng, coords[c][0]);
-        minlng = Math.min(minlng, coords[c][0]);
-        coords[c] = new L.LatLng(coords[c][1], coords[c][0]);
-      }
-      var poly = new L.polygon(coords, { weight: 2, color: (polys.features[f].properties.fill || "#0000ff") });
-      if(polys.features[f].properties.name || polys.features[f].properties.description){
-        poly.bindPopup( ('<h3>' + polys.features[f].properties.name + '</h3>' || '') + describe( polys.features[f].properties.description ) );
-      }
-      map.addLayer(poly);
-    }
-    if(polys.features.length){
-      map.fitBounds( new L.LatLngBounds( new L.LatLng(minlat, minlng), new L.LatLng(maxlat, maxlng) ) );
-    }
-  });
+  $.getJSON('mybuild.geojson', loadedPolys);
 });
+
+function loadedPolys(polys){
+  var src = polys.source;
+  var src_credits = "";
+  switch(src){
+    case "allegheny":
+    case "pittsburgh":
+      src_credits = ".allegheny";
+      break;
+    case "chicago":
+      src_credits = ".chicago";
+      break;
+    case "lancaster":
+      src_credits = ".lancaster";
+      break;
+    case "oakland":
+      src_credits = ".oakland";
+      break;
+    case "philadelphia":
+      src_credits = ".philadelphia";
+      break;
+    case "savannah":
+      src_credits = ".savannah";
+      break;
+    case "seattle":
+      src_credits = ".seattle";
+      break;
+  }
+  $(src_credits).css({ "display": "block" });
+
+  //console.log(polys);
+  var maxlat = -90;
+  var minlat = 90;
+  var maxlng = -180;
+  var minlng = 180;
+  for(var f=0;f<polys.features.length;f++){
+    var coords = polys.features[f].geometry.coordinates[0];
+    for(var c=0;c<coords.length;c++){
+      maxlat = Math.max(maxlat, coords[c][1]);
+      minlat = Math.min(minlat, coords[c][1]);
+      maxlng = Math.max(maxlng, coords[c][0]);
+      minlng = Math.min(minlng, coords[c][0]);
+      coords[c] = new L.LatLng(coords[c][1], coords[c][0]);
+    }
+    var poly = new L.polygon(coords, { weight: 2, color: (polys.features[f].properties.fill || "#0000ff") });
+    if(polys.features[f].properties.name || polys.features[f].properties.description){
+      poly.bindPopup( ('<h3>' + polys.features[f].properties.name + '</h3>' || '') + describe( polys.features[f].properties.description ) );
+    }
+    map.addLayer(poly);
+  }
+  if(polys.features.length){
+    map.fitBounds( new L.LatLngBounds( new L.LatLng(minlat, minlng), new L.LatLng(maxlat, maxlng) ) );
+  }
+}
 function replaceAll(src, oldr, newr){
   while(src.indexOf(oldr) > -1){
     src = src.replace(oldr, newr);

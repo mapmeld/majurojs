@@ -1,0 +1,7 @@
+/* currently need BlobBuilder and FileSaver to export */
+.exportmap{
+  display: none;
+}
+.dragdrop{
+  display: none;
+}
