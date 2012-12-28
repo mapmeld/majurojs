@@ -22,17 +22,23 @@ Step 4: Interact with any building to add a photo, description, or color-coding.
 
 <img src="http://i.imgur.com/WmhxI.png"/>
 
-Step 5: Download your custom map as KML (for Google Earth) and GeoJSON (for Github Pages).
+# How to share your map
+
+You have three options to share your finished map:
+
+<strong>Option 1: Download your map</strong> as KML (for Google Earth) or GeoJSON.
 
 <img src="http://i.imgur.com/OggY1.png"/>
 
-<strong>You've got your map! Keep going if you want to put it online with Github Pages:</strong>
+<strong>Option 2: Save to MajuroJS.org</strong> A link in the map sidebar saves your map "in the cloud" and gives you a shareable link.
 
-Step 6: Fork this repo to your Github account. If you don't have a Github account - join! It's free.
-<br/>
-A sample map will appear at <a href="http://mapmeld.github.com/majurojs">USERNAME.github.com/majurojs</a>
+Visitors to your map can download it in KML (for Google Earth) and GeoJSON formats.
 
-Step 7: Using Github's online editor, replace the text inside mybuild.geojson with your map's GeoJSON.  Save changes.
+<strong>Option 3: Store on Github Pages</strong> Download your map as a GeoJSON file. Then fork this repo to your Github account - creating an account is free!
+
+While you're signed into Github and on github.com/USERNAME/majurojs, click on mybuild.geojson. Then click "Edit" above the text box to make it editable. Paste in the GeoJSON from your own map. If you're not sure how to copy the GeoJSON file, open it in Notepad (Windows) or TextEdit (Mac).
+
+Your map will appear at <a href="http://mapmeld.github.com/majurojs">USERNAME.github.com/majurojs</a>.
 
 # How to create a 3D View
 
@@ -119,3 +125,8 @@ Include these variables to add details and/or timespan information:
 * address
 * start (milliseconds in Unix time)
 * end (milliseconds in Unix time)
+
+# License
+Majuro.js is available through the open source MIT license.
+
+Third-party libraries such as jQuery, Bootstrap, and Poang are made available under their respective licenses.
