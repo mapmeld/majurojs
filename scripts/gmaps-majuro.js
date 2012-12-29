@@ -86,11 +86,10 @@ $(document).ready(function(){
   });
 });
 function bindPopup(shape, name, details){
-  shape.on('click', function(e){
+  google.maps.event.addListener(shape, 'click', function(){
     infowindow.close();
     infowindow.setContent( "<strong>" + name + "</strong><br/>" + details );
-    infowindow.setPosition( shape.getBounds().getCenter() );
-    infowindow.open(map);
+    infowindow.open(map, shape);
   });
 }
 function describe(description){
