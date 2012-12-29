@@ -80,7 +80,8 @@ var init = exports.init = function (config) {
   
   app.get('/timeline', function(req, res){
     // show timeline
-    res.render('checkouttime', { customgeo: req.query['customgeo'] });
+    //res.render('checkouttime', { customgeo: req.query['customgeo'] });
+    res.render('leaflettimeline', { customgeo: req.query['customgeo'] });
   });
 
   app.get('/explore3d', function(req, res){
