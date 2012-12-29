@@ -53,19 +53,19 @@ function set_time_period(jstime){
   var y = codeToTime(jstime) * 1;
   $("#mydate").html( y );
   for(var f=0;f<features.length;f++){
-    if(map.hasLayer(features[f])){
+    if(map.hasLayer(features[f].geometry)){
       if(f.properties.start && codeToTime( f.properties.start ) * 1 > y){
-        map.removeLayer(features[f]);
+        map.removeLayer(features[f].geometry);
         continue;
       }
       if(f.properties.end && codeToTime( f.properties.end ) * 1 < y){
-        map.removeLayer(features[f]);
+        map.removeLayer(features[f].geometry);
         continue;
       }
     }
     else{
       if((!f.properties.start || codeToTime( f.properties.start ) * 1 <= y) && (!f.properties.end || codeToTime( f.properties.end ) * 1 >= y)){
-        map.addLayer( features[f] );
+        map.addLayer( features[f].geometry );
       }
     }
   }
@@ -206,7 +206,7 @@ $(document).ready(function(){
     play.innerHTML = '<a class="btn btn-success"><i class="icon-play-circle icon-white"></i> Play</a>';
     play.onclick = function(){
       var step = codeToTime( $("#filter").slider('value') ) * 1;
-      // Every quarter-second (250 ms) increment the time period
+      // Every quarter-second (300 ms) increment the time period
       // When the end is reached, call clearInterval to stop the animation.
       playStep = window.setInterval(function() {
         if (step * 1 < codeToTime( $("#filter").slider('option', 'max') ) * 1) {
