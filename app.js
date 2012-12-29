@@ -14,7 +14,7 @@ var express = require('express')
 
 var HOUR_IN_MILLISECONDS = 3600000;
 
-var included_sources = [ "allegheny", "chicago", "lancaster", "oakland", "philadelphia", "pittsburgh", "savannah", "seattle" ];
+var included_sources = [ "allegheny", "bloomington", "boston", "chicago", "kitsap", "lancaster", "oakland", "philadelphia", "pittsburgh", "sanfrancisco", "savannah", "seattle", "spokane" ];
 
 var init = exports.init = function (config) {
   

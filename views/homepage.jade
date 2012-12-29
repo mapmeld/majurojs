@@ -91,25 +91,38 @@ body(data-spy="scroll", data-target=".subnav", data-offset="100")
 
       div#cities.main_cont
         h1 Cities
-        p At launch time, you will be able to download buildings in seven cities or counties! Please wait for locations marked with a *.
+        p
+          span At launch time, you will be able to download buildings in eleven cities or counties!
+          strong Locations marked with a * have yet to be uploaded.
         p Some sources include addresses, build dates, and height of buildings. You'll get that data, too.
         ul
           li
             a(href="/draw?src=allegheny") Allegheny County (Pittsburgh), PA
           li
+            a(href="/draw?src=bloomington") Bloomington, IN *
+          li
+            a(href="/draw?src=boston") Boston, MA *
+          li
             a(href="http://historicchicago.herokuapp.com") Chicago, IL
             span + (address, build date, height)
           li
-            a(href="/draw?src=lancaster") Lancaster County, PA *
+            a(href="/draw?src=kitsap") Kitsap County, WA *
+            span + (height)
+          li
+            a(href="/draw?src=lancaster") Lancaster County, PA
           li
             a(href="/draw?src=oakland") Oakland (partial), CA
             span + (name)
           li
             a(href="http://philly-builder.herokuapp.com") Philadelphia, PA
           li
+            a(href="/draw?src=sanfrancisco") San Francisco, CA *
+          li
             a(href="http://savannah-builder.herokuapp.com") Savannah, GA
           li
             a(href="/draw?src=seattle") Seattle, WA *
+          li
+            a(href="/draw?src=spokane") Spokane, WA *
         p Buildings data was collected under open data licenses. There is no official endorsement or maintenance of this site by these cities and counties.
         
         div#finish_line_cont
@@ -118,8 +131,8 @@ body(data-spy="scroll", data-target=".subnav", data-offset="100")
         h1 FAQ
         div
           h4 How can I use the data?
-          p This site links to each city's open data policy.
-          p If you have questions or need the data for anything mission-critical, ask the city.
+          p A popup on each map links to the data's source and the local government's data policy.
+          p If you have questions or need the data for anything mission-critical, ask the local government directly.
           hr
 
           h4 What if my city isn't included?
@@ -138,7 +151,7 @@ body(data-spy="scroll", data-target=".subnav", data-offset="100")
           hr
 
           h4 How do I add my data?
-          p Send a shapefile, KML, or a link to your city's open data site.
+          p Send a shapefile, KML, or a link to a page from your city's open data site.
           hr
 
           h4 Is this open source?

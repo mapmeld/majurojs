@@ -48,12 +48,16 @@ body
         p
           span Data downloaded from&nbsp;
           a.allegheny(href="#", onclick="showDataSource()") Allegheny County
+          a.bloomington(href="#", onclick="showDataSource()") City of Bloomington
+          a.boston(href="#", onclick="showDataSource()") City of Boston
           a.chicago(href="#", onclick="showDataSource()") City of Chicago
+          a.kitsap(href="#", onclick="showDataSource()") Kitsap County
           a.lancaster(href="#", onclick="showDataSource()") Lancaster County
           a.oakland(href="#", onclick="showDataSource()") City of Oakland
           a.philadelphia(href="#", onclick="showDataSource()") City of Philadelphia
           a.savannah(href="#", onclick="showDataSource()") SAGIS
           a.seattle(href="#", onclick="showDataSource()") City of Seattle
+          a.spokane(href="#", onclick="showDataSource()") City of Spokane
           br
           br
           span Source code on&nbsp;
@@ -72,11 +76,26 @@ body
         a(href="http://www.pasda.psu.edu/", target="_blank") PASDA
         br
         a(href="http://www.pasda.psu.edu/uci/FullMetadataDisplay.aspx?file=AlleghenyCounty_Footprints20080616.xml", target="_blank") Data Citation
+      p.bloomington
+        span Buildings data from the City of Bloomington, Indiana via their website.
+        a(href="http://bloomington.in.gov/documents/viewDocument.php?document_id=1870", target="_blank") Source
+        br
+        a(href="http://bloomington.in.gov/documents/viewDocument.php?document_id=709", target="_blank") Data Policy
+      p.boston
+        span Buildings data for the City of Boston via the&nbsp;
+        a(href="http://www.bostonredevelopmentauthority.org/BRA_3D_Models/2D-download.html", target="_blank") Boston Redevelopment Authority
+        br
+        a(href="http://www.bostonredevelopmentauthority.org/BRA_3D_Models/Index.html", target="_blank") Data Policy
       p.chicago
         span Buildings data from the City of Chicago via&nbsp;
         a(href="https://data.cityofchicago.org", target="_blank") data.cityofchicago.org
         br
         a(href="https://data.cityofchicago.org/Buildings/Building-Footprints/w2v3-isjw", target="_blank") Public Data
+      p.kitsap
+        span Buildings data from Kitsap County, Washington via their&nbsp;
+        a(href="http://www.kitsapgov.com/gis/", target="_blank") GIS portal.
+        br
+        a(href="http://www.kitsapgov.com/county/privacy.htm", target="_blank") Data Policy
       p.lancaster
         span Buildings data from Lancaster County, Pennsylvania via&nbsp;
         a(href="http://www.pasda.psu.edu/", target="_blank") PASDA
@@ -103,5 +122,10 @@ body
         a(href="https://data.seattle.gov", target="_blank") data.seattle.gov
         br
         a(href="https://data.seattle.gov/dataset/2009-Building-Outlines/y7u8-vad7", target="_blank") Public Domain
+      p.spokane
+        span Buildings data from the City of Spokane via their&nbsp;
+        a(href="http://www.spokanecity.org/services/gis/data/", target="_blank") GIS portal.
+        br
+        a(href="http://www.spokanecity.org/services/gis/disclaimer/", target="_blank") Data Disclaimer
     div.modal-footer
       a.btn.btn-primary(href="#", onclick="$('.modal').modal('toggle');") Close
