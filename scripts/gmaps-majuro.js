@@ -88,7 +88,7 @@ $(document).ready(function(){
 function bindPopup(shape, name, details){
   shape.on('click', function(e){
     infowindow.close();
-    infowindow.setContent( "<strong>" + name + "</strong><br/>" + details;
+    infowindow.setContent( "<strong>" + name + "</strong><br/>" + details );
     infowindow.setPosition( shape.getBounds().getCenter() );
     infowindow.open(map);
   });
