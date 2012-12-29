@@ -79,8 +79,17 @@ function loadedPolys(polys){
     case "pittsburgh":
       src_credits = ".allegheny";
       break;
+    case "bloomington":
+      src_credits = ".bloomington";
+      break;
+    case "boston":
+      src_credits = ".boston";
+      break;
     case "chicago":
       src_credits = ".chicago";
+      break;
+    case "kitsap":
+      src_credits = ".kitsap";
       break;
     case "lancaster":
       src_credits = ".lancaster";
@@ -96,6 +105,9 @@ function loadedPolys(polys){
       break;
     case "seattle":
       src_credits = ".seattle";
+      break;
+    case "spokane":
+      src_credits = ".spokane";
       break;
   }
   $(src_credits).css({ "display": "block" });
