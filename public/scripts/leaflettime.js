@@ -205,7 +205,7 @@ $(document).ready(function(){
     
     play.innerHTML = '<a class="btn btn-success"><i class="icon-play-circle icon-white"></i> Play</a>';
     play.onclick = function(){
-      var step = codeToTime( $("#filter").slider('value') );
+      var step = codeToTime( $("#filter").slider('value') ) * 1;
       // Every quarter-second (250 ms) increment the time period
       // When the end is reached, call clearInterval to stop the animation.
       playStep = window.setInterval(function() {
