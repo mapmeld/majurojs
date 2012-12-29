@@ -47,7 +47,7 @@ var city_options = {
 
 function codeToTime(jstime){
   return (new Date(jstime)).getYear();
-};
+}
 
 function set_time_period(jstime){
   var y = codeToTime(jstime) * 1;
@@ -69,14 +69,14 @@ function set_time_period(jstime){
       }
     }
   }
-};
+}
 
 function bindDetails(poly, props){
   poly.on('mouseover', function(e){
     building_pop.setLatLng( poly.getBounds().getCenter() ).setContent( (feature.properties.address || feature.properties.name) + "<br/>Built " + (feature.properties.start || "") + "<br/>" + (describe(features.properties.description) || "") );
     map.openPopup(building_pop);
   });
-};
+}
 
 function describe(description){
   if((typeof description == 'undefined') || (!description)){
