@@ -45,11 +45,11 @@ var city_options = {
   }
 };
 
-var codeToTime = function(jstime){
+function codeToTime(jstime){
   return (new Date(jstime)).getYear();
 };
 
-var set_time_period = function(jstime){
+function set_time_period(jstime){
   var y = codeToTime(jstime) * 1;
   $("#mydate").html( y );
   for(var f=0;f<features.length;f++){
@@ -71,7 +71,7 @@ var set_time_period = function(jstime){
   }
 };
 
-var bindDetails = function(poly, props){
+function bindDetails(poly, props){
   poly.on('mouseover', function(e){
     building_pop.setLatLng( poly.getBounds().getCenter() ).setContent( (feature.properties.address || feature.properties.name) + "<br/>Built " + (feature.properties.start || "") + "<br/>" + (describe(features.properties.description) || "") );
     map.openPopup(building_pop);
