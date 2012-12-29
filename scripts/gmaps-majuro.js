@@ -13,20 +13,86 @@ $(document).ready(function(){
     maxWidth: 300
   });
   
-  buildings = new google.maps.KmlLayer('../mybuild.geojson', { suppressInfoWindows: false, preserveViewport: false, map: map });
-  
-  /* buildings.on('featureclick', function(feature, latlng, pos, data){
-    if(!data.name && !data.description){
-      // no info was stored on this feature. No need for a popup.
-      return;
+  $.getJSON('../mybuild.geojson', function(polys){
+    var src = polys.source;
+    var src_credits = "";
+    switch(src){
+      case "allegheny":
+      case "pittsburgh":
+        src_credits = ".allegheny";
+        break;
+      case "bloomington":
+        src_credits = ".bloomington";
+        break;
+      case "boston":
+        src_credits = ".boston";
+        break;
+      case "chicago":
+        src_credits = ".chicago";
+        break;
+      case "kitsap":
+        src_credits = ".kitsap";
+        break;
+      case "lancaster":
+        src_credits = ".lancaster";
+        break;
+      case "oakland":
+        src_credits = ".oakland";
+        break;
+      case "philadelphia":
+        src_credits = ".philadelphia";
+        break;
+      case "savannah":
+        src_credits = ".savannah";
+        break;
+      case "seattle":
+        src_credits = ".seattle";
+        break;
+      case "spokane":
+        src_credits = ".spokane";
+        break;
     }
-    infowindow.close();
-    infowindow.setContent( "<strong>" + (data.name || data.id || "") + "</strong><br/>" + describe(data.description) );
-    infowindow.setPosition( latlng );
-    infowindow.open(map);
-  }); */
+    $(src_credits).css({ "display": "block" });
 
+    //console.log(polys);
+    var maxlat = -90;
+    var minlat = 90;
+    var maxlng = -180;
+    var minlng = 180;
+    for(var f=0;f<polys.features.length;f++){
+      var coords = polys.features[f].geometry.coordinates[0];
+      for(var c=0;c<coords.length;c++){
+        maxlat = Math.max(maxlat, coords[c][1]);
+        minlat = Math.min(minlat, coords[c][1]);
+        maxlng = Math.max(maxlng, coords[c][0]);
+        minlng = Math.min(minlng, coords[c][0]);
+        coords[c] = new google.maps.LatLng(coords[c][1], coords[c][0]);
+      }
+      var poly = new google.maps.Polygon({
+        map: map,
+        paths: [ coords ],
+        strokeColor: (polys.features[f].properties.fill || "#0000ff"),
+        strokeOpacity: 0.8,
+        fillColor: (polys.features[f].properties.fill || "#0000ff"),
+        fillOpacity: 0.3
+      });
+      if(polys.features[f].properties.name || polys.features[f].properties.description){
+        bindPopup(poly, ('<h3>' + polys.features[f].properties.name + '</h3>' || ''), describe( polys.features[f].properties.description ) );
+      }
+    }
+    if(polys.features.length){
+      map.fitBounds( new google.maps.LatLngBounds( new google.maps.LatLng(minlat, minlng), new google.maps.LatLng(maxlat, maxlng) ) );
+    }
+  });
 });
+function bindPopup(shape, name, details){
+  shape.on('click', function(e){
+    infowindow.close();
+    infowindow.setContent( "<strong>" + name + "</strong><br/>" + details;
+    infowindow.setPosition( shape.getBounds().getCenter() );
+    infowindow.open(map);
+  });
+}
 function describe(description){
   if((typeof description == 'undefined') || (!description)){
     return "";
