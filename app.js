@@ -387,6 +387,29 @@ var init = exports.init = function (config) {
         }
       });
     }
+    else if(req.query['polygon']){
+      // API request in form /timeline-at?polygon=[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
+      // speedier request with form /timeline-at?src=CITYCODE&polygon=[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
+      if(req.query['src']){
+        // speed up query with a specific city, county, or locality
+        timepoly.TimePoly.find({ src: req.query['src'] }).find({ ll: { "$within": { "$polygon": JSON.parse(req.query['polygon']) } } }).limit(10000).exec(function(err, timepolys){
+          if(err){
+            res.send(err);
+            return;
+          }
+          processTimepolys(timepolys, req, res);
+        });
+      }
+      else{
+        timepoly.TimePoly.find({ ll: { "$within": { "$polygon": JSON.parse(req.query['polygon']) } } }).limit(10000).exec(function(err, timepolys){
+          if(err){
+            res.send(err);
+            return;
+          }
+          processTimepolys(timepolys, req, res);
+        });
+      }
+    }
   });
 
   app.get('/auth', middleware.require_auth_browser, routes.index);
