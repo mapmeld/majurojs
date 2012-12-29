@@ -40,7 +40,9 @@ While you're signed into Github and on github.com/USERNAME/majurojs, click on my
 
 Your map will appear at <a href="http://mapmeld.github.com/majurojs">USERNAME.github.com/majurojs</a>.
 
-# How to create a 3D View
+# Visualizations
+
+## 3D View
 
 Rendering 3D buildings with D3.js and three.js is an option for users of Firefox, Chrome, and Opera. Adapted from <a href="https://github.com/bmount">Brian Mount</a>'s original <a href="http://b.aguacat.es/anatine/_design/funbun/index.html">3D GeoJSON map</a>.
 
@@ -52,13 +54,19 @@ A 3D View is available directly from the neighborhood-drawing map on MajuroJS.or
 
 <strong>Tips</strong>: Use arrow keys to pan, < and > to zoom, d and x to tilt, z and s to roll.
 
-# How to create a neighborhood editor
+## Neighborhood Editor
 
 A mini map editor will appear at <em>USERNAME.github.com/majurojs/editor</em> after you fork this repo.
 
 <strong>Customization</strong>: Put your buildings data into mybuild.geojson.
 
 <strong>Downloads</strong>: Users of Firefox, Chrome, Opera, and IE10+ can work with your map and add details, then download Google Earth / KML or GeoJSON files. They won't be able to save their changes on your site.
+
+## Google Maps Demo
+
+A Google Maps API view will be set up at <em>USERNAME.github.com/majurojs/gmaps</em> after you fork this repo.
+
+<strong>Customization</strong>: Put your buildings data into mybuild.geojson.
 
 # Server
 
