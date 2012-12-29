@@ -154,14 +154,14 @@ $(document).ready(function(){
     var mintime = new Date("January 1, 3000") * 1;
     var maxtime = new Date("January 1, 1000") * 1;
     for(var i=0;i<features.length;i++){
-      features[i].properties["marker-color"] = '#000';
-      features[i].properties["marker-symbol"] = 'star-stroked';
-      years[features[i].properties.year] = true;
-      maxtime = Math.max(maxtime, features[i].properties.start);
-      maxtime = Math.max(maxtime, features[i].properties.end);
-      mintime = Math.min(mintime, features[i].properties.start);
-      mintime = Math.min(mintime, features[i].properties.end);
-      
+      if(features[i].properties.start){
+        maxtime = Math.max(maxtime, features[i].properties.start);
+        mintime = Math.min(mintime, features[i].properties.start);
+      }
+      if(features[i].properties.end){
+        maxtime = Math.max(maxtime, features[i].properties.end);
+        mintime = Math.min(mintime, features[i].properties.end);
+      }
       var coords = features[i].geometry.coordinates[0];
       for(var p=0;p<coords.length;p++){
         minlat = Math.min(minlat, coords[p][1]);
