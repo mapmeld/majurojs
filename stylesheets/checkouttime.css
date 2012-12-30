@@ -41,9 +41,18 @@ body {
   width: 26px;
 }
 .allegheny{ display:none; }
+.austin{ display:none; }
+.baltimore{ display:none; }
+.bloomington{ display:none; }
+.boston{ display:none; }
 .chicago{ display:none; }
+.kitsap{ display:none; }
 .lancaster{ display:none; }
+.nanaimo{ display:none; }
 .oakland{ display:none; }
 .philadelphia{ display:none; }
+.sanfrancisco{ display:none; }
 .savannah{ display:none; }
 .seattle{ display:none; }
+.spokane{ display:none; }
+.westsacramento{ display:none; }
