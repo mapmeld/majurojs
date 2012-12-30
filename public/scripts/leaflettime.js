@@ -7,16 +7,34 @@ var city_options = {
     zoom: 14,
     time: false
   },
+  boston: {
+    lat: 42.358431,
+    lng: -71.059773,
+    zoom: 14,
+    time: false
+  },
+  bloomington: {
+    lat: 39.165325,
+    lng: -86.526386,
+    zoom: 14,
+    time: false
+  },
   chicago: {
     lat: 41.888476,
     lng: -87.624034,
     zoom: 14,
     time: true
   },
+  kitsap: {
+    lat: 47.647661,
+    lng: -122.641258,
+    zoom: 14,
+    time: false
+  },
   lancaster: {
     lat: 40.011839,
     lng: -76.172333,
-    zoom: 14,
+    zoom: 13,
     time: false
   },
   oakland: {
@@ -31,6 +49,12 @@ var city_options = {
     zoom: 14,
     time: false
   },
+  sanfrancisco: {
+    lat: 37.77493,
+    lng: -122.419416,
+    zoom: 14,
+    time: false
+  },
   savannah: {
     lat: 32.076175,
     lng: -81.095238,
@@ -40,6 +64,12 @@ var city_options = {
   seattle: {
     lat: 47.605237,
     lng: -122.325897,
+    zoom: 14,
+    time: false
+  },
+  spokane: {
+    lat: 47.65878,
+    lng: -117.426047,
     zoom: 14,
     time: false
   }
