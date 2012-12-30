@@ -11,6 +11,18 @@ var city_options = {
     zoom: 14,
     time: false
   },
+  austin: {
+    lat: 30.312427,
+    lng: -97.76018,
+    zoom: 14,
+    time: false
+  },
+  baltimore: {
+    lat: 39.312564,
+    lng: -76.61684
+    zoom: 14,
+    time: false
+  },
   boston: {
     lat: 42.358431,
     lng: -71.059773,
@@ -39,6 +51,12 @@ var city_options = {
     lat: 40.011839,
     lng: -76.172333,
     zoom: 13,
+    time: false
+  },
+  nanaimo: {
+    lat: 49.166,
+    lng: -123.93519,
+    zoom: 14,
     time: false
   },
   oakland: {
@@ -74,6 +92,12 @@ var city_options = {
   spokane: {
     lat: 47.65878,
     lng: -117.426047,
+    zoom: 14,
+    time: false
+  },
+  westsacramento: {
+    lat: 38.578312,
+    lng: -121.546635,
     zoom: 14,
     time: false
   }
