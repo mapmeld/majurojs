@@ -42,7 +42,7 @@ body
                   a(href="#", onclick="downloadFile(1)") GeoJSON
               br
             li(style="margin-left:-10px;")
-              a(href="#", onclick="saveMap()") Save on MajuroJS.org
+              a(href="#", onclick="startSave()") Save on MajuroJS.org
         br
         br
         p
@@ -65,6 +65,21 @@ body
         div.arrow-right
 
       div#map(ondragend="dragended(event)", ondrop="dropped(event)", ondragover="allowDrop(event)")
+
+  div#savemapinfo.modal.hide.fade
+    div.modal-header
+      button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
+      h3 Saving Map
+    div.modal-body
+      p
+        h3 Customize your SaveMap:
+        h4 Name (optional)
+        input.x-large#savemapname(type="text", value="")
+        h4 Info (optional)
+        textarea#savemapinfo(rows="5", cols="30")
+    div.modal-footer
+      a.btn.btn-inverse(href="#", onclick="$('#savemapinfo').modal('toggle');") Cancel
+      a#savemaplink.btn.btn-primary(href="#", onclick="saveMap()") Save
 
   div#creditmessage.modal.hide.fade
     div.modal-header
@@ -130,4 +145,4 @@ body
       br
       span There is no official endorsement or maintenance of this site by this city or county.
     div.modal-footer
-      a.btn.btn-primary(href="#", onclick="$('.modal').modal('toggle');") Close
+      a.btn.btn-primary(href="#", onclick="$('#creditmessage').modal('toggle');") Close

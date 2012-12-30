@@ -93,7 +93,9 @@ var init = exports.init = function (config) {
     // store map details as a SaveMap
     var mymap = new savemap.SaveMap({
       customgeo: req.body.customgeo,
-      edited: JSON.parse(req.body.edited)
+      edited: JSON.parse(req.body.edited),
+      name: req.body.name,
+      info: req.body.info
     });
     mymap.save(function (err){
       res.send({ saveid: mymap._id });
@@ -167,13 +169,13 @@ var init = exports.init = function (config) {
                 } 
               }
             }
-            processTimepolys(timepolys, req, res);
+            processTimepolys(timepolys, req, res, mymap.name || "", mymap.info || "");
           });
         });
       }
       else{
         // show saved map
-        res.render('savemap', { "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ) });
+        res.render('savemap', { "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ), "name": (mymap.name || ""), "info": (mymap.info || "") });
       }
     });
   });
@@ -253,7 +255,7 @@ var init = exports.init = function (config) {
     return description;
   };
   
-  var processTimepolys = function(timepolys, req, res){
+  var processTimepolys = function(timepolys, req, res, optname, optinfo){
     var src = "";
     if(timepolys.length){
       src = timepolys[0].src;
@@ -268,7 +270,7 @@ var init = exports.init = function (config) {
     }
     if(req.url.indexOf('kml') > -1){
       // KML output
-      var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://earth.google.com/kml/2.2">\n	<Document>\n		<name>Majuro Export</name>\n		<description>Buildings Export, Source: ' + src + '</description>\n';
+      var kmlintro = '<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://earth.google.com/kml/2.2">\n	<Document>\n		<name>' + (optname || 'Majuro.js Export') + '</name>\n		<description><![CDATA[' + (optinfo || 'Buildings Export, Source: ' + src) + ']]></description>\n';
       kmlintro += '			<Style id="poly">\n				<LineStyle>\n					<color>aaff0000</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>88ff0000</color>\n				</PolyStyle>\n			</Style>\n';
       kmlintro += '			<Style id="red_poly">\n				<LineStyle>\n					<color>ff0000ff</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>880000ff</color>\n				</PolyStyle>\n			</Style>\n			<Style id="blue_poly">\n				<LineStyle>\n					<color>ffff0000</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>88ff0000</color>\n				</PolyStyle>\n			</Style>\n			<Style id="green_poly">\n				<LineStyle>\n					<color>ff00ff00</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>8800ff00</color>\n				</PolyStyle>\n			</Style>\n			<Style id="orange_poly">\n				<LineStyle>\n					<color>ff005aff</color>\n				</LineStyle>\n				<PolyStyle>\n					<color>88005aff</color>\n				</PolyStyle>\n			</Style>\n';
 
@@ -348,7 +350,7 @@ var init = exports.init = function (config) {
           "properties": proplist
         };
       }
-      res.json({ "type": "FeatureCollection", "source": src, "features": timepolys });
+      res.json({ "type": "FeatureCollection", "source": src, "features": timepolys, "name": (optname || ""), "info": (optinfo || "") });
     }
   };
   

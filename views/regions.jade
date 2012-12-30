@@ -21,12 +21,12 @@ body
             span(style="text-transform:capitalize;") #{region.fullname}
         div
           h3 Lists of regions:
-          for division in region.divisions
-            h4 division.category
+          - for division in region.divisions
+            h4 #{division.category}
             ul
-              for district in division.districts
+              - for district in division.districts
                 li
-                  a("/build?src=#{division.name}&customgeo=#{district.geo}") district.name
+                  a("/build?src=#{division.name}&customgeo=#{district.geo}") #{district.name}
 
       .span4
         img.govlogo(src="#{region.images[1]}")

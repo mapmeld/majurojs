@@ -336,6 +336,9 @@ function describe(description){
   }
   return description;
 }
+function startSave(){
+  $("#savemapinfo").modal();
+}
 function saveMap(){
   var poly_id = getURLParameter("customgeo");
   var arredited = [];
@@ -357,7 +360,7 @@ function saveMap(){
       arredited[ arredited.length-1 ].description = footprints[editShape].description;
     }
   });
-  $.post("/savemap", { customgeo: poly_id, edited: JSON.stringify(arredited) }, function(data){
+  $.post("/savemap", { customgeo: poly_id, edited: JSON.stringify(arredited), name: $("#savemapname").val(), info: $("#savemapinfo").val() }, function(data){
     window.location = "/savemap?id=" + data.saveid;
   });
 }
