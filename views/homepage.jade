@@ -92,7 +92,7 @@ body(data-spy="scroll", data-target=".subnav", data-offset="100")
       div#cities.main_cont
         h1 Cities
         p
-          span At launch time, you will be able to download buildings in sixteen cities or counties!
+          span At launch time, you will be able to download buildings in fifteen cities or counties!
           strong Locations marked with a * have yet to be uploaded.
         p Some sources include addresses, build dates, and height of buildings. You'll get that data, too.
         ul
@@ -123,8 +123,9 @@ body(data-spy="scroll", data-target=".subnav", data-offset="100")
             span + (name)
           li
             a(href="http://philly-builder.herokuapp.com") Philadelphia, PA
-          li
-            a(href="/draw?src=sanfrancisco") San Francisco, CA *
+          //
+            li
+              a(href="/draw?src=sanfrancisco") San Francisco, CA *
           li
             a(href="/draw?src=seattle") Seattle, WA *
           li
