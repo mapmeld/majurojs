@@ -23,6 +23,12 @@ $(document).ready(function(){
       case "pittsburgh":
         src_credits = ".allegheny";
         break;
+      case "austin":
+        src_credits = ".austin";
+        break;
+      case "baltimore":
+        src_credits = ".baltimore";
+        break;
       case "bloomington":
         src_credits = ".bloomington";
         break;
@@ -38,6 +44,9 @@ $(document).ready(function(){
       case "lancaster":
         src_credits = ".lancaster";
         break;
+      case "nanaimo":
+        src_credits = ".nanaimo";
+        break;
       case "oakland":
         src_credits = ".oakland";
         break;
@@ -45,6 +54,8 @@ $(document).ready(function(){
         src_credits = ".philadelphia";
         break;
       case "savannah":
+      case "chatham":
+      case "sagis":
         src_credits = ".savannah";
         break;
       case "seattle":
@@ -52,6 +63,9 @@ $(document).ready(function(){
         break;
       case "spokane":
         src_credits = ".spokane";
+        break;
+      case "westsacramento":
+        src_credits = ".westsacramento";
         break;
     }
     $(src_credits).css({ "display": "block" });
