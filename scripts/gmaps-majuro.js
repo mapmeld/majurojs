@@ -96,7 +96,7 @@ function bindPopup(shape, center, name, details){
   google.maps.event.addListener(shape, 'click', function(){
     infowindow.close();
     infowindow.setContent( "<strong>" + name + "</strong><br/>" + details );
-    infowindow.setLatLng(center);
+    infowindow.setPosition(center);
     infowindow.open(map);
   });
 }
