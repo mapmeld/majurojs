@@ -61,23 +61,30 @@ $(document).ready(function(){
     var minlng = 180;
     for(var f=0;f<polys.features.length;f++){
       var coords = polys.features[f].geometry.coordinates[0];
+      var avglat = 0;
+      var avglng = 0;
       for(var c=0;c<coords.length;c++){
         maxlat = Math.max(maxlat, coords[c][1]);
         minlat = Math.min(minlat, coords[c][1]);
         maxlng = Math.max(maxlng, coords[c][0]);
         minlng = Math.min(minlng, coords[c][0]);
+        avglat += coords[c][1];
+        avglng += coords[c][0];
         coords[c] = new google.maps.LatLng(coords[c][1], coords[c][0]);
       }
+      avglat /= coords.length;
+      avglng /= coords.length;
+      var ctr = new google.maps.LatLng(avglat, avglng);
       var poly = new google.maps.Polygon({
         map: map,
         paths: [ coords ],
         strokeColor: (polys.features[f].properties.fill || "#0000ff"),
-        strokeOpacity: 0.8,
+        strokeOpacity: 0.5,
         fillColor: (polys.features[f].properties.fill || "#0000ff"),
         fillOpacity: 0.3
       });
       if(polys.features[f].properties.name || polys.features[f].properties.description){
-        bindPopup(poly, ('<h3>' + polys.features[f].properties.name + '</h3>' || ''), describe( polys.features[f].properties.description ) );
+        bindPopup(poly, ctr, ('<h3>' + polys.features[f].properties.name + '</h3>' || ''), describe( polys.features[f].properties.description ) );
       }
     }
     if(polys.features.length){
@@ -85,11 +92,12 @@ $(document).ready(function(){
     }
   });
 });
-function bindPopup(shape, name, details){
+function bindPopup(shape, center, name, details){
   google.maps.event.addListener(shape, 'click', function(){
     infowindow.close();
     infowindow.setContent( "<strong>" + name + "</strong><br/>" + details );
-    infowindow.open(map, shape);
+    infowindow.setLatLng(center);
+    infowindow.open(map);
   });
 }
 function describe(description){
