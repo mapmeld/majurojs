@@ -42,6 +42,12 @@ Your map will appear at <a href="http://mapmeld.github.com/majurojs">USERNAME.gi
 
 # Visualizations
 
+## Map Key
+
+You can add a map key to show what red, blue, green, and orange buildings symbolize on your map.
+
+After forking this repo to your Github account, click on mapkey.js and then Edit to make the map key appear, add symbols, and change any other settings.
+
 ## 3D View
 
 Rendering 3D buildings with D3.js and three.js is an option for users of Firefox, Chrome, and Opera. Adapted from <a href="https://github.com/bmount">Brian Mount</a>'s original <a href="http://b.aguacat.es/anatine/_design/funbun/index.html">3D GeoJSON map</a>.
