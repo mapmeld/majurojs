@@ -73,6 +73,7 @@ $(document).ready(function(){
     var minlat = 90;
     var maxlng = -180;
     var minlng = 180;
+    var includedColors = [];
     for(var f=0;f<polys.features.length;f++){
       var coords = polys.features[f].geometry.coordinates[0];
       var avglat = 0;
@@ -89,20 +90,82 @@ $(document).ready(function(){
       avglat /= coords.length;
       avglng /= coords.length;
       var ctr = new google.maps.LatLng(avglat, avglng);
+      var polyfill = (polys.features[f].properties.fill || "#0033ff");
       var poly = new google.maps.Polygon({
         map: map,
         paths: [ coords ],
-        strokeColor: (polys.features[f].properties.fill || "#0000ff"),
+        strokeColor: polyfill,
         strokeOpacity: 0.5,
-        fillColor: (polys.features[f].properties.fill || "#0000ff"),
+        fillColor: polyfill,
         fillOpacity: 0.3
       });
       if(polys.features[f].properties.name || polys.features[f].properties.description){
         bindPopup(poly, ctr, ('<h3>' + polys.features[f].properties.name + '</h3>' || ''), describe( polys.features[f].properties.description ) );
       }
+      if(ShowMapKey && !ShowUnusedColors){
+        switch(polyfill){
+          case "#0000ff":
+          case "#0033ff":
+          case "#00f":
+          case "blue":
+            if(includedColors.indexOf("blue") == -1){
+              includedColors.push("blue");
+            }
+            break;
+          case "#ff0000":
+          case "#f00":
+          case "red":
+            if(includedColors.indexOf("red") == -1){
+              includedColors.push("red");
+            }
+            break;
+          case "#00ff00":
+          case "#0f0":
+          case "green":
+            if(includedColors.indexOf("green") == -1){
+              includedColors.push("green");
+            }
+            break;
+          case "#ffa500":
+          case "orange":
+            if(includedColors.indexOf("orange") == -1){
+              includedColors.push("orange");
+            }
+            break;
+        }
+      }
     }
     if(polys.features.length){
       map.fitBounds( new google.maps.LatLngBounds( new google.maps.LatLng(minlat, minlng), new google.maps.LatLng(maxlat, maxlng) ) );
+    }
+    // load key, if requested
+    if(ShowMapKey){
+      var key = document.createElement('div');
+      key.className = 'mapkey';
+      var keyContent = "<h4>Map Key</h4><ul>";
+      $.each(MapKey, function(color, label){
+        // check if all colors should be included, or that this color was used, before adding it to the key
+        if(!ShowUnusedColors && includedColors.indexOf(color) == -1){
+          return;
+        }
+        // remove whitespace
+        while(label.indexOf(" ") == 0){
+          label = label.replace(" ","");
+        }
+        while(label.lastIndexOf(" ") == label.length - 1){
+          label = label.substring(0, label.length - 1);
+        }
+        while(label.indexOf("	") == 0){
+          label = label.replace("	","");
+        }
+        while(label.lastIndexOf("	") == label.length - 1){
+          label = label.substring(0, label.length - 1);
+        }
+        keyContent += "<li><img src='images/" + color + "marker.png'/><span>" + label + "</span></li>";      
+      });
+      keyContent += "</ul>";
+      key.innerHTML = keyContent;
+      $("#sidebar").append(key);
     }
   });
 });

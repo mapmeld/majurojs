@@ -64,3 +64,22 @@ ul li{
   font-size: 13pt !important;
   line-height: 25pt !important;
 }
+.mapkey{
+  background-color: #fff;
+  padding: 12px;
+}
+.mapkey li{
+  list-style-type: none;
+  margin-left: -23px;
+}
+.mapkey img{
+  width: 17px;
+  vertical-align: middle;
+  margin-left: -5px;
+  padding-right: 5px;
+}
+.mapkey span{
+  vertical-align: middle;
+  padding-left: 8px;
+  padding-right: 8px;
+}
