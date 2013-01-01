@@ -428,7 +428,7 @@ function saveMap(){
       arredited[ arredited.length-1 ].description = footprints[editShape].description;
     }
   });
-  $.post("/savemap", { customgeo: poly_id, edited: JSON.stringify(arredited), name: $("#savemapname").val(), info: $("#savemapinfo").val() }, function(data){
+  $.post("/savemap", { customgeo: poly_id, edited: JSON.stringify(arredited), name: $("#savemapname").val(), info: $("#savemapinfotext").val() }, function(data){
     window.location = "/savemap?id=" + data.saveid;
   });
 }
