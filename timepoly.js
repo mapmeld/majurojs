@@ -9,7 +9,8 @@ var TimePolySchema = new Schema({
   name: String,
   address: String,
   points: Array,
-  src: String
+  src: String,
+  height: Number
 });
 
 var TimePoly = mongoose.model('TimePoly', TimePolySchema);
