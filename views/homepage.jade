@@ -1,5 +1,7 @@
 head
   meta(charset="utf-8")
+  meta(name="author", content="Nick Doiron @mapmeld")
+  meta(name="description", content="Instant, intuitive neighborhood maps of 15 cities. Ready to download to Google Earth or store in the cloud. Open source platform for open civic data.")
   title Majuro.js
   link(href="/stylesheets/style.css", rel="stylesheet", type="text/css")
   link(href='http://fonts.googleapis.com/css?family=Alfa+Slab+One', rel='stylesheet', type='text/css')
@@ -9,16 +11,16 @@ head
 body(data-spy="scroll", data-target=".subnav", data-offset="100")
   div#banner_bg
     h1 MAJURO.JS
+    h3
+      span Instant, intuitive neighborhood maps
+      br
+      span Ready to download to Google Earth or store in the cloud
     h3(style="display:none;")
       span Many websites have data.
       br
       span At MajuroJS.org,&nbsp;&nbsp;
       em you
       span &nbsp;&nbsp;have data.
-    h3
-      span Instant, intuitive neighborhood maps
-      br
-      span Ready to download to Google Earth or store in the cloud
 
   div#information
     div#main_nav_cont.subnav
@@ -164,8 +166,10 @@ body(data-spy="scroll", data-target=".subnav", data-offset="100")
           hr
 
           h4 Is this open source?
-          p The entire site is open source.
-          a(href="https://github.com/mapmeld/majurojs") Source code on Github
+          p
+            span The entire site is open source.&nbsp;
+            a(href="https://github.com/mapmeld/majurojs") Source code on Github
+          p The background map (and the image at the top of this page) use data from OpenStreetMap.
           hr
           
           h4 Can I map a whole city with this?
