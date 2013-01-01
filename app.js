@@ -66,8 +66,42 @@ var init = exports.init = function (config) {
   });
   
   app.get('/regions/:regionname', function(req, res){
-    region.Region.findOne({ "name": req.params.regionname }).exec(function(err, myregion){
-      res.render('regions', { region: myregion });
+    //region.Region.findOne({ "name": req.params.regionname }).exec(function(err, myregion){
+    //  res.render('regions', { region: myregion });
+    //});
+    res.render('regions', {
+      region: {
+        fullname: "Samplistan",
+        images: ["/images/bg.png", "/images/logo.png"],
+        divisions: [
+          {
+            category: "Districts",
+            districts: [
+              {
+                name: "District 9",
+                geo: 96960
+              },
+              {
+                name: "District 9+3/4",
+                geo: 96961
+              }
+            ]
+          },
+          {
+            category: "Neighborhoods",
+            districts: [
+              {
+                name: "Sesame Street",
+                geo: 123
+              },
+              {
+                name: "Easy Street",
+                geo: 456
+              }
+            ]
+          }
+        ]
+      }
     });
   });
   //app.get('/namedgeo', function(req, res){
