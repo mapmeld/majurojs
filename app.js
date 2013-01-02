@@ -479,6 +479,7 @@ var init = exports.init = function (config) {
         for(var pt=0;pt<poly.length;pt++){
           poly[pt] = [ poly[pt].split(",")[1] * 1.0, poly[pt].split(",")[0] * 1.0 ];
         }
+        return res.send(poly);
         timepoly.TimePoly.find({ src: req.params.src }).find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
           if(err){
             return res.send(err);
