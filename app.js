@@ -483,7 +483,6 @@ var init = exports.init = function (config) {
           if(err){
             return res.send(err);
           }
-          return res.send(timepolys);
           processTimepolys(timepolys, req, res);
         });
       });
@@ -514,7 +513,6 @@ var init = exports.init = function (config) {
           if(err){
             return res.send(err);
           }
-          return res.send(timepolys);
           processTimepolys(timepolys, req, res);
         });
       });
