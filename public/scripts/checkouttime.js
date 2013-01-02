@@ -19,7 +19,7 @@ var city_options = {
   },
   baltimore: {
     lat: 39.312564,
-    lng: -76.61684
+    lng: -76.61684,
     zoom: 14,
     time: false
   },
