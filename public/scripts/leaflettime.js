@@ -7,6 +7,18 @@ var city_options = {
     zoom: 14,
     time: false
   },
+  austin: {
+    lat: 30.312427,
+    lng: -97.76018,
+    zoom: 14,
+    time: false
+  },
+  baltimore: {
+    lat: 39.312564,
+    lng: -76.61684,
+    zoom: 14,
+    time: false
+  },
   boston: {
     lat: 42.358431,
     lng: -71.059773,
@@ -19,11 +31,23 @@ var city_options = {
     zoom: 14,
     time: false
   },
+  chapelhill: {
+    lat: 35.925661,
+    lng: -79.032004,
+    zoom: 14,
+    time: false
+  },
   chicago: {
     lat: 41.888476,
     lng: -87.624034,
     zoom: 14,
     time: true
+  },
+  clark: {
+    lat: 39.924251,
+    lng: -83.804479,
+    zoom: 14,
+    time: false
   },
   kitsap: {
     lat: 47.647661,
@@ -37,15 +61,45 @@ var city_options = {
     zoom: 13,
     time: false
   },
+  midland: {
+    lat: 31.998308,
+    lng: -102.083141,
+    zoom: 14,
+    time: true
+  },
+  nanaimo: {
+    lat: 49.166,
+    lng: -123.93519,
+    zoom: 14,
+    time: false
+  },
   oakland: {
     lat: 37.795135,
     lng: -122.255173,
     zoom: 14,
     time: false
   },
+  petaluma: {
+    lat: 38.250729,
+    lng: -122.634824,
+    zoom: 14,
+    time: false
+  },
   philadelphia: {
     lat: 39.938435,
     lng: -75.136528,
+    zoom: 14,
+    time: false
+  },
+  raleigh: {
+    lat: 35.825602,
+    lng: -78.617236,
+    zoom: 14,
+    time: false
+  },
+  roundrock: {
+    lat: 30.533027,
+    lng: -97.686814,
     zoom: 14,
     time: false
   },
@@ -67,9 +121,27 @@ var city_options = {
     zoom: 14,
     time: false
   },
+  smith: {
+    lat: 32.336932,
+    lng: -95.303603,
+    zoom: 14,
+    time: false
+  },
   spokane: {
     lat: 47.65878,
     lng: -117.426047,
+    zoom: 14,
+    time: false
+  },
+  steamboatsprings: {
+    lat: 40.458486,
+    lng: -106.807356,
+    zoom: 14,
+    time: false
+  },
+  westsacramento: {
+    lat: 38.578312,
+    lng: -121.546635,
     zoom: 14,
     time: false
   }
