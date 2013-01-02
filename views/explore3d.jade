@@ -10,7 +10,7 @@ head
   script(type='text/javascript', src='/scripts/jquery-1.7.1.min.js')
   script(type='text/javascript', src='/scripts/bootstrap.min.js')
 body
-  script(type="text/javascript") var home=[ #{lng} - 0.001, #{lat} + 0.0035 ];
+  script(type="text/javascript") var home=[ #{lng} - 0.001, #{lat} + 0.0035 ]; var customgeo = "#{customgeo}"; var src = "#{src}";
   script(src="/scripts/explore3d.js", type="text/javascript")
   div.layer
   div

@@ -4,11 +4,12 @@ head
   script(src='/scripts/mapbox.js', type='text/javascript')
   script(src='/scripts/jquery-1.6.2.min.js', type='text/javascript')
   script(src='/scripts/jquery-ui-slider.min.js', type='text/javascript')
-  script(src='/scripts/checkouttime.js', type='text/javascript')
   link(href='http://twitter.github.com/bootstrap/assets/css/bootstrap.css', rel='stylesheet', type='text/css')
   link(href='/stylesheets/mapbox.css', rel='stylesheet', type='text/css')
   link(href='/stylesheets/jquery-ui-slider.css', rel='stylesheet', type='text/css')
   link(href='/stylesheets/checkouttime.css', rel='stylesheet', type='text/css')
+  script(type="text/javascript") var src = "#{src}"; var customgeo = "#{customgeo}";
+  script(src='/scripts/checkouttime.js', type='text/javascript')
 
 body
   div#sidebar
@@ -21,9 +22,9 @@ body
         a(href="/", style="display:block;font-size:12pt;") Make your own timeline
         br
         span Download as&nbsp;
-        a.visible(href="/timeline-at.kml?customgeo=#{customgeo}") Google Earth / KML
+        a.visible(href="/timeline-at/#{customgeo}.kml") Google Earth / KML
         span &nbsp;or&nbsp;
-        a.visible(href="/timeline-at.geojson?customgeo=#{customgeo}") GeoJSON
+        a.visible(href="/timeline-at/#{customgeo}.geojson") GeoJSON
 
   div#map
   a.zoomer.zoomin(href="javascript:map.zoomBy(1);void(0);") +

@@ -155,10 +155,6 @@ var codeToTime = function(jstime){
   return (new Date(jstime)).getYear();
 };
 
-function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
-}
-
 $(document).ready(function(){
 
   var timeline = document.getElementById('timeline'),
@@ -176,7 +172,7 @@ $(document).ready(function(){
   var markerLayer = mapbox.markers.layer()
     // start with all markers hidden
     .filter(function(f) { return false })
-    .url('/timeline-at.geojson?customgeo=' + getURLParameter("customgeo"), function(err, features) {
+    .url('/timeline-at/' + customgeo + '.geojson', function(err, features) {
       // callback once GeoJSON is loaded
 
       set_time_period = function(y) {
@@ -283,9 +279,8 @@ $(document).ready(function(){
   map.addLayer(markerLayer);
   
   // generalize code to fit all markers
-  var source = getURLParameter("src");
   if(src && city_options[ src ]){
-    map.zoom(city_options[ source ].zoom).center({ lat: city_options[ source ].lat, lon: city_options[ source ].lng });  
+    map.zoom(city_options[ src ].zoom).center({ lat: city_options[ src ].lat, lon: city_options[ src ].lng });  
   }
   else{
     map.zoom(15).center({ lat: 41.9308364983, lon: -87.6718342764 });

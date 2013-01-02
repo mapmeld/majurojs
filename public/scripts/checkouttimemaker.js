@@ -163,12 +163,12 @@ $(document).ready(function(){
   var lng = -75.136528;
   var zoom = 14;
 
-  if( getURLParameter("src") && city_options[ getURLParameter("src") ] ){
-    lat = city_options[ getURLParameter("src") ].lat;
-    lng = city_options[ getURLParameter("src") ].lng;
-    zoom = city_options[ getURLParameter("src") ].zoom;
+  if( src ){
+    lat = city_options[ src ].lat;
+    lng = city_options[ src ].lng;
+    zoom = city_options[ src ].zoom;
     // add timeline option if available ( currently just Chicago )
-    if( city_options[ getURLParameter("src") ].time ){
+    if( city_options[ src ].time ){
       $(".timeline").css({ "display": "inline" });
     }
   }
@@ -195,10 +195,20 @@ function postGeo(format){
   var poly = llserial(footprint.getLatLngs());
   $.post("/customgeo", { pts: poly }, function(data){
     if(format == "html"){
-      window.location = "/build?src=" + (getURLParameter("src") || "") + "&customgeo=" + data.id;
+      if(src){
+        window.location = "/build/" + src + "/" + data.id;
+      }
+      else{
+        window.location = "/build/" + data.id;      
+      }
     }
     else if(format == "time"){
-      window.location = "/timeline?src=" + (getURLParameter("src") || "") + "&customgeo=" + data.id;
+      if(src){
+        window.location = "/timeline/" + src + "/" + data.id;
+      }
+      else{
+        window.location = "/timeline/" + data.id;      
+      }
     }
     else if(format == "3d"){
       var minlat = 90;
@@ -209,17 +219,28 @@ function postGeo(format){
         centerlng += pts[p].lng;
       }
       centerlng /= pts.length;
-      window.location = "/explore3d?customgeo=" + data.id + "&lat=" + minlat.toFixed(6) + "&lng=" + centerlng.toFixed(6);
+      if(src){
+        window.location = "/explore3d/" + src + "/" + data.id + "?lat=" + minlat.toFixed(6) + "&lng=" + centerlng.toFixed(6);
+      }
+      else{
+        window.location = "/explore3d/" + data.id + "?lat=" + minlat.toFixed(6) + "&lng=" + centerlng.toFixed(6);
+      }
     }
     else if(format == "geojson"){
-      window.location = "/timeline-at.geojson?customgeo=" + data.id;
+      if(src){
+        window.location = "/timeline-at/" + src + "/" + data.id + ".geojson";
+      }
+      else{
+        window.location = "/timeline-at/" + data.id + ".geojson";      
+      }
     }
     else if(format == "kml"){
-      window.location = "/timeline-at.kml?customgeo=" + data.id;
+      if(src){
+        window.location = "/timeline-at/" + src + "/" + data.id + ".kml";
+      }
+      else{
+        window.location = "/timeline-at/" + data.id + ".kml";
+      }
     }
   });
-}
-
-function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }

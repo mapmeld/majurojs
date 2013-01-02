@@ -78,13 +78,15 @@ A Google Maps API view will be set up at <em>USERNAME.github.com/majurojs/gmaps<
 
 Send a direct request for buildings in KML or GeoJSON format by sending an array of [lng, lat] coordinates in a URL:
 
-    /timeline-at.kml?polygon=[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
-    /timeline-at.geojson?polygon=[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
+    /timeline-at/[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
+    /timeline-at/[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ].geojson
+    /timeline-at/[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ].kml
 
-Specifying a source can speed up your query. Current CITY_NAMEs are allegheny, bloomington, boston, chicago, kitsap, lancaster, oakland, philadelphia, pittsburgh, sanfrancisco, savannah, seattle, and spokane
+Specifying a source can speed up your query. These follow the URL format of /draw. For example, if /draw/allegheny is valid, then allegheny is the source name.
 
-    /timeline-at.kml?src=CITY_NAME&polygon=[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
-    /timeline-at.geojson?src=CITY_NAME&polygon=[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
+    /timeline-at/SOURCE/[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
+    /timeline-at/SOURCE/[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ].geojson
+    /timeline-at/SOURCE/[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ].kml
 
 # Server
 
@@ -116,7 +118,7 @@ MongoDB is a NoSQL database which supports <a href="http://www.mongodb.org/displ
 
 1) Do a git clone:
 
-    git clone git://github.com/mapmeld/savannah-builder.git
+    git clone git://github.com/mapmeld/majurojs.git
     
 2) cd into the project directory and then install the necessary node modules:
 

@@ -53,7 +53,11 @@ var init = exports.init = function (config) {
 
   app.get('/draw', function(req, res){
     // show timeline editor (not yet designed)
-    res.render('checkouttimemaker');
+    res.render('checkouttimemaker', { src: req.query.src });
+  });
+  app.get('/draw/:src', function(req, res){
+    // show timeline editor (not yet designed)
+    res.render('checkouttimemaker', { src: req.params.src });
   });
   
   app.post('/customgeo', function(req, res){
@@ -62,6 +66,26 @@ var init = exports.init = function (config) {
     });
     shape.save(function (err){
       res.send({ id: shape._id });
+    });
+  });
+  
+  app.get('/dedupe/:src', function(req, res){
+    customgeo.CustomGeo.find({ "src": req.params.src }).exec(function(err, polys){
+      var dupelist = [ ];
+      for(var p=0;p<polys.length;p++){
+        var coded = polys[p].ll.join("_");
+        var dupeloc = dupelist.indexOf(coded);
+        if(dupeloc == -1){
+          dupelist.push(coded);
+        }
+        else{
+          polys[p].delete(function(err){ });
+          //customgeo.CustomGeo.findById(polys[p]._id, function(err, poly){
+          //  poly.delete();
+          //});
+          dupelist.splice(dupeloc,1);
+        }
+      }
     });
   });
   
@@ -107,24 +131,42 @@ var init = exports.init = function (config) {
   //app.get('/namedgeo', function(req, res){
   //});
 
+  // show map and editor
   app.get('/build', function(req, res){
-    // show map and editor
-    res.render('custombuild', { customgeo: req.query['customgeo'] });
+    res.render('custombuild', { src: (req.query.src || ""), customgeo: req.query.customgeo });
   });
-  
-  app.get('/timeline', function(req, res){
-    // show timeline
-    //res.render('checkouttime', { customgeo: req.query['customgeo'] });
-    res.render('leaflettimeline', { customgeo: req.query['customgeo'] });
+  app.get('/build/:customgeo', function(req, res){
+    res.render('custombuild', { src: "", customgeo: req.params.customgeo });
+  });
+  app.get('/build/:src/:customgeo', function(req, res){
+    res.render('custombuild', { src: req.params.src, customgeo: req.params.customgeo });
   });
 
+  // show timeline
+  app.get('/timeline', function(req, res){
+    //res.render('checkouttime', { customgeo: req.query['customgeo'] });
+    res.render('leaflettimeline', { src: (req.query.src || ""), customgeo: req.query.customgeo });
+  });
+  app.get('/timeline/:customgeo', function(req, res){
+    res.render('leaflettimeline', { src: "", customgeo: req.params.customgeo });
+  });
+  app.get('/timeline/:src/:customgeo', function(req, res){
+    res.render('leaflettimeline', { src: req.params.src, customgeo: req.params.customgeo });
+  });
+
+  // show map in 3D
   app.get('/explore3d', function(req, res){
-    // show map in 3D
-    res.render('explore3d', { customgeo: req.query['customgeo'], lng: req.query['lng'], lat: req.query['lat'] });
+    res.render('explore3d', { src: (req.query.src || ""), customgeo: req.query.customgeo, lng: req.query.lng, lat: req.query.lat });
+  });
+  app.get('/explore3d/:customgeo', function(req, res){
+    res.render('explore3d', { src: "", customgeo: req.params.customgeo, lng: req.query.lng, lat: req.query.lat });
+  });
+  app.get('/explore3d/:src/:customgeo', function(req, res){
+    res.render('explore3d', { src: req.params.src, customgeo: req.params.customgeo, lng: req.query.lng, lat: req.query.lat });
   });
   
+  // store map details as a SaveMap
   app.post('/savemap', function(req, res){
-    // store map details as a SaveMap
     var mymap = new savemap.SaveMap({
       customgeo: req.body.customgeo,
       edited: JSON.parse(req.body.edited),
@@ -135,12 +177,21 @@ var init = exports.init = function (config) {
       res.send({ saveid: mymap._id });
     });
   });
-  app.get('/savemap*', function(req, res){
-    savemap.SaveMap.findById(req.query['id'], function(err, mymap){
-      if(err){
-        return res.send(err);
-      }
-      if(req.url.indexOf('kml') > -1 || req.url.indexOf('json') > -1){
+
+  // retrieve map details from a SaveMap
+  app.get('/savemap', function(req, res){
+    savemap.SaveMap.findById(req.query.id, function(err, mymap){
+      if(err){ return res.send(err); }
+      res.render('savemap', { "id": req.query.id, "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ), "name": (mymap.name || ""), "info": (mymap.info || "") });
+    });
+  });
+  app.get('/savemap.*', function(req, res){
+    // redirect old KML and JSON requests to the new REST URL
+    res.redirect('/savemap/' + req.query.id + '.' + req.url.split(".")[1]);
+  });
+  app.get('/savemap/:id.*', function(req, res){
+    savemap.SaveMap.findById(req.params.id, function(err, mymap){
+      if(req.url.indexOf('.kml') > -1 || req.url.indexOf('.json') > -1){
         // return saved map as KML or GeoJSON
         // first, fetch custom geo area
         customgeo.CustomGeo.findById(mymap.customgeo, function(err, geo){
@@ -207,10 +258,12 @@ var init = exports.init = function (config) {
           });
         });
       }
-      else{
-        // show saved map
-        res.render('savemap', { "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ), "name": (mymap.name || ""), "info": (mymap.info || "") });
-      }
+    });
+  });
+  app.get('/savemap/:id', function(req, res){
+    savemap.SaveMap.findById(req.params.id, function(err, mymap){
+      if(err){ return res.send(err); }
+      res.render('savemap', { "id": req.params.id, "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ), "name": (mymap.name || ""), "info": (mymap.info || "") });
     });
   });
   
@@ -391,63 +444,87 @@ var init = exports.init = function (config) {
     }
   };
   
-  app.get('/timeline-at*', function(req, res){
-    if(req.query['customgeo'] && req.query['customgeo'] != ""){
-      // do a query to return GeoJSON inside a custom polygon
-      customgeo.CustomGeo.findById(req.query['customgeo'], function(err, geo){
+  // get GeoJSON inside a custom polygon
+  app.get('/timeline-at', function(req, res){
+    // redirect old URL params to REST
+    if(req.query.customgeo){
+      if(req.query.src){
+        res.redirect('/timeline-at/' + req.query.src + '/' + req.query.customgeo);
+      }
+      else{
+        res.redirect('/timeline-at/' + req.query.customgeo);        
+      }
+    }
+  });
+  app.get('/timeline-at.*', function(req, res){
+    // redirect old URL params to REST
+    if(req.query.customgeo){
+      if(req.query.src){
+        res.redirect('/timeline-at/' + req.query.src + '/' + req.query.customgeo + '.' + req.url.split(".")[1]);
+      }
+      else{
+        res.redirect('/timeline-at/' + req.query.customgeo + '.' + req.url.split(".")[1]);
+      }
+    }
+  });
+  app.get('/timeline-at/:src/:customgeo*', function(req, res){
+    var reqgeo = JSON.parse(req.params.customgeo.split(".")[0]);
+    if(typeof reqgeo == "string"){
+      // requesting geo by id
+      customgeo.CustomGeo.findById(reqgeo, function(err, geo){
         if(err){
-          res.send(err);
-          return;
+          return res.send(err);
         }
         var poly = geo.latlngs;
         for(var pt=0;pt<poly.length;pt++){
           poly[pt] = [ poly[pt].split(",")[1] * 1.0, poly[pt].split(",")[0] * 1.0 ];
         }
-        //res.send(poly);
-        //return;
-        if(req.query['src']){
-          // speed up query with a specific city, county, or locality
-          timepoly.TimePoly.find({ src: req.query['src'] }).find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
-            if(err){
-              res.send(err);
-              return;
-            }
-            processTimepolys(timepolys, req, res);
-          });
-        }
-        else{
-          timepoly.TimePoly.find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
-            if(err){
-              res.send(err);
-              return;
-            }
-            processTimepolys(timepolys, req, res);
-          });
-        }
+        timepoly.TimePoly.find({ src: req.params.src }).find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
+          if(err){
+            return res.send(err);
+          }
+          processTimepolys(timepolys, req, res);
+        });
       });
     }
-    else if(req.query['polygon']){
-      // API request in form /timeline-at?polygon=[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
-      // speedier request with form /timeline-at?src=CITYCODE&polygon=[ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
-      if(req.query['src']){
-        // speed up query with a specific city, county, or locality
-        timepoly.TimePoly.find({ src: req.query['src'] }).find({ ll: { "$within": { "$polygon": JSON.parse(req.query['polygon']) } } }).limit(10000).exec(function(err, timepolys){
+    else{
+      // API request in form /timeline-at/:src/:polygon where polygon is [ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
+      timepoly.TimePoly.find({ src: req.params.src }).find({ ll: { "$within": { "$polygon": reqgeo } } }).limit(10000).exec(function(err, timepolys){
+        if(err){
+          return res.send(err);
+        }
+        processTimepolys(timepolys, req, res);
+      });
+    }
+  });
+  app.get('/timeline-at/:customgeo*', function(req, res){
+    var reqgeo = JSON.parse(req.params.customgeo.split(".")[0]);
+    if(typeof reqgeo == "string"){
+      // requesting geo by id
+      customgeo.CustomGeo.findById(reqgeo, function(err, geo){
+        if(err){
+          return res.send(err);
+        }
+        var poly = geo.latlngs;
+        for(var pt=0;pt<poly.length;pt++){
+          poly[pt] = [ poly[pt].split(",")[1] * 1.0, poly[pt].split(",")[0] * 1.0 ];
+        }
+        timepoly.TimePoly.find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
           if(err){
-            res.send(err);
-            return;
+            return res.send(err);
           }
           processTimepolys(timepolys, req, res);
         });
-      }
-      else{
-        timepoly.TimePoly.find({ ll: { "$within": { "$polygon": JSON.parse(req.query['polygon']) } } }).limit(10000).exec(function(err, timepolys){
-          if(err){
-            res.send(err);
-            return;
-          }
-          processTimepolys(timepolys, req, res);
-        });
-      }
+      });
+    }
+    else{
+      // API request in form /timeline-at/:polygon where polygon is [ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
+      timepoly.TimePoly.find({ ll: { "$within": { "$polygon": reqgeo } } }).limit(10000).exec(function(err, timepolys){
+        if(err){
+          return res.send(err);
+        }
+        processTimepolys(timepolys, req, res);
+      });
     }
   });
 

@@ -185,11 +185,11 @@ function describe(description){
 function downloadFile(format){
   if(format == 1){ 
     // GeoJSON
-    window.location = "/savemap.geojson?id=" + getURLParameter("id");
+    window.location = "/savemap/" + savemapid + ".geojson";
   }
   else if(format == 0){
     // KML
-    window.location = "/savemap.kml?id=" + getURLParameter("id");
+    window.location = "/savemap/" + savemapid + ".kml";
   }
 }
 function showDataSource(){

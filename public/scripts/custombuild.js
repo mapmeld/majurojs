@@ -1,4 +1,4 @@
-var map, dragtype, building_pop, src;
+var map, dragtype, building_pop;
 var footprints = [ ];
 var city_options = {
   allegheny: {
@@ -147,10 +147,6 @@ var city_options = {
   }
 };
 
-function getURLParameter(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
-}
-
 $(document).ready(function(){
   // make a Leaflet map
   map = new L.Map('map', { zoomControl: false, panControl: false });
@@ -163,7 +159,6 @@ $(document).ready(function(){
   map.addLayer(terrainLayer);
   
   // center map based on city or county source
-  src = getURLParameter("src");
   if(src && city_options[ src ]){
     map.setView(new L.LatLng(city_options[ src ].lat, city_options[ src ].lng), city_options[ src ].zoom);  
   }
@@ -173,9 +168,15 @@ $(document).ready(function(){
   
   building_pop = new L.Popup();
   
-  if(getURLParameter("customgeo") && getURLParameter("customgeo").length){
+  if(customgeo){
     // request building geo dynamically from server
-    $.getJSON('/timeline-at.geojson?customgeo=' + getURLParameter("customgeo"), function(polys){
+    var polysurl = '/timeline-at';
+    if(src){
+      polysurl += '/' + src;
+    }
+    polysurl += '/' + customgeo;
+    
+    $.getJSON(polysurl, function(polys){
 
       // show the relevant city or county credit
       src = polys.source;
@@ -485,7 +486,6 @@ function startSave(){
   $("#savemapinfo").modal();
 }
 function saveMap(){
-  var poly_id = getURLParameter("customgeo");
   var arredited = [];
   $.each(footprints, function(editShape, e){
     if(!footprints[editShape].color && !footprints[editShape].name && !footprints[editShape].description){
@@ -505,8 +505,8 @@ function saveMap(){
       arredited[ arredited.length-1 ].description = footprints[editShape].description;
     }
   });
-  $.post("/savemap", { customgeo: poly_id, edited: JSON.stringify(arredited), name: $("#savemapname").val(), info: $("#savemapinfotext").val() }, function(data){
-    window.location = "/savemap?id=" + data.saveid;
+  $.post("/savemap", { customgeo: customgeo, edited: JSON.stringify(arredited), name: $("#savemapname").val(), info: $("#savemapinfotext").val() }, function(data){
+    window.location = "/savemap/" + data.saveid;
   });
 }
 function showDataSource(){

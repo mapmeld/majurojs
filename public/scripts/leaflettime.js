@@ -215,10 +215,6 @@ function describe(description){
   return description;
 }
 
-function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
-}
-
 $(document).ready(function(){
 
   var timeline = document.getElementById('timeline'),
@@ -240,7 +236,6 @@ $(document).ready(function(){
   map.addLayer(terrainLayer);
   
   // center map based on city or county source
-  src = getURLParameter("src");
   if(src && city_options[ src ]){
     map.setView(new L.LatLng(city_options[ src ].lat, city_options[ src ].lng), city_options[ src ].zoom);  
   }
@@ -248,7 +243,7 @@ $(document).ready(function(){
     map.setView(new L.LatLng(39.938435,-75.136528), 14);
   }
 
-  $.getJSON('/timeline-at.geojson?customgeo=' + getURLParameter("customgeo"), function(timepolys){
+  $.getJSON('/timeline-at/' + customgeo, function(timepolys){
     features = timepolys.features;
     building_pop = new L.Popup();
     
