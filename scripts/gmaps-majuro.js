@@ -33,8 +33,17 @@ $(document).ready(function(){
       case "boston":
         src_credits = ".boston";
         break;
+      case "boulder":
+        src_credits = ".boulder";
+        break;
+      case "chapelhill":
+        src_credits = ".chapelhill";
+        break;
       case "chicago":
         src_credits = ".chicago";
+        break;
+      case "clark":
+        src_credits = ".clark";
         break;
       case "kitsap":
         src_credits = ".kitsap";
@@ -42,14 +51,27 @@ $(document).ready(function(){
       case "lancaster":
         src_credits = ".lancaster";
         break;
+      case "midland":
+        src_credits = ".midland";
+        break;
       case "nanaimo":
         src_credits = ".nanaimo";
         break;
       case "oakland":
         src_credits = ".oakland";
         break;
+      case "petaluma":
+        src_credits = ".petaluma";
+        break;
       case "philadelphia":
         src_credits = ".philadelphia";
+        break;
+      case "raleigh":
+      case "wake":
+        src_credits = ".raleigh";
+        break;
+      case "roundrock":
+        src_credits = ".roundrock";
         break;
       case "savannah":
       case "chatham":
@@ -59,8 +81,15 @@ $(document).ready(function(){
       case "seattle":
         src_credits = ".seattle";
         break;
+      case "smith":
+      case "tyler":
+        src_credits = ".smith";
+        break;
       case "spokane":
         src_credits = ".spokane";
+        break;
+      case "steamboatsprings":
+        src_credits = ".steamboatsprings";
         break;
       case "westsacramento":
         src_credits = ".westsacramento";
