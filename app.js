@@ -467,7 +467,7 @@ var init = exports.init = function (config) {
       }
     }
   });
-  app.get('/timeline-at/:src/:customgeo*', function(req, res){
+  app.get('/timeline-at/:src/:customgeo', function(req, res){
     var reqgeo = req.params.customgeo.split(".")[0];
     if(reqgeo.indexOf("[") == -1){
       // requesting geo by id
@@ -497,7 +497,7 @@ var init = exports.init = function (config) {
       });
     }
   });
-  app.get('/timeline-at/:customgeo*', function(req, res){
+  app.get('/timeline-at/:customgeo', function(req, res){
     var reqgeo = req.params.customgeo.split(".")[0];
     if(reqgeo.indexOf("[") == -1){
       // requesting geo by id
@@ -509,7 +509,6 @@ var init = exports.init = function (config) {
         for(var pt=0;pt<poly.length;pt++){
           poly[pt] = [ poly[pt].split(",")[1] * 1.0, poly[pt].split(",")[0] * 1.0 ];
         }
-        res.send(poly);
         timepoly.TimePoly.find({ ll: { "$within": { "$polygon": poly } } }).limit(10000).exec(function(err, timepolys){
           if(err){
             return res.send(err);
