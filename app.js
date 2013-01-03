@@ -51,16 +51,15 @@ var init = exports.init = function (config) {
     res.render('homepage');
   });
 
+  // use Leaflet polygon editing tools to select a neighborhood
   app.get('/draw', function(req, res){
-    // show timeline editor (not yet designed)
     res.render('checkouttimemaker', { src: req.query.src });
   });
   app.get('/draw/:src', function(req, res){
-    // show timeline editor (not yet designed)
     res.render('checkouttimemaker', { src: req.params.src });
   });
+  // experimental OpenLayers neighborhood-selector
   app.get('/instantdraw/:src', function(req, res){
-    // show timeline editor (not yet designed)
     res.render('instantdraw', { src: req.params.src });
   });
   
