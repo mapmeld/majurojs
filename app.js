@@ -59,6 +59,10 @@ var init = exports.init = function (config) {
     // show timeline editor (not yet designed)
     res.render('checkouttimemaker', { src: req.params.src });
   });
+  app.get('/instantdraw/:src', function(req, res){
+    // show timeline editor (not yet designed)
+    res.render('instantdraw', { src: req.params.src });
+  });
   
   app.post('/customgeo', function(req, res){
     var shape = new customgeo.CustomGeo({

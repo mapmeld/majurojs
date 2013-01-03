@@ -1,0 +1,79 @@
+html, body, #map{
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+olControlAttribution {
+  bottom: 5px;
+  font-size: 9px;
+}
+div.olControlZoomPanel {
+  top: 10px;
+  left: 10px;
+}
+div.olControlZoomPanel .olControlZoomInItemInactive,
+div.olControlZoomPanel .olControlZoomOutItemInactive {
+  background: rgba(0, 0, 0, 0.2);
+  position: absolute;
+}
+div.olControlZoomPanel .olControlZoomInItemInactive {
+  border-radius: 3px 3px 0 0;
+}
+div.olControlZoomPanel .olControlZoomOutItemInactive {
+  border-radius: 0 0 3px 3px ;
+  top: 20px;
+}
+div.olControlZoomPanel div:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+div.olControlZoomPanel .olControlZoomOutItemInactive:after ,
+div.olControlZoomPanel .olControlZoomInItemInactive:after {
+  font-weight: bold;
+  content: '+';
+  font-size: 18px;
+  padding: 0 2px;
+  z-index: 2000;
+  color: #fff;
+  line-height: 1em;
+}
+div.olControlZoomPanel .olControlZoomOutItemInactive:after {
+  content: '–';
+  line-height: 0.9em;
+  padding: 0 5px;
+}
+div.olControlZoomPanel .olControlZoomToMaxExtentItemInactive {
+  display: none;
+}
+#sidebar {
+  position:absolute;
+  top:20px;
+  border-radius: 10px;
+  background:#fafafa;
+  padding: 15px;
+  z-index:999;
+  overflow:auto;
+  right:12%;
+  border:1px solid #000;
+}
+#timeline {
+  padding:10px;
+}
+#timeline a {
+  text-decoration:none;
+  display: none;
+}
+#timeline #controls a {
+  font-size:20px;
+  margin-left:10px;
+  display: inline;
+}
+#timeline a.visible{
+  display: inline;
+}
+#timeline a.timeline{
+  display: none;
+}
+#timeline span.timeline{
+  display: none;
+}

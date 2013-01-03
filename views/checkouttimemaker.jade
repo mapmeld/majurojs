@@ -15,7 +15,9 @@ head
   script(src='/scripts/checkouttimemaker.js', type='text/javascript')
 
 body
-  div#sidebar(style="left:initial;right:12%;border:1px solid #000;")
+  div#map
+
+  div#sidebar
     div#timeline
       h2 Majuro.js
       p
@@ -34,5 +36,3 @@ body
         span ,&nbsp;or&nbsp;
         a.visible(href="#", onclick="postGeo('kml')") Google Earth / KML
         span .
-
-  div#map

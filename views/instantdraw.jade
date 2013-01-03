@@ -1,0 +1,32 @@
+head
+  meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+  meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0")
+  title OpenLayers Instant Draw
+  link(href="/stylesheets/instantdraw.css", rel="stylesheet", type="text/css")
+  script(src="/scripts/OpenLayers.js", type="text/javascript")
+  script(src="/scripts/jquery-1.7.1.min.js", type="text/javascript")
+  script(type="text/javascript") var src = "#{src}";
+  script(src="/scripts/instantdraw.js", type="text/javascript")
+
+body
+  div#sidebar(style="left:initial;right:12%;border:1px solid #000;")
+    div#timeline
+      h2 Majuro.js
+      p
+        span Make your own interactive maps with public building data!
+        br
+        span 1) Click map to start adding points, double click to stop.
+        br
+        span 2) View as&nbsp;
+        a.visible(href="#", onclick="postGeo('html')") web map
+        span ,&nbsp;
+        a.visible.timeline(href="#", onclick="postGeo('time')") timeline
+        span.timeline ,&nbsp;
+        a.visible(href="#", onclick="postGeo('3d')") 3D view
+        span ,&nbsp;
+        a.visible(href="#", onclick="postGeo('geojson')") GeoJSON
+        span ,&nbsp;or&nbsp;
+        a.visible(href="#", onclick="postGeo('kml')") Google Earth / KML
+        span .
+
+  div#map
