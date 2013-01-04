@@ -122,7 +122,7 @@ $(document).ready(function(){
       avg[1] = avg[1].toFixed(6);
       var myid = avg.join(',') + "," + coords.length;
 
-      var poly = new L.polygon(coords, { weight: 2, color: "#0000ff" });
+      var poly = new L.polygon(coords, { weight: 2, color: "#0033ff" });
       for(var p=0;p<edited.length;p++){
         if(edited[p].id == myid){
           if(edited[p].name || edited[p].description){
