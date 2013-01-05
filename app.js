@@ -145,6 +145,42 @@ var init = exports.init = function (config) {
     res.render('custombuild', { src: req.params.src, customgeo: req.params.customgeo });
   });
 
+  app.post('/timeline', function(req, res){
+    // load this point into MongoDB
+    coordinates = req.body['points'].split('||');
+    for(var c=0;c<coordinates.length;c++){
+      coordinates[c] = coordinates[c].split('|');
+      coordinates[c][0] *= 1.0;
+      coordinates[c][1] *= 1.0;
+    }
+    var savedata = {
+      "points": coordinates,
+      // src is the name of the city, county, or other locality
+      "src": req.body.src,
+      // use [ lng , lat ] format to be consistent with GeoJSON
+      "ll": [ req.body['lng'] * 1.0, req.body['lat'] * 1.0 ]
+    };
+    if(req.body.name){
+      savedata["name"] = req.body.name;
+    }
+    if(req.body.address){
+      savedata["address"] = req.body.address;
+    }
+    if(req.body.start){
+      savedata["start"] = new Date(req.body.start * 1);
+    }
+    if(req.body.startyr){
+      savedata["start"] = new Date("January 10, " + req.body.start);
+    }
+    if(req.body.end){
+      savedata["end"] = new Date(req.body.end * 1);
+    }
+    poly = new timepoly.TimePoly( savedata );
+    poly.save(function(err){
+      res.send(err || 'success');
+    });
+  });
+
   // show timeline
   app.get('/timeline', function(req, res){
     //res.render('checkouttime', { customgeo: req.query['customgeo'] });
@@ -267,42 +303,6 @@ var init = exports.init = function (config) {
     savemap.SaveMap.findById(req.params.id, function(err, mymap){
       if(err){ return res.send(err); }
       res.render('savemap', { "id": req.params.id, "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ), "name": (mymap.name || ""), "info": (mymap.info || "") });
-    });
-  });
-  
-  app.post('/timeline', function(req, res){
-    // load this point into MongoDB
-    coordinates = req.body['points'].split('||');
-    for(var c=0;c<coordinates.length;c++){
-      coordinates[c] = coordinates[c].split('|');
-      coordinates[c][0] *= 1.0;
-      coordinates[c][1] *= 1.0;
-    }
-    var savedata = {
-      "points": coordinates,
-      // src is the name of the city, county, or other locality
-      "src": req.body.src,
-      // use [ lng , lat ] format to be consistent with GeoJSON
-      "ll": [ req.body['lng'] * 1.0, req.body['lat'] * 1.0 ]
-    };
-    if(req.body.name){
-      savedata["name"] = req.body.name;
-    }
-    if(req.body.address){
-      savedata["address"] = req.body.address;
-    }
-    if(req.body.start){
-      savedata["start"] = new Date(req.body.start * 1);
-    }
-    if(req.body.startyr){
-      savedata["start"] = new Date("January 10, " + req.body.start);
-    }
-    if(req.body.end){
-      savedata["end"] = new Date(req.body.end * 1);
-    }
-    poly = new timepoly.TimePoly( savedata );
-    poly.save(function(err){
-      res.send(err || 'success');
     });
   });
   

@@ -21,12 +21,14 @@ body
             span(style="text-transform:capitalize;") #{region.fullname}
         div
           h3 Lists of regions:
-          - for division in region.divisions
+          - region.divisions.forEach(function(division){
             h4 #{division.category}
             ul
-              - for district in division.districts
+              - division.districts.forEach(function(district){
                 li
                   a("/build?src=#{division.name}&customgeo=#{district.geo}") #{district.name}
+              - })
+          - })
 
       .span4
         img.govlogo(src="#{region.images[1]}")
