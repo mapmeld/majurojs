@@ -151,7 +151,7 @@ $(document).ready(function(){
   // let users change the source
   if( src ){
     $("#cityselect").val(src);
-    $("#cityselect").on('change', function(e){
+    $("#cityselect").change(function(e){
       window.location = "/draw/" + $("#cityselect").val();
     });
   }
