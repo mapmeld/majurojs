@@ -74,6 +74,12 @@ A Google Maps API view will be set up at <em>USERNAME.github.com/majurojs/gmaps<
 
 <strong>Customization</strong>: Put your buildings data into mybuild.geojson.
 
+## Fisheye Map
+
+The fisheye map visualization wraps buildings around the center of the map based on logarithmic distance. It will be set up at <em>USERNAME.github.com/majurojs/logarithmic</em> after you fork this repo.
+
+<strong>Customization</strong>: Put your buildings data into mybuild.geojson, and add ?center=LATITUDE,LONGITUDE to the end of the URL to change the center of the map.
+
 # Direct API
 
 Send a direct request for buildings in KML or GeoJSON format by sending an array of [lng, lat] coordinates in a URL:
