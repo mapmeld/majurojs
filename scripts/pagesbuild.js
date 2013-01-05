@@ -2,6 +2,20 @@ var map, dragtype, building_pop, src;
 var footprints = [ ];
 
 $(document).ready(function(){
+  // check for browser compatibility other than IE
+  if((typeof $.browser.mozilla != "undefined") && ($.browser.mozilla) && (isNaN($.browser.version * 1) || ($.browser.version * 1 < 4))){
+    // older version of Firefox
+    IE_EDITOR = true;
+    $(".exportmap").css({ "display": "none" });
+    $(".dragdrop").css({ "display": "none" });    
+  }
+  if((typeof $.browser.safari != "undefined") && ($.browser.safari) && (isNaN($.browser.version * 1) || ($.browser.version * 1 < 5))){
+    // older version of Safari (possibly Chrome)
+    IE_EDITOR = true;
+    $(".exportmap").css({ "display": "none" });
+    $(".dragdrop").css({ "display": "none" });
+  }
+
   // make a Leaflet map
   map = new L.Map('map', { zoomControl: false, panControl: false });
   map.attributionControl.setPrefix('');
