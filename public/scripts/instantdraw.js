@@ -148,7 +148,8 @@ var city_options = {
 };
 
 $(document).ready(function(){
-  var streets = new OpenLayers.Layer.XYZ("MapBox Streets", [ "http://a.tiles.mapbox.com/v3/mapbox.mapbox-streets/${z}/${x}/${y}.png" ], { } );
+  var streets = new OpenLayers.Layer.XYZ("Stamen", [ "http://d.tile.stamen.com/toner/${z}/${x}/${y}.png" ], {
+  });
 
   map = new OpenLayers.Map({
     div: "map",
