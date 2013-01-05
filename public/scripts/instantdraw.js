@@ -151,13 +151,7 @@ $(document).ready(function(){
   var streets = new OpenLayers.Layer.XYZ("Stamen", [ "http://d.tile.stamen.com/toner/${z}/${x}/${y}.png" ], {
   });
 
-  map = new OpenLayers.Map({
-    div: "map",
-    layers: [streets],
-    center: [ -71, 42 ],
-    zoom: 10
-  });
-  
+  var lon, lat;
   if( src ){
     lat = city_options[ src ].lat;
     lng = city_options[ src ].lng;
@@ -171,8 +165,14 @@ $(document).ready(function(){
     var toPrj = new OpenLayers.Projection("EPSG:900913");
     var ll = new OpenLayers.LonLat( lng, lat );
     ll.transform(fromPrj, toPrj);
-    map.setCenter( ll );
   }
+
+  map = new OpenLayers.Map({
+    div: "map",
+    layers: [streets],
+    center: [ ll.lon, ll.lat ],
+    zoom: 10
+  });
 
   var polygonLayer = new OpenLayers.Layer.Vector("Draw Bounds");
   map.addLayer( polygonLayer );
