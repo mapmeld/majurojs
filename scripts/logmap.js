@@ -189,7 +189,6 @@ function loadedPolys(polys){
       scaledx = parseInt((coords[c][0] - minx) * scale);
       if(usedcoords.indexOf(scaledx + "," + scaledy) == -1){
         // new coordinate
-        console.log("has some lines");
         ctx.lineTo(1000 - scaledx, scaledy);
       }
     }
