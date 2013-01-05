@@ -148,6 +148,14 @@ var city_options = {
 };
 
 $(document).ready(function(){
+  // let users change the source
+  if( src ){
+    $("#cityselect").val(src);
+    $("#cityselect").on('change', function(e){
+      window.location = "/draw/" + $("#cityselect").val();
+    });
+  }
+
   // make a Leaflet map
   map = new L.Map('map', { zoomControl: false, panControl: false });
   map.attributionControl.setPrefix('');

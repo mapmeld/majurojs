@@ -22,10 +22,22 @@ body
       h2 Majuro.js
       p
         span Make your own interactive maps with public building data!
+        span 1) Your city:
+        select#cityselect(style="font-size:14pt;")
+          option(value="allegheny") Allegheny County, PA
+          option(value="bloomington") Bloomington, IN
+          option(value="boston") Boston, MA
+          option(value="kitsap") Kitsap County, WA
+          option(value="lancaster") Lancaster County, PA
+          option(value="oakland") Oakland, CA
+          option(value="petaluma") Petaluma, CA
+          option(value="savannah") Savannah, GA
+          option(value="spokane") Spokane, WA
+          option(value="westsacramento") West Sacramento, CA
         br
-        span 1) Move points on the blue shape to cover your neighborhood.
+        span 2) Move points on the blue shape to cover your neighborhood.
         br
-        span 2) View as&nbsp;
+        span 3) View as&nbsp;
         a.visible(href="#", onclick="postGeo('html')") web map
         span ,&nbsp;
         a.visible.timeline(href="#", onclick="postGeo('time')") timeline
