@@ -26,7 +26,7 @@ body
             ul
               - each district in division.districts
                 li
-                  a("/build?src=#{division.name}&customgeo=#{district.geo}") #{district.name}
+                  a(href="/build?src=#{division.name}&customgeo=#{district.geo}") #{district.name}
 
       .span4
         img.govlogo(src="#{region.images[1]}")
