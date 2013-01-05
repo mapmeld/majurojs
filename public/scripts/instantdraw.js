@@ -169,7 +169,9 @@ $(document).ready(function(){
     }
     var fromPrj = new OpenLayers.Projection("EPSG:4326");
     var toPrj = new OpenLayers.Projection("EPSG:900913");
-    map.setCenter( new OpenLayers.LonLat( lng, lat ).transform(fromPrj, toPrj) );
+    var ll = new OpenLayers.LonLat( lng, lat );
+    ll.transform(fromPrj, toPrj);
+    map.setCenter( ll );
   }
 
   var polygonLayer = new OpenLayers.Layer.Vector("Draw Bounds");
