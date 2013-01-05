@@ -190,8 +190,8 @@ function llserial(latlngs){
   for(var i=0;i<latlngs.length;i++){
     var fromPrj = new OpenLayers.Projection("EPSG:4326");
     var toPrj = new OpenLayers.Projection("EPSG:900913");
-    var ll = latlngs[i].transform(toPrj, fromPrj);
-    llstr.push(ll.y.toFixed(6) + "," + ll.x.toFixed(6));
+    //var ll = latlngs[i].transform(toPrj, fromPrj);
+    llstr.push(latlngs[i].y.toFixed(6) + "," + latlngs[i].x.toFixed(6));
   }
   return llstr.join("|");
 }
