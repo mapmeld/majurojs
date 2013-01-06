@@ -1,12 +1,13 @@
 head
   title Regions of #{region.fullname}
   link(href="/stylesheets/bootstrap-mini.css", type="text/css", rel="stylesheet")
+  style(type="text/css") .navbar-inner li{ list-style-type: none; float: left; padding-left: 10px 20px; }
   script(type="text/javascript", src="/scripts/localregions.js")
 body
   div.navbar
     .navbar-inner
       .container
-        li
+        li(style="padding-top:0px;padding-bottom:0px;")
           a.brand(href="#") MajuroJS.org
         li
           a(href="#") Draw
@@ -14,23 +15,28 @@ body
   div.container
     .row
       .span8
-        .hero-unit(style="background-color:#C2F23C;background-image:'#{region.images[0]}';background-repeat:no-repeat;")
-          h1 MajuroJS.org
+        .hero-unit(style="background-color:#C2F23C;background-image:'#{region.images[0]}';background-repeat:no-repeat;padding:30px;")
           h3
-            span Regions of
+            span Regions of&nbsp;
             span(style="text-transform:capitalize;") #{region.fullname}
         div
-          h3 Lists of regions:
           - each division in region.divisions
+            a(name="division.category")
             h4 #{division.category}
             ul
               - each district in division.districts
-                li
-                  a(href="/build?src=#{division.name}&customgeo=#{district.geo}") #{district.name}
+                div(style="float:left;text-align:center;")
+                  a(href="/build/#{division.name}/#{district.geo}")
+                    span #{district.name}
+                    br
+                    img(src="/regionmap/#{division.geo}", width="256", height="256")
 
       .span4
         img.govlogo(src="#{region.images[1]}")
         br
         br
-        h2 Look up a Region
-        div.regionlists
+        h2 Jump to a category
+        ul.regionlists
+        - each division in region.divisions
+          li
+            a(href="##{division.category}") #{division.category}

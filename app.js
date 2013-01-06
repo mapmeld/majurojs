@@ -131,6 +131,19 @@ var init = exports.init = function (config) {
       }
     });
   });
+  app.get('/regionmap/:geo', function(req, res){
+    customgeo.CustomGeo.findById(reqgeo, function(err, geo){
+      if(err){
+        return res.send(err);
+      }
+      var poly = geo.latlngs;
+      for(var pt=0;pt<poly.length;pt++){
+        poly[pt] = [ Math.round(poly[pt].split(",")[0] * 100000) / 100000, Math.round(poly[pt].split(",")[1] * 100000) / 100000 ];
+      }
+      res.redirect('http://maps.google.com/maps/api/staticmap?sensor=false&size=256x256&center=0,0&zoom=15');
+      //res.redirect('http://maps.google.com/maps/api/staticmap?sensor=false&size=256x256&polygon=');
+    });
+  });
   //app.get('/namedgeo', function(req, res){
   //});
 
