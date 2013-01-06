@@ -116,7 +116,7 @@ function loadedPolys(polys){
       coords[c] = new L.LatLng(coords[c][1], coords[c][0]);
     }
     var polyfill = (polys.features[f].properties.fill || "#0033ff");
-    console.log(polyfill);
+    //console.log(polyfill);
     var poly = new L.polygon(coords, { weight: 2, color: polyfill });
     if(polys.features[f].properties.name || polys.features[f].properties.description){
       poly.bindPopup( ('<h3>' + polys.features[f].properties.name + '</h3>' || '') + describe( polys.features[f].properties.description ) );
