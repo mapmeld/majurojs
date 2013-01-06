@@ -21,7 +21,7 @@ body
         div
           - each division in region.divisions
             a(name="division.category")
-            h4 #{division.category}
+            h3 #{division.category}
             ul
               - each district in division.districts
                 div(style="float:left;text-align:center;")
@@ -34,8 +34,8 @@ body
         img.govlogo(src="#{region.images[1]}")
         br
         br
-        h2 Jump to a category
+        h2 Jump to
         ul.regionlists
-        - each division in region.divisions
-          li
-            a(href="##{division.category}") #{division.category}
+          - each division in region.divisions
+            li
+              a(href="##{division.category}") #{division.category}
