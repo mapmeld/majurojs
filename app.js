@@ -99,6 +99,7 @@ var init = exports.init = function (config) {
     res.render('regions', {
       region: {
         fullname: "Samplistan",
+        name: "samplistan",
         images: ["/images/bg.png", "/images/logo.png"],
         divisions: [
           {

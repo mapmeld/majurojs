@@ -25,10 +25,10 @@ body
             ul
               - each district in division.districts
                 div(style="float:left;text-align:center;")
-                  a(href="/build/#{division.name}/#{district.geo}")
+                  a(href="/build/#{region.name}/#{district.geo}")
                     span #{district.name}
                     br
-                    img(src="/regionmap/#{division.geo}", width="256", height="256")
+                    img(src="/regionmap/#{district.geo}", width="256", height="256")
 
       .span4
         img.govlogo(src="#{region.images[1]}")
