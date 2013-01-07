@@ -92,44 +92,48 @@ var init = exports.init = function (config) {
     });
   });
   
-  app.get('/regions/:regionname', function(req, res){
-    //region.Region.findOne({ "name": req.params.regionname }).exec(function(err, myregion){
-    //  res.render('regions', { region: myregion });
-    //});
-    res.render('regions', {
-      region: {
-        fullname: "Samplistan",
-        name: "samplistan",
-        images: ["/images/bg.png", "/images/logo.png"],
+  app.post('/createregion', function(req, res){
+    // POST /createregion with src = chicago
+    // then POST /createregion with name = DISTRICT_NAME and geo = LAT1,LNG1|LAT2,LNG2
+    if(req.body.start && req.body.start == "chicago"){
+      region = new region.Region({
+        name: "chicago",
+        fullname: "Chicago",
+        images: [ "/images/chicagobg.png", "/images/chicagologo.png" ],
         divisions: [
           {
-            category: "Districts",
-            districts: [
-              {
-                name: "District 9",
-                geo: 96960
-              },
-              {
-                name: "District 9+3/4",
-                geo: 96961
-              }
-            ]
-          },
-          {
-            category: "Neighborhoods",
-            districts: [
-              {
-                name: "Sesame Street",
-                geo: 123
-              },
-              {
-                name: "Easy Street",
-                geo: 456
-              }
-            ]
+            category: "Community Areas",
+            districts: []
           }
         ]
-      }
+      });
+      region.save(function(err){
+        res.send(err || "success");
+      });
+    }
+    else if(req.body.name && req.body.geo && req.body.src){
+      region.Region.findOne({ "name": req.body.src }).exec(function(err, myregion){
+        var shape = new customgeo.CustomGeo({
+          "latlngs": req.body.geo.split("|")
+        });
+        shape.save(function(err){
+          if(err){
+            return res.send(err);
+          }
+          myregion.divisions[0].districts.push({
+            name: req.body.name,
+            geo: shape._id
+          });
+          myregion.save(function(err){
+            res.send(err || "success");
+          });
+        });
+      });
+    }
+  });
+  app.get('/regions/:regionname', function(req, res){
+    region.Region.findOne({ "name": req.params.regionname }).exec(function(err, myregion){
+      res.render('regions', { region: myregion });
     });
   });
   app.get('/regionmap/:geo', function(req, res){
