@@ -141,12 +141,10 @@ var init = exports.init = function (config) {
       for(var pt=0;pt<poly.length;pt++){
         poly[pt] = [ Math.round(poly[pt].split(",")[0] * 100000) / 100000, Math.round(poly[pt].split(",")[1] * 100000) / 100000 ];
       }
-      res.redirect('http://maps.google.com/maps/api/staticmap?sensor=false&size=256x256&center=0,0&zoom=15');
-      //res.redirect('http://maps.google.com/maps/api/staticmap?sensor=false&size=256x256&polygon=');
+      // for the time being, use Google Static Maps API: https://developers.google.com/maps/documentation/staticmaps/?hl=nl
+      res.redirect('http://maps.google.com/maps/api/staticmap?sensor=false&size=256x256&path=color:0x00000000|fillcolor:0x0000FF33|' + poly.join('|'));
     });
   });
-  //app.get('/namedgeo', function(req, res){
-  //});
 
   // show map and editor
   app.get('/build', function(req, res){
