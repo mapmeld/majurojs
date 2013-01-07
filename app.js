@@ -96,7 +96,7 @@ var init = exports.init = function (config) {
     // POST /createregion with src = chicago
     // then POST /createregion with name = DISTRICT_NAME and geo = LAT1,LNG1|LAT2,LNG2
     if(req.body.start && req.body.start == "chicago"){
-      region = new region.Region({
+      r = new region.Region({
         name: "chicago",
         fullname: "Chicago",
         images: [ "/images/chicagobg.png", "/images/chicagologo.png" ],
@@ -107,7 +107,7 @@ var init = exports.init = function (config) {
           }
         ]
       });
-      region.save(function(err){
+      r.save(function(err){
         res.send(err || "success");
       });
     }

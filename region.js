@@ -10,6 +10,6 @@ var RegionSchema = new Schema({
   datarules: String // HTML of known open data policies
 });
 
-var region = mongoose.model('Region', RegionSchema);
+var Region = mongoose.model('Region', RegionSchema);
 
-exports.region = region;
+exports.Region = Region;
