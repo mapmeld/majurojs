@@ -142,7 +142,7 @@ var init = exports.init = function (config) {
         poly[pt] = [ Math.round(poly[pt].split(",")[0] * 100000) / 100000, Math.round(poly[pt].split(",")[1] * 100000) / 100000 ];
       }
       // for the time being, use Google Static Maps API: https://developers.google.com/maps/documentation/staticmaps/?hl=nl
-      res.redirect('http://maps.google.com/maps/api/staticmap?sensor=false&size=256x256&path=color:0x00000000|fillcolor:0x0000FF33|' + poly.join('|'));
+      res.redirect('http://maps.google.com/maps/api/staticmap?sensor=false&size=256x256&path=fillcolor:0x0000FF33|' + poly.join('|'));
     });
   });
 
