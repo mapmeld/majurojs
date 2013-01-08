@@ -6,6 +6,7 @@ var CustomGeoSchema = new Schema({
   latlngs: Array,
   updated: Date
 });
+CustomGeoSchema.index({ updated: -1 });
 
 var CustomGeo = mongoose.model('CustomGeo', CustomGeoSchema);
 
