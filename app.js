@@ -74,18 +74,18 @@ var init = exports.init = function (config) {
   });
   
   // database fixes
-  app.get('/settime', function(req, res){
-    timepoly.TimePoly.findOne({ "ll": [ req.query.lat * 1.0, req.query.lng * 1.0 ] }).exec(function(err, poly){
+  app.post('/settime', function(req, res){
+    timepoly.TimePoly.findOne({ "ll": [ req.body.lat * 1.0, req.body.lng * 1.0 ] }).exec(function(err, poly){
       if(err){
         return res.send(err);
       }
-      poly.start = new Date("January 10, " + req.query.startyr);
+      poly.start = new Date("January 10, " + req.body.startyr);
       poly.save(function(err){
         res.send(err || "success");
       });
     });
   });
-  app.get('/dedupe/:src', function(req, res){
+  /*app.get('/dedupe/:src', function(req, res){
     customgeo.CustomGeo.find({ "src": req.params.src }).exec(function(err, polys){
       var dupelist = [ ];
       for(var p=0;p<polys.length;p++){
@@ -103,7 +103,7 @@ var init = exports.init = function (config) {
         }
       }
     });
-  });
+  });*/
   
   app.post('/createregion', function(req, res){
     // POST /createregion with src = chicago
