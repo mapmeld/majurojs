@@ -72,6 +72,18 @@ var init = exports.init = function (config) {
     });
   });
   
+  // database fixes
+  app.get('/settime', function(req, res){
+    timepoly.TimePoly.findOne({ "ll": [ req.query.lat * 1.0, req.query.lng * 1.0 ] }).exec(function(err, poly){
+      if(err){
+        return res.send(err);
+      }
+      poly.start = new Date("January 10, " + req.query.startyr);
+      poly.save(function(err){
+        res.send(err || "success");
+      });
+    });
+  });
   app.get('/dedupe/:src', function(req, res){
     customgeo.CustomGeo.find({ "src": req.params.src }).exec(function(err, polys){
       var dupelist = [ ];
