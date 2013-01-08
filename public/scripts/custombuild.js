@@ -8,8 +8,8 @@ var city_options = {
     time: false
   },
   austin: {
-    lat: 30.312427,
-    lng: -97.76018,
+    lat: 30.268926,
+    lng: -97.746176,
     zoom: 14,
     time: false
   },
