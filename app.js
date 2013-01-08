@@ -186,7 +186,7 @@ var init = exports.init = function (config) {
       savedata["start"] = new Date(req.body.start * 1);
     }
     if(req.body.startyr){
-      savedata["start"] = new Date("January 10, " + req.body.start);
+      savedata["start"] = new Date("January 10, " + req.body.startyr);
     }
     if(req.body.end){
       savedata["end"] = new Date(req.body.end * 1);
