@@ -65,7 +65,8 @@ var init = exports.init = function (config) {
   
   app.post('/customgeo', function(req, res){
     var shape = new customgeo.CustomGeo({
-      "latlngs": req.body.pts.split("|")
+      "latlngs": req.body.pts.split("|"),
+      "updated": new Date()
     });
     shape.save(function (err){
       res.send({ id: shape._id });
@@ -143,11 +144,19 @@ var init = exports.init = function (config) {
       });
     }
   });
+  
+  app.get('/regions/recent', function(req, res){
+    customgeo.CustomGeo.find().sort('-updated').limit(20).exec(function(err, recents){
+      res.render('geolist', { geos: recents });
+    });
+  });
+  
   app.get('/regions/:regionname', function(req, res){
     region.Region.findOne({ "name": req.params.regionname }).exec(function(err, myregion){
       res.render('regions', { region: myregion });
     });
   });
+
   app.get('/regionmap/:geo', function(req, res){
     customgeo.CustomGeo.findById(req.params.geo, function(err, geo){
       if(err){
@@ -159,7 +168,7 @@ var init = exports.init = function (config) {
       }
       poly.push(poly[0]);
       // for the time being, use Google Static Maps API: https://developers.google.com/maps/documentation/staticmaps/?hl=nl
-      res.redirect('http://maps.google.com/maps/api/staticmap?sensor=false&size=256x256&path=fillcolor:0x0000FF33|' + poly.join('|'));
+      res.redirect('http://maps.google.com/maps/api/staticmap?sensor=false&size=256x256&path=fillcolor:0x0000FF33|weight:1|' + poly.join('|'));
     });
   });
 

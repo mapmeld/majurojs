@@ -1,0 +1,22 @@
+head
+  title Recent Regions
+  link(href="/stylesheets/bootstrap-mini.css", type="text/css", rel="stylesheet")
+  style(type="text/css") .img{ margin: 15px; }
+body
+  div.navbar
+    .navbar-inner
+      .container
+        li(style="padding-top:0px;padding-bottom:0px;")
+          a.brand(href="/") MajuroJS.org
+
+  div.container
+    .row
+      .span8
+        .hero-unit(style="background-color:#C2F23C;background-image:'#{region.images[0]}';background-repeat:no-repeat;padding:30px;")
+          h3 Recently drawn areas 
+        
+    .row
+      - each geo in geos
+        .span3
+          a(href="/build/#{geo._id}")
+            img(src="/regionmap/#{geo._id}", width="256", height="256")
