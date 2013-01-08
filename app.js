@@ -137,7 +137,7 @@ var init = exports.init = function (config) {
     });
   });
   app.get('/regionmap/:geo', function(req, res){
-    customgeo.CustomGeo.findById(reqgeo, function(err, geo){
+    customgeo.CustomGeo.findById(req.params.geo, function(err, geo){
       if(err){
         return res.send(err);
       }
