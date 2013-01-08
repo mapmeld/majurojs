@@ -147,6 +147,7 @@ var init = exports.init = function (config) {
   
   app.get('/regions/recent', function(req, res){
     customgeo.CustomGeo.find().sort('-updated').limit(20).exec(function(err, recents){
+      if(err){ return res.send(err); }
       res.render('geolist', { geos: recents });
     });
   });
