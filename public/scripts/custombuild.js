@@ -14,7 +14,7 @@ var city_options = {
     time: false
   },
   baltimore: {
-    lat: 39.312564,
+    lat: 39.278776,
     lng: -76.61684,
     zoom: 14,
     time: false
@@ -134,9 +134,9 @@ var city_options = {
     time: false
   },
   steamboatsprings: {
-    lat: 40.458486,
-    lng: -106.807356,
-    zoom: 14,
+    lat: 40.484037,
+    lng: -106.825046,
+    zoom: 12,
     time: false
   },
   westsacramento: {
