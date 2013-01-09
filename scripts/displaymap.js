@@ -121,6 +121,9 @@ function loadedPolys(polys){
     if(polys.features[f].properties.name || polys.features[f].properties.description){
       poly.bindPopup( ('<h3>' + polys.features[f].properties.name + '</h3>' || '') + describe( polys.features[f].properties.description ) );
     }
+    else{
+      poly.setStyle({ clickable: false });
+    }
     map.addLayer(poly);
     if(ShowMapKey && !ShowUnusedColors){
       switch(polyfill){
