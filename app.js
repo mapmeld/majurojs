@@ -146,7 +146,7 @@ var init = exports.init = function (config) {
   });
   
   app.get('/regions/recent', function(req, res){
-    customgeo.CustomGeo.find({'updated': { $gt: new Date('January 1, 2000') }}).sort('-updated').limit(20).exec(function(err, recents){
+    customgeo.CustomGeo.find({'updated.date': { "$gt": new Date('January 1, 2000') }}).sort('-updated.date').limit(20).exec(function(err, recents){
       if(err){ return res.send(err); }
       res.render('geolist', { geos: recents });
     });
@@ -154,6 +154,7 @@ var init = exports.init = function (config) {
   
   app.get('/regions/:regionname', function(req, res){
     region.Region.findOne({ "name": req.params.regionname }).exec(function(err, myregion){
+      if(err){ return res.send(err); }
       res.render('regions', { region: myregion });
     });
   });

@@ -128,6 +128,9 @@ $(document).ready(function(){
           if(edited[p].name || edited[p].description){
             poly.bindPopup( '<h3>' + (edited[p].name || '') + '</h3>' + describe( ( edited[p].description || '') ) );
           }
+          else{
+            poly.setStyle({ clickable: false });
+          }
           if(edited[p].color){
             poly.setStyle({ color: edited[p].color, opacity: 0.65 });
           }
