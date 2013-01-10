@@ -85,8 +85,8 @@ var init = exports.init = function (config) {
       });
     });
   });
-  /*app.get('/dedupe/:src', function(req, res){
-    customgeo.CustomGeo.find({ "src": req.params.src }).exec(function(err, polys){
+  app.get('/dedupe/:src', function(req, res){
+    timepoly.TimePoly.find({ "src": req.params.src }).exec(function(err, polys){
       var dupelist = [ ];
       for(var p=0;p<polys.length;p++){
         var coded = polys[p].ll.join("_");
@@ -95,15 +95,13 @@ var init = exports.init = function (config) {
           dupelist.push(coded);
         }
         else{
-          polys[p].delete(function(err){ });
-          //customgeo.CustomGeo.findById(polys[p]._id, function(err, poly){
-          //  poly.delete();
-          //});
+          timepoly.TimePoly.remove({ _id: polys[p]._id }, function(err){
+          });
           dupelist.splice(dupeloc,1);
         }
       }
     });
-  });*/
+  });
   
   app.post('/createregion', function(req, res){
     // POST /createregion with src = chicago
