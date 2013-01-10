@@ -127,7 +127,7 @@ var init = exports.init = function (config) {
   });
   
   app.get('/regions/recent', function(req, res){
-    customgeo.CustomGeo.find({'created': { "$gt": (new Date('January 1, 2000')) * 1 }}).sort('-created').limit(20).exec(function(err, recents){
+    customgeo.CustomGeo.find({'created': { "$gt": 1000 }}).limit(20).exec(function(err, recents){
       if(err){ return res.send(err); }
       res.render('geolist', { geos: recents });
     });
