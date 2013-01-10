@@ -156,17 +156,17 @@ function set_time_period(jstime){
   $("#mydate").html( y );
   for(var f=0;f<features.length;f++){
     if(map.hasLayer(features[f].geometry)){
-      if(f.properties.start && codeToTime( f.properties.start ) * 1 > y){
+      if(features[f].properties.start && codeToTime( features[f].properties.start ) * 1 > y){
         map.removeLayer(features[f].geometry);
         continue;
       }
-      if(f.properties.end && codeToTime( f.properties.end ) * 1 < y){
+      if(features[f].properties.end && codeToTime( features[f].properties.end ) * 1 < y){
         map.removeLayer(features[f].geometry);
         continue;
       }
     }
     else{
-      if((!f.properties.start || codeToTime( f.properties.start ) * 1 <= y) && (!f.properties.end || codeToTime( f.properties.end ) * 1 >= y)){
+      if((!features[f].properties.start || codeToTime( features[f].properties.start ) * 1 <= y) && (!features[f].properties.end || codeToTime( features[f].properties.end ) * 1 >= y)){
         map.addLayer( features[f].geometry );
       }
     }
@@ -175,7 +175,7 @@ function set_time_period(jstime){
 
 function bindDetails(poly, props){
   poly.on('mouseover', function(e){
-    building_pop.setLatLng( poly.getBounds().getCenter() ).setContent( (feature.properties.address || feature.properties.name) + "<br/>Built " + (feature.properties.start || "") + "<br/>" + (describe(features.properties.description) || "") );
+    building_pop.setLatLng( poly.getBounds().getCenter() ).setContent( (props.address || props.name || "") + "<br/>Built " + (props.start || "") + "<br/>" + (describe(props.description) || "") );
     map.openPopup(building_pop);
   });
 }
@@ -300,7 +300,8 @@ $(document).ready(function(){
     controls.appendChild( myd );
     $("#loading").css({ display: "none" });
     
-    play.innerHTML = '<a class="btn btn-success"><i class="icon-play-circle icon-white"></i> Play</a>';
+    play.innerHTML = '<i class="icon-play-circle icon-white"></i> Play';
+    play.className = "btn btn-success";
     play.onclick = function(){
       var step = codeToTime( $("#filter").slider('value') ) * 1;
       // Every quarter-second (300 ms) increment the time period
@@ -317,7 +318,8 @@ $(document).ready(function(){
       }, 300);
     };
 
-    stop.innerHTML = '<a class="btn btn-inverse"><i class="icon-stop icon-white"></i> Stop</a>';
+    stop.className = 'btn btn-inverse';
+    stop.innerHTML = '<i class="icon-stop icon-white"></i> Stop';
     stop.onclick = function(){
       window.clearInterval(playStep);
     };
