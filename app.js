@@ -165,6 +165,7 @@ var init = exports.init = function (config) {
         return res.send(err);
       }
       var poly = geo.latlngs;
+      // round to 5 decimal places instead of 6
       for(var pt=0;pt<poly.length;pt++){
         poly[pt] = [ Math.round(poly[pt].split(",")[0] * 100000) / 100000, Math.round(poly[pt].split(",")[1] * 100000) / 100000 ];
       }

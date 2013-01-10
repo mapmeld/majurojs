@@ -148,7 +148,7 @@ var city_options = {
 };
 
 function codeToTime(jstime){
-  return (new Date(jstime)).getYear();
+  return (new Date(jstime)).getFullYear();
 }
 
 function set_time_period(jstime){
@@ -265,7 +265,7 @@ $(document).ready(function(){
         maxlat = Math.max(maxlat, coords[p][1]);
         minlng = Math.min(minlng, coords[p][0]);
         maxlng = Math.max(maxlng, coords[p][0]);
-        coords[p] = new L.LatLng( coords[1], coords[0] );
+        coords[p] = new L.LatLng( coords[p][1], coords[p][0] );
       }
       features[f].geometry = new L.polygon(coords, { weight: 2 });
       if(features[f].properties.fill){
