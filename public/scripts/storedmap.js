@@ -126,8 +126,10 @@ $(document).ready(function(){
       var myid = avg.join(',') + "," + coords.length;
 
       var poly = new L.polygon(coords, { weight: 2, color: "#0033ff" });
+      var foundMatch = false;
       for(var p=0;p<edited.length;p++){
         if(edited[p].id == myid){
+          foundMatch = true;
           if(edited[p].name || edited[p].description){
             poly.bindPopup( '<h3>' + (edited[p].name || '') + '</h3>' + describe( ( edited[p].description || '') ) );
           }
@@ -140,6 +142,10 @@ $(document).ready(function(){
           edited.splice(p,1);
           break;
         }
+      }
+      if(!foundMatch){
+        // unedited building
+        poly.setStyle({ clickable: false });
       }
       map.addLayer(poly);
     }
