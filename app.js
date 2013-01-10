@@ -127,7 +127,8 @@ var init = exports.init = function (config) {
   });
   
   app.get('/regions/recent', function(req, res){
-    customgeo.CustomGeo.find({'created': { "$gt": 1000 }}).limit(20).exec(function(err, recents){
+    var yesterday = (new Date() * 1) - 24 * 60 * 60 * 1000;
+    customgeo.CustomGeo.find({'created': { "$gt": yesterday }}).limit(20).exec(function(err, recents){
       if(err){ return res.send(err); }
       res.render('geolist', { geos: recents });
     });
