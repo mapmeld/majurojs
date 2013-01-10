@@ -267,12 +267,12 @@ $(document).ready(function(){
         maxlng = Math.max(maxlng, coords[p][0]);
         coords[p] = new L.LatLng( coords[p][1], coords[p][0] );
       }
-      features[f].geometry = new L.polygon(coords, { weight: 2 });
-      if(features[f].properties.fill){
-        features[f].geometry.setStyle({ color: features[f].properties.fill, opacity: 0.65 });
+      features[i].geometry = new L.polygon(coords, { weight: 2 });
+      if(features[i].properties.fill){
+        features[i].geometry.setStyle({ color: features[i].properties.fill, opacity: 0.65 });
       }
-      bindDetails( features[f].geometry, features[f].properties );
-      map.addLayer( features[f].geometry );
+      bindDetails( features[i].geometry, features[i].properties );
+      map.addLayer( features[i].geometry );
     }
     map.fitBounds( new L.LatLngBounds( new L.LatLng(minlat, minlng), new L.LatLng(maxlat, maxlng) ) );
 
