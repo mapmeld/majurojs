@@ -1,7 +1,7 @@
 var map, dragtype, building_pop;
 var footprints = [ ];
 var city_options = {
-  allegheny: {
+  pittsburgh: {
     lat: 40.440676,
     lng: -79.984589,
     zoom: 14,
