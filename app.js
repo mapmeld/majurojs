@@ -85,24 +85,6 @@ var init = exports.init = function (config) {
       });
     });
   });
-  app.get('/dedupe/:src', function(req, res){
-    timepoly.TimePoly.find({ "src": req.params.src }).exec(function(err, polys){
-      var dupelist = [ ];
-      for(var p=0;p<polys.length;p++){
-        var coded = polys[p].ll.join("_");
-        var dupeloc = dupelist.indexOf(coded);
-        if(dupeloc == -1){
-          dupelist.push(coded);
-        }
-        else{
-          res.write(polys[p]._id);
-          timepoly.TimePoly.remove({ _id: polys[p]._id }, function(err){
-          });
-          dupelist.splice(dupeloc,1);
-        }
-      }
-    });
-  });
   
   app.post('/createregion', function(req, res){
     // POST /createregion with src = chicago
@@ -145,7 +127,7 @@ var init = exports.init = function (config) {
   });
   
   app.get('/regions/recent', function(req, res){
-    customgeo.CustomGeo.find({'updated.date': { "$gt": new Date('January 1, 2000') }}).sort('-updated.date').limit(20).exec(function(err, recents){
+    customgeo.CustomGeo.find({"$exists": "updated"}).limit(20).exec(function(err, recents){
       if(err){ return res.send(err); }
       res.render('geolist', { geos: recents });
     });
