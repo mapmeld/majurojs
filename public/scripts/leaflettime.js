@@ -175,7 +175,17 @@ function set_time_period(jstime){
 
 function bindDetails(poly, props){
   poly.on('mouseover', function(e){
-    building_pop.setLatLng( poly.getBounds().getCenter() ).setContent( (props.address || props.name || "") + "<br/>Built " + (props.start || "") + "<br/>" + (describe(props.description) || "") );
+    var contentStr = "";
+    if(props.address || props.name){
+      contentStr += (props.address || props.name) + "<br/>";
+    }
+    if(props.start){
+      contentStr += "Built " + codeToTime(props.start) + "<br/>";
+    }
+    if(props.description){
+      contentStr += describe(props.description);
+    }
+    building_pop.setLatLng( poly.getBounds().getCenter() ).setContent( contentStr );
     map.openPopup(building_pop);
   });
 }
