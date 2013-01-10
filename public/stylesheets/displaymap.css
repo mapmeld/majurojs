@@ -1,0 +1,94 @@
+html, body{
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+body {
+  margin:0;
+  padding:0;
+  font-family: arial, sansserif;
+  border: 5px solid #444;
+  background-color: #f0f0f0;
+}
+#map {
+  height:99%;
+  overflow:none;
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:84%;
+  left:16%;
+}
+.span2{
+  width: 11%;
+}
+.marker{
+  vertical-align:middle;
+  width: 26px;
+  margin: 8px;
+  display: inline-block;
+}
+ol li{
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+ul li{
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.allegheny{ display:none; }
+.austin{ display:none; }
+.baltimore{ display:none; }
+.bloomington{ display:none; }
+.boston{ display:none; }
+.boulder{ display:none; }
+.chapelhill{ display:none; }
+.chicago{ display:none; }
+.clark{ display:none; }
+.kitsap{ display:none; }
+.lancaster{ display:none; }
+.midland{ display:none; }
+.nanaimo{ display:none; }
+.oakland{ display:none; }
+.petaluma{ display:none; }
+.philadelphia{ display:none; }
+.raleigh{ display:none; }
+.roundrock{ display:none; }
+.sanfrancisco{ display:none; }
+.savannah{ display:none; }
+.seattle{ display:none; }
+.smith{ display:none; }
+.spokane{ display:none; }
+.steamboatsprings{ display:none; }
+.westsacramento{ display:none; }
+#sidebar{
+  padding-left: 20px;
+  padding-top: 8px;
+  border-right: 5px solid #444;
+  width: 13.7%;
+  height: 97%;
+  overflow: none;
+}
+.modal-body p{
+  font-size: 13pt !important;
+  line-height: 25pt !important;
+}
+.mapkey{
+  background-color: #fff;
+  padding: 12px;
+}
+.mapkey li{
+  list-style-type: none;
+  margin-left: -23px;
+}
+.mapkey img{
+  width: 17px;
+  vertical-align: middle;
+  margin-left: -5px;
+  padding-right: 5px;
+}
+.mapkey span{
+  vertical-align: middle;
+  padding-left: 8px;
+  padding-right: 8px;
+}
