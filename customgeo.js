@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
 
 var CustomGeoSchema = new Schema({
   latlngs: Array,
-  updated: Number
+  created: Number
 });
 CustomGeoSchema.index({ updated: -1 });
 

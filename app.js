@@ -66,7 +66,7 @@ var init = exports.init = function (config) {
   app.post('/customgeo', function(req, res){
     var shape = new customgeo.CustomGeo({
       "latlngs": req.body.pts.split("|"),
-      "updated": (new Date()) * 1
+      "created": (new Date()) * 1
     });
     shape.save(function (err){
       res.send({ id: shape._id });
@@ -127,7 +127,7 @@ var init = exports.init = function (config) {
   });
   
   app.get('/regions/recent', function(req, res){
-    customgeo.CustomGeo.find({'updated': { "$gt": (new Date('January 1, 2000')) * 1 }}).sort('-updated').limit(20).exec(function(err, recents){
+    customgeo.CustomGeo.find({'created': { "$gt": (new Date('January 1, 2000')) * 1 }}).sort('-created').limit(20).exec(function(err, recents){
       if(err){ return res.send(err); }
       res.render('geolist', { geos: recents });
     });
