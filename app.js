@@ -82,8 +82,7 @@ var init = exports.init = function (config) {
       if(!poly){
         return res.send('found no polygon');
       }
-      var start = new Date("January 10, " + req.body.startyr);
-      poly.start = start * 1;
+      poly.start = new Date("January 10, " + req.body.startyr);
       poly.save(function(err){
         res.send(err || "success");
       });

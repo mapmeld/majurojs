@@ -4,8 +4,8 @@ var mongoose = require('mongoose'),
 
 var TimePolySchema = new Schema({
   ll: { type: [Number], index: '2d' },
-  start: Number,
-  end: Number,
+  start: Date,
+  end: Date,
   name: String,
   address: String,
   points: Array,
