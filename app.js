@@ -173,7 +173,7 @@ var init = exports.init = function (config) {
 
   app.post('/timeline', function(req, res){
     // load this point into MongoDB
-    coordinates = req.body['points'].split('||');
+    coordinates = req.body.points.split('||');
     for(var c=0;c<coordinates.length;c++){
       coordinates[c] = coordinates[c].split('|');
       coordinates[c][0] *= 1.0;
@@ -184,7 +184,7 @@ var init = exports.init = function (config) {
       // src is the name of the city, county, or other locality
       "src": req.body.src,
       // use [ lng , lat ] format to be consistent with GeoJSON
-      "ll": [ req.body['lng'] * 1.0, req.body['lat'] * 1.0 ]
+      "ll": [ req.body.lng * 1.0, req.body.lat * 1.0 ]
     };
     if(req.body.name){
       savedata["name"] = req.body.name;
@@ -209,7 +209,7 @@ var init = exports.init = function (config) {
 
   // show timeline
   app.get('/timeline', function(req, res){
-    //res.render('checkouttime', { customgeo: req.query['customgeo'] });
+    //res.render('checkouttime', { customgeo: req.query.customgeo });
     res.render('leaflettimeline', { src: (req.query.src || ""), customgeo: req.query.customgeo });
   });
   app.get('/timeline/:customgeo', function(req, res){
@@ -391,8 +391,8 @@ var init = exports.init = function (config) {
       src = timepolys[0].src;
     }
     else{
-      if(req.query['src'] && included_sources.indexOf( req.query['src'] ) != -1){
-        src = req.query['src'];
+      if((req.query.src && included_sources.indexOf( req.query.src ) != -1) || (req.params.src && included_sources.indexOf( req.params.src ) != -1)){
+        src = req.query.src;
       }
       else{
         src = "Source unknown";
