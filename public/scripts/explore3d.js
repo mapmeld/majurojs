@@ -199,7 +199,7 @@ d3.json(jsonData, function (err, footprints) {
 })
 }
 
-loadBuildings('/timeline-at/' + customgeo + '.geojson');
+loadBuildings('/timeline-at/' + customgeo);
 
 container = document.createElement('div');
 document.body.appendChild(container);
