@@ -1,0 +1,182 @@
+head
+  meta(name="viewport", content="initial-scale=1.0, user-scalable=no")
+  meta(http-equiv="Content-Type", content="text/html; charset=ISO-8859-1")
+  script(src="/scripts/d3.v3.min.js", type="text/javascript")
+  title Decade Clusters from GeoJSON
+  link(href='/stylesheets/bootstrap-mini.css', rel='stylesheet', type='text/css')
+  link(rel="stylesheet", type="text/css", href="/stylesheets/explore3d.css")
+  script(type='text/javascript', src='/scripts/jquery-1.7.1.min.js')
+  script(type='text/javascript', src='/scripts/bootstrap.min.js')
+  script(type="text/javascript") var customgeo = "#{customgeo}"; var src = "#{src}";
+  script(src="/scripts/timeclusters.js", type="text/javascript")
+  style(type="text/css") .node { stroke: #fff; stroke-width: 1.5px; }
+body
+  div
+    canvas#layer(width="1276", height="644")
+  div.popover
+    h3 3D View
+    p
+      span Adapted from Brian Mount's&nbsp;
+      a(href="http://b.aguacat.es/anatine/_design/funbun/index.html", target="_blank") D3 example
+      span .
+    p
+      span Buildings data downloaded from&nbsp;
+      a.allegheny(href="#", onclick="showDataSource()") Allegheny County
+      a.austin(href="#", onclick="showDataSource()") City of Austin
+      a.baltimore(href="#", onclick="showDataSource()") City of Baltimore
+      a.bloomington(href="#", onclick="showDataSource()") City of Bloomington
+      a.boston(href="#", onclick="showDataSource()") City of Boston
+      a.boulder(href="#", onclick="showDataSource()") City of Boulder
+      a.chapelhill(href="#", onclick="showDataSource()") Town of Chapel Hill
+      a.chicago(href="#", onclick="showDataSource()") City of Chicago
+      a.clark(href="#", onclick="showDataSource()") Clark County
+      a.kitsap(href="#", onclick="showDataSource()") Kitsap County
+      a.lancaster(href="#", onclick="showDataSource()") Lancaster County
+      a.midland(href="#", onclick="showDataSource()") City of Midland
+      a.nanaimo(href="#", onclick="showDataSource()") City of Nanaimo
+      a.oakland(href="#", onclick="showDataSource()") City of Oakland
+      a.petaluma(href="#", onclick="showDataSource()") City of Petaluma
+      a.philadelphia(href="#", onclick="showDataSource()") City of Philadelphia
+      a.raleigh(href="#", onclick="showDataSource()") Wake County
+      a.roundrock(href="#", onclick="showDataSource()") City of Round Rock
+      a.sanfrancisco(href="#", onclick="showDataSource()") City and County of San Francisco
+      a.savannah(href="#", onclick="showDataSource()") SAGIS
+      a.seattle(href="#", onclick="showDataSource()") City of Seattle
+      a.smith(href="#", onclick="showDataSource()") Smith County
+      a.spokane(href="#", onclick="showDataSource()") City of Spokane
+      a.steamboatsprings(href="#", onclick="showDataSource()") City of Steamboat Springs
+      a.westsacramento(href="#", onclick="showDataSource()") City of West Sacramento
+      br
+    p
+      span Create your own at&nbsp;
+      a(href="http://www.majurojs.org") MajuroJS.org
+      span .
+
+  div#creditmessage.modal.hide.fade
+    div.modal-header
+      button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
+      h3 Data Source
+    div.modal-body
+      p.allegheny
+        span Buildings data from Allegheny County, Pennsylvania via&nbsp;
+        a(href="http://www.pasda.psu.edu/", target="_blank") PASDA
+        br
+        a(href="http://www.pasda.psu.edu/uci/FullMetadataDisplay.aspx?file=AlleghenyCounty_Footprints20080616.xml", target="_blank") Data Citation
+      p.austin
+        span Buildings data from the City of Austin, Texas via their&nbsp;
+        a(href="ftp://ftp.ci.austin.tx.us/GIS-Data/Regional/coa_gis.html", target="_blank") GIS FTP site
+        span &nbsp;set up by the Communications and Technology Department.
+        br
+        span A data disclaimer is written on the GIS FTP site.
+      p.baltimore
+        span Buildings data from the City of Baltimore, Maryland via the&nbsp;
+        a(href="http://www.baltimorecity.gov/OfficeoftheMayor/MayoralOffices/InformationTechnology/EnterpriseGeographicInformationServices.aspx", target="_blank") Mayor's Office of Information Technology
+        span .
+        br
+        a(href="https://data.baltimorecity.gov/Geographic/Building-Footprint-Shape/deus-s85f", target="_blank") Released into Public Domain
+      p.bloomington
+        span Buildings data from the City of Bloomington, Indiana via their website.
+        a(href="http://bloomington.in.gov/documents/viewDocument.php?document_id=1870", target="_blank") Source
+        br
+        a(href="http://bloomington.in.gov/documents/viewDocument.php?document_id=709", target="_blank") Data Policy
+      p.boston
+        span Buildings data for the City of Boston via the&nbsp;
+        a(href="http://www.bostonredevelopmentauthority.org/BRA_3D_Models/2D-download.html", target="_blank") Boston Redevelopment Authority
+        br
+        a(href="http://www.bostonredevelopmentauthority.org/BRA_3D_Models/Index.html", target="_blank") Data Policy
+      p.chapelhill
+        span Buildings data from the Town of Chapel Hill, North Carolina via their website,&nbsp;
+        a(href="http://townofchapelhill.org", target="_blank") TownOfChapelHill.org
+        br
+        a(href="http://gis.townofchapelhill.org/download_data/", target="_blank") GIS Data Disclaimer
+      p.chicago
+        span Buildings data from the City of Chicago via&nbsp;
+        a(href="https://data.cityofchicago.org", target="_blank") data.cityofchicago.org
+        br
+        a(href="https://data.cityofchicago.org/Buildings/Building-Footprints/w2v3-isjw", target="_blank") Public Data
+      p.clark
+        span Buildings data from Clark County, Ohio via&nbsp;
+        a(href="http://downloads.ddti.net/ClarkOH/", target="_blank") Digital Data Technologies, Inc.
+      p.kitsap
+        span Buildings data from Kitsap County, Washington via their&nbsp;
+        a(href="http://www.kitsapgov.com/gis/", target="_blank") GIS portal.
+        br
+        a(href="http://www.kitsapgov.com/county/privacy.htm", target="_blank") Data Policy
+      p.lancaster
+        span Buildings data from Lancaster County, Pennsylvania via&nbsp;
+        a(href="http://www.pasda.psu.edu/", target="_blank") PASDA
+        br
+        a(href="http://www.pasda.psu.edu/uci/LancasterAgreement.asp?File=http://www.pasda.psu.edu/lancco/data/LancasterCountyBuildings200812.zip", target="_blank") Data Use Policy
+      p.midland
+        span Buildings data from the City of Midland, Texas via&nbsp;
+        a(href="http://www.midlandtexas.gov", target="_blank") MidlandTexas.gov
+        br
+        a(href="http://www.midlandtexas.gov/departments/development_serv/gis/gis_data.html", target="_blank") GIS Data Information Page
+      p.nanaimo
+        span Buildings data from Nanaimo, British Columbia, Canada. Available under a&nbsp;
+        a(href="http://koordinates.com/layer/3200-building-footprint/", target="_blank") Creative Commons Attribution 2.5 license.
+      p.oakland
+        span Buildings data from the City of Oakland via&nbsp;
+        a(href="http://www2.oaklandnet.com/Government/o/PBN/OurServices/Plans/DOWD008194", target="_blank") Broadway/Valdez District Specific Plan
+        br
+      p.petaluma
+        span Buildings data from the City of Petaluma, California (and multiple online sources, not necessarily controlled by the City of Petaluma) via&nbsp;
+        a(href="http://www.cityofpetaluma.net/cmgr/gis.html", target="_blank") CityOfPetaluma.net
+        br
+        a(href="http://www.cityofpetaluma.net/cmgr/gisdownloads.html", target="_blank") GIS Data Information Page
+      p.philadelphia
+        span Buildings data from the City of Philadelphia via&nbsp;
+        a(href="http://www.opendataphilly.org/opendata/resource/6/buildings/", target="_blank") OpenDataPhilly.org
+        br
+        a(href="http://opendataphilly.org/faq/#five", target="_blank") Data Use Policy
+      p.raleigh
+        span Buildings data for the City of Raleigh, North Carolina via&nbsp;
+        a(href="http://www.wakegov.com/gis/services/pages/data.aspx", target="_blank") Wake County's GIS page
+        span .
+        br
+        a(href="http://www.wakegov.com/gis/services/Pages/metadata.aspx", target="_blank") Data Disclaimer
+      p.roundrock
+        span Buildings data from the City of Round Rock, Texas or its agents via&nbsp;
+        a(href="http://www.roundrocktexas.gov", target="_blank") RoundRockTexas.gov
+        span .
+        br
+        a(href="http://www.roundrocktexas.gov/home/index.asp?page=517", target="_blank") GIS Data Information Page
+      p.sanfrancisco
+        span Buildings data from the City and County of San Francisco, California via&nbsp;
+        a(href="http://data.sfgov.org", target="_blank") data.sfgov.org
+        span .
+        br
+        a(href="https://data.sfgov.org/Facilities-and-Structures/Building-Footprints-Zipped-Shapefile-Format-/jezr-5bxm", target="_blank") Creative Commons Zero License
+      p.savannah
+        span Buildings data from the Metropolitan Planning Commission and Savannah Area GIS. Visit&nbsp;
+        a(href="http://www.thempc.org/SAGIS.htm", target="_blank") thempc.org
+        span &nbsp;and&nbsp;
+        a(href="http://www.sagis.org", target="_blank") SAGIS.org
+        br
+        a(href="http://www.thempc.org/SAGIS/Q_Export/default.htm", target="_blank") Data Use Policy
+      p.seattle
+        span Buildings data from the City of Seattle via&nbsp;
+        a(href="https://data.seattle.gov", target="_blank") data.seattle.gov
+        br
+        a(href="https://data.seattle.gov/dataset/2009-Building-Outlines/y7u8-vad7", target="_blank") Public Domain
+      p.spokane
+        span Buildings data from the City of Spokane via their&nbsp;
+        a(href="http://www.spokanecity.org/services/gis/data/", target="_blank") GIS portal.
+        br
+        a(href="http://www.spokanecity.org/services/gis/disclaimer/", target="_blank") Data Disclaimer
+      p.steamboatsprings
+        span Buildings data from the City of Steamboat Springs, Colorado via their&nbsp;
+        a(href="http://steamboatsprings.net/index.aspx?NID=210", target="_blank") GIS Page
+        span .
+      p.westsacramento
+        span Buildings data from the City of West Sacramento, California via their&nbsp;
+        a(href="http://www.cityofwestsacramento.org/services/gis/downloads.asp", target="_blank") GIS site
+        span .
+        br
+        a(href="http://maps.cityofwestsacramento.org/resources/documents/City%20Disclaimer.pdf", target="_blank") Data Disclaimer (PDF)
+      br
+      span There is no official endorsement or maintenance of this site by this city or county.
+    div.modal-footer
+      a.btn.btn-primary(href="#", onclick="$('.modal').modal('toggle');") Close
+
+  script(type="text/javascript") var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-37457564-1']);_gaq.push(['_trackPageview']);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})();

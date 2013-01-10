@@ -199,12 +199,7 @@ d3.json(jsonData, function (err, footprints) {
 })
 }
 
-if(getURLParameter("customgeo") && getURLParameter("customgeo").length){
-  loadBuildings('/timeline-at.geojson?customgeo=' + getURLParameter("customgeo"));
-}
-else{
-  loadBuildings('mybuild.geojson');
-}
+loadBuildings('/timeline-at/' + customgeo + '.geojson');
 
 container = document.createElement('div');
 document.body.appendChild(container);

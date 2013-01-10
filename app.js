@@ -75,7 +75,7 @@ var init = exports.init = function (config) {
   
   // database fixes
   app.post('/settime', function(req, res){
-    timepoly.TimePoly.findOne({ "ll": [ req.body.lat * 1.0, req.body.lng * 1.0 ] }).exec(function(err, poly){
+    timepoly.TimePoly.findOne({ "ll": [ req.body.lng * 1.0, req.body.lat * 1.0 ] }).exec(function(err, poly){
       if(err){
         return res.send(err);
       }
@@ -214,6 +214,17 @@ var init = exports.init = function (config) {
   });
   app.get('/timeline/:src/:customgeo', function(req, res){
     res.render('leaflettimeline', { src: req.params.src, customgeo: req.params.customgeo });
+  });
+  
+  // experimental /timeclusters view
+  app.get('/timeclusters', function(req, res){
+    res.render('timeclusters', { src: (req.query.src || ""), customgeo: req.query.customgeo });
+  });
+  app.get('/timeline/:customgeo', function(req, res){
+    res.render('timeclusters', { src: "", customgeo: req.params.customgeo });
+  });
+  app.get('/timeline/:src/:customgeo', function(req, res){
+    res.render('timeclusters', { src: req.params.src, customgeo: req.params.customgeo });
   });
 
   // show map in 3D
