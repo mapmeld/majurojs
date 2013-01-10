@@ -66,7 +66,7 @@ var init = exports.init = function (config) {
   app.post('/customgeo', function(req, res){
     var shape = new customgeo.CustomGeo({
       "latlngs": req.body.pts.split("|"),
-      "updated": new Date() * 1
+      "updated": (new Date()) * 1
     });
     shape.save(function (err){
       res.send({ id: shape._id });
