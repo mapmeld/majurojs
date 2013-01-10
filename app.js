@@ -95,6 +95,7 @@ var init = exports.init = function (config) {
           dupelist.push(coded);
         }
         else{
+          res.write(polys[p]._id);
           timepoly.TimePoly.remove({ _id: polys[p]._id }, function(err){
           });
           dupelist.splice(dupeloc,1);
