@@ -179,7 +179,7 @@ function bindDetails(poly, props){
     if(props.address || props.name){
       contentStr += (props.address || props.name) + "<br/>";
     }
-    if(props.start){
+    if(props.start !== null){
       contentStr += "Built " + codeToTime(props.start) + "<br/>";
     }
     if(props.description){
