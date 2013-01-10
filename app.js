@@ -79,7 +79,7 @@ var init = exports.init = function (config) {
       if(err){
         return res.send(err);
       }
-      poly.start = new Date("January 10, " + req.body.startyr);
+      poly.start = (new Date("January 10, " + req.body.startyr)) * 1;
       poly.save(function(err){
         res.send(err || "success");
       });
@@ -190,13 +190,13 @@ var init = exports.init = function (config) {
       savedata["address"] = req.body.address;
     }
     if(req.body.start){
-      savedata["start"] = new Date(req.body.start * 1);
+      savedata["start"] = req.body.start * 1;
     }
     if(req.body.startyr){
-      savedata["start"] = new Date("January 10, " + req.body.startyr);
+      savedata["start"] = (new Date("January 10, " + req.body.startyr)) * 1;
     }
     if(req.body.end){
-      savedata["end"] = new Date(req.body.end * 1);
+      savedata["end"] = req.body.end * 1;
     }
     poly = new timepoly.TimePoly( savedata );
     poly.save(function(err){
