@@ -336,7 +336,7 @@ function saveDetail(){
   var selcolor;
   footprints[ id ].name = name;
   footprints[ id ].description = description;
-  if(IE_EDITOR){
+  if(typeof IE_EDITOR != "undefined" && IE_EDITOR){
     selcolor = $('#poly_color').val();
     if(selcolor == "#00f"){
       footprints[ id ].color = "";
