@@ -76,6 +76,9 @@ function loadedPolys(polys){
     case "roundrock":
       src_credits = ".roundrock";
       break;
+    case "sanfrancisco":
+      src_credits = ".sanfrancisco";
+      break;
     case "savannah":
     case "chatham":
     case "sagis":

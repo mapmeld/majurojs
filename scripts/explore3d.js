@@ -139,6 +139,9 @@ d3.json(jsonData, function (err, footprints) {
       case "roundrock":
         src_credits = ".roundrock";
         break;
+      case "sanfrancisco":
+        src_credits = ".sanfrancisco";
+        break;
       case "savannah":
       case "chatham":
       case "sagis":
