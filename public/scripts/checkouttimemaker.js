@@ -218,6 +218,14 @@ function postGeo(format){
         window.location = "/timeline/" + data.id;      
       }
     }
+    else if(format == "clusters"){
+      if(src){
+        window.location = "/timeclusters/" + src + "/" + data.id;
+      }
+      else{
+        window.location = "/timeclusters/" + data.id;      
+      }
+    }
     else if(format == "3d"){
       var minlat = 90;
       var centerlng = 0;

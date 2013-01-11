@@ -223,10 +223,10 @@ var init = exports.init = function (config) {
   app.get('/timeclusters', function(req, res){
     res.render('timeclusters', { src: (req.query.src || ""), customgeo: req.query.customgeo });
   });
-  app.get('/timeline/:customgeo', function(req, res){
+  app.get('/timeclusters/:customgeo', function(req, res){
     res.render('timeclusters', { src: "", customgeo: req.params.customgeo });
   });
-  app.get('/timeline/:src/:customgeo', function(req, res){
+  app.get('/timeclusters/:src/:customgeo', function(req, res){
     res.render('timeclusters', { src: req.params.src, customgeo: req.params.customgeo });
   });
 
