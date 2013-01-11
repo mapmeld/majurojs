@@ -2,7 +2,7 @@ $(document).ready(function(){
   var width = 1276, height = 644;
   var color = d3.scale.category20();
   var force = d3.layout.force()
-    .charge(-250)
+    .charge(-200)
     .size([width, height]);
 
   var svg = d3.select("body").append("svg")
