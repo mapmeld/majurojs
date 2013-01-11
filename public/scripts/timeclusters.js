@@ -183,7 +183,7 @@ $(document).ready(function(){
       return area;
     };
 
-    var centroid = function(poly){
+    var centroid = function(poly, mytimer){
       var pts = poly.coordinates[0];
       var nPts = pts.length;
       var x=0;
@@ -198,7 +198,7 @@ $(document).ready(function(){
         y+=(p1.y+p2.y)*f;
       }
       f=poly_area(pts)*6;
-      return [ x/f, y/f ];
+      return [ (x/f - ctrlng) * mytimer / 200 + ctrlng, (y/f - ctrlat) * mytimer / 200 + ctrlat ];
     };
     
     // create decade labels
@@ -208,6 +208,7 @@ $(document).ready(function(){
         .attr("class", "t" + decades[decade])
         .attr("x", 0)
         .attr("y", 0)
+        .style("text-shadow", "2px 2px #fff")
         .style("display", "none");
     }
     
@@ -222,12 +223,10 @@ $(document).ready(function(){
 
     // start polygons in map form
     var moveTracts = false;
+    var mytimer;
     setTimeout(function(){
-      node.style("display", "block");
       svg.selectAll("text").style("display", "block");
-      for(var t=0;t<tracts[0].length;t++){
-        d3.select(tracts[0][t]).attr("d", geopath.projection( d3.geo.mercator().scale(24000000).center( centroid(graph.geometries.features[t].geometry) ) ) );
-      }
+      mytimer = 0;
       moveTracts = true;
     }, 1000);
 
@@ -243,11 +242,25 @@ $(document).ready(function(){
         matchText.attr("y", matchCircle.attr("cy") - 20);        
       }
     
-      // center tracts on dot after 1 second delay
+      // transition buildings to dots
       if(moveTracts){
-        tracts.attr("transform", function(d){
-          var matchCircle = svg.select(".dgr" + d.properties.INDEX);
-          return "translate(" + (matchCircle[0][0].cx.baseVal.value - 480) + "," + (matchCircle[0][0].cy.baseVal.value - 250) + ")";
+        if(mytimer <= 200){
+          mytimer++;
+          for(var t=0;t<tracts[0].length;t++){
+            d3.select(tracts[0][t]).attr("d", geopath.projection( d3.geo.mercator().scale(24000000).center( centroid(graph.geometries.features[t].geometry, mytimer) ) ) );
+          }
+          if(mytimer == 200){
+            node.style("display", "block");
+          }
+        }
+        tracts.attr("transform", function(d) {
+      	  var matchCircle = svg.select(".dgr" + d.properties.INDEX);
+      	  if(mytimer <= 200){
+     	    return "translate(" + (matchCircle[0][0].cx.baseVal.value - 480) * mytimer / 200 + "," + (matchCircle[0][0].cy.baseVal.value - 250) * mytimer / 200 + ")";
+    	  }
+    	  else{
+     	    return "translate(" + (matchCircle[0][0].cx.baseVal.value - 480) + "," + (matchCircle[0][0].cy.baseVal.value - 250) + ")";
+     	  }
         });
       }
     });
