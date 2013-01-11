@@ -2,7 +2,7 @@ $(document).ready(function(){
   var width = 1276, height = 644;
   var color = d3.scale.category20();
   var force = d3.layout.force()
-    .charge(-330)
+    .charge(-450)
     .size([width, height]);
 
   var svg = d3.select("body").append("svg")
@@ -11,6 +11,27 @@ $(document).ready(function(){
 
   var geopath = d3.geo.path();
   var decades = { };
+  // comment out the random colors statement below if you want fixed colors
+  var decadeColors = {
+    "1880": "#ccc",
+    "1890": "#4e4",
+    "1900": "#44e",
+    "1910": "#4433ef",
+    "1920": "#ef44ef",
+    "1930": "#efef44",
+    "1940": "#44aaef",
+    "1950": "#e0e0e0",
+    "1960": "#cccccc",
+    "1970": "#e48",
+    "1980": "midnightblue",
+    "1990": "orange",
+    "2000": "maroon",
+    "2010": "tan"
+  };
+  // not so good at color selection... let's try random colors
+  for(decade in decadeColors){
+    decadeColors[decade] = "rgb(" + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + ")";
+  }
   var graph;
 
   d3.json("/timeline-at/" + customgeo, function(error, gj){
@@ -129,6 +150,7 @@ $(document).ready(function(){
         // this building is the first marker of this decade
         decades[ Math.floor(myyear / 10) + "0" ] = a;
       }
+      gj.features[a].properties.color = decadeColors[ Math.floor(myyear / 10) + "0" ];
     }
     force
       .nodes(graph.nodes.reverse())
@@ -140,7 +162,7 @@ $(document).ready(function(){
       .enter().append("path")
       .data(graph.geometries.features)
       .attr("d", geopath.projection( d3.geo.mercator().scale(24000000).center([ctrlng, ctrlat]) ) )
-      .style("fill", function(d) { return color(d.group); })
+      .style("fill", function(d) { return d.properties.color; })
       .attr("class", "node mapnode")
       .call(force.drag);
 
@@ -178,9 +200,6 @@ $(document).ready(function(){
       f=poly_area(pts)*6;
       return [ x/f, y/f ];
     };
-    for(var t=0;t<tracts[0].length;t++){
-      d3.select(tracts[0][t]).attr("d", geopath.projection( d3.geo.mercator().scale(24000000).center( centroid(graph.geometries.features[t].geometry) ) ) );
-    }
     
     // create decade labels
     for(decade in decades){      
@@ -188,7 +207,8 @@ $(document).ready(function(){
         .text(decade + "s")
         .attr("class", "t" + decades[decade])
         .attr("x", 0)
-        .attr("y", 0);
+        .attr("y", 0)
+        .style("display", "none");
     }
     
     var node = svg.selectAll("circle.node")
@@ -197,11 +217,17 @@ $(document).ready(function(){
       .attr("class", function(d){ return "node d" + d.name })
       .attr("r", 5)
       .style("fill", function(d) { return color(d.group); })
+      .style("display", "none")
       .call(force.drag);
 
     // start polygons in map form
     var moveTracts = false;
     setTimeout(function(){
+      node.style("display", "block");
+      svg.selectAll("text").style("display", "block");
+      for(var t=0;t<tracts[0].length;t++){
+        d3.select(tracts[0][t]).attr("d", geopath.projection( d3.geo.mercator().scale(24000000).center( centroid(graph.geometries.features[t].geometry) ) ) );
+      }
       moveTracts = true;
     }, 1000);
 
