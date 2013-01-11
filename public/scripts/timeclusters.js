@@ -2,7 +2,7 @@ $(document).ready(function(){
   var width = 1276, height = 644;
   var color = d3.scale.category20();
   var force = d3.layout.force()
-    .charge(-250)
+    .charge(-330)
     .size([width, height]);
 
   var svg = d3.select("body").append("svg")
@@ -104,7 +104,11 @@ $(document).ready(function(){
       geometries: gj,
       links: []
     };
-    for(var a=0;a<gj.features.length;a++){
+    for(var a=gj.features.length-1;a>=0;a--){
+      if(typeof gj.features[a].properties.start == 'undefined'){
+        gj.features.splice(a, 1);
+        continue;
+      }
       gj.features[a].properties.INDEX = a;
       graph.nodes.push({
         group: a,
@@ -127,7 +131,7 @@ $(document).ready(function(){
       }
     }
     force
-      .nodes(graph.nodes)
+      .nodes(graph.nodes.reverse())
       .links(graph.links)
       .start();
 
@@ -135,7 +139,7 @@ $(document).ready(function(){
       .data(graph.nodes)
       .enter().append("path")
       .data(graph.geometries.features)
-      .attr("d", geopath.projection( d3.geo.mercator().scale(200000).center([-87.6308311,41.8859622]) ) )
+      .attr("d", geopath.projection( d3.geo.mercator().scale(24000000).center([ctrlng, ctrlat]) ) )
       .style("fill", function(d) { return color(d.group); })
       .attr("class", "node mapnode")
       .call(force.drag);
@@ -178,6 +182,15 @@ $(document).ready(function(){
       d3.select(tracts[0][t]).attr("d", geopath.projection( d3.geo.mercator().scale(24000000).center( centroid(graph.geometries.features[t].geometry) ) ) );
     }
     
+    // create decade labels
+    for(decade in decades){      
+      svg.append("text")
+        .text(decade + "s")
+        .attr("class", "t" + decades[decade])
+        .attr("x", 0)
+        .attr("y", 0);
+    }
+    
     var node = svg.selectAll("circle.node")
       .data(graph.nodes)
       .enter().append("circle")
@@ -186,18 +199,31 @@ $(document).ready(function(){
       .style("fill", function(d) { return color(d.group); })
       .call(force.drag);
 
-    //node.append("title")
-    //  .text(function(d) { return d.name; });
+    // start polygons in map form
+    var moveTracts = false;
+    setTimeout(function(){
+      moveTracts = true;
+    }, 1000);
 
     force.on("tick", function() {
       node.attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
+
+      // keep text labels on center building
+      for(decade in decades){
+        var matchCircle = svg.select(".dgr" + decades[decade]);
+        var matchText = svg.select(".t" + decades[decade]);
+        matchText.attr("x", matchCircle.attr("cx") - 20);
+        matchText.attr("y", matchCircle.attr("cy") - 20);        
+      }
     
-      // center tracts on dot
-      tracts.attr("transform", function(d){
-        var matchCircle = svg.select(".dgr" + d.properties.INDEX);
-        return "translate(" + (matchCircle[0][0].cx.baseVal.value - 480) + "," + (matchCircle[0][0].cy.baseVal.value - 250) + ")";
-      });
+      // center tracts on dot after 1 second delay
+      if(moveTracts){
+        tracts.attr("transform", function(d){
+          var matchCircle = svg.select(".dgr" + d.properties.INDEX);
+          return "translate(" + (matchCircle[0][0].cx.baseVal.value - 480) + "," + (matchCircle[0][0].cy.baseVal.value - 250) + ")";
+        });
+      }
     });
   });
 });
