@@ -2,7 +2,7 @@ $(document).ready(function(){
   var width = 1276, height = 644;
   var color = d3.scale.category20();
   var force = d3.layout.force()
-    .charge(-450)
+    .charge(-250)
     .size([width, height]);
 
   var svg = d3.select("body").append("svg")
@@ -256,10 +256,10 @@ $(document).ready(function(){
         tracts.attr("transform", function(d) {
       	  var matchCircle = svg.select(".dgr" + d.properties.INDEX);
       	  if(mytimer <= 200){
-     	    return "translate(" + (matchCircle[0][0].cx.baseVal.value - 480) * mytimer / 200 + "," + (matchCircle[0][0].cy.baseVal.value - 250) * mytimer / 200 + ")";
+     	    return "translate(" + (matchCircle.attr("cx") - 480) * mytimer / 200 + "," + (matchCircle.attr("cy") - 250) * mytimer / 200 + ")";
     	  }
     	  else{
-     	    return "translate(" + (matchCircle[0][0].cx.baseVal.value - 480) + "," + (matchCircle[0][0].cy.baseVal.value - 250) + ")";
+     	    return "translate(" + (matchCircle.attr("cx") - 480) + "," + (matchCircle.attr("cy") - 250) + ")";
      	  }
         });
       }
