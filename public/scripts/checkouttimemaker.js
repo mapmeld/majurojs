@@ -219,11 +219,20 @@ function postGeo(format){
       }
     }
     else if(format == "clusters"){
+      var ctrlat = 0;
+      var ctrlng = 0;
+      var pts = footprint.getLatLngs();
+      for(var p=0;p<pts.length;p++){
+        ctrlat += pts[p].lat;
+        ctrlng += pts[p].lng;
+      }
+      ctrlat /= pts.length;
+      ctrlng /= pts.length;
       if(src){
-        window.location = "/timeclusters/" + src + "/" + data.id;
+        window.location = "/timeclusters/" + src + "/" + data.id + "?ctrlat=" + ctrlat.toFixed(6) + "&ctrlng=" + ctrlng.toFixed(6);
       }
       else{
-        window.location = "/timeclusters/" + data.id;      
+        window.location = "/timeclusters/" + data.id + "?ctrlat=" + ctrlat.toFixed(6) + "&ctrlng=" + ctrlng.toFixed(6);
       }
     }
     else if(format == "3d"){
