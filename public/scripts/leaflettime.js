@@ -155,18 +155,21 @@ function set_time_period(jstime){
   var y = codeToTime(jstime) * 1;
   $("#mydate").html( y );
   for(var f=0;f<features.length;f++){
+    if(!features[f].geometry){
+      continue;
+    }
     if(map.hasLayer(features[f].geometry)){
-      if(features[f].properties.start && codeToTime( features[f].properties.start ) * 1 > y){
+      if(typeof features[f].properties.start != 'undefined' && codeToTime( features[f].properties.start ) * 1 > y){
         map.removeLayer(features[f].geometry);
         continue;
       }
-      if(features[f].properties.end && codeToTime( features[f].properties.end ) * 1 < y){
+      if(typeof features[f].properties.end != 'undefined' && codeToTime( features[f].properties.end ) * 1 < y){
         map.removeLayer(features[f].geometry);
         continue;
       }
     }
     else{
-      if((!features[f].properties.start || codeToTime( features[f].properties.start ) * 1 <= y) && (!features[f].properties.end || codeToTime( features[f].properties.end ) * 1 >= y)){
+      if((typeof features[f].properties.start == 'undefined' || codeToTime( features[f].properties.start ) * 1 <= y) && (typeof features[f].properties.end == 'undefined' || codeToTime( features[f].properties.end ) * 1 >= y)){
         map.addLayer( features[f].geometry );
       }
     }
@@ -179,7 +182,7 @@ function bindDetails(poly, props){
     if(props.address || props.name){
       contentStr += (props.address || props.name) + "<br/>";
     }
-    if(props.start !== null){
+    if(typeof props.start != "undefined"){
       contentStr += "Built " + codeToTime(props.start) + "<br/>";
     }
     if(props.description){
@@ -261,11 +264,16 @@ $(document).ready(function(){
     var mintime = new Date("January 1, 3000") * 1;
     var maxtime = new Date("January 1, 1000") * 1;
     for(var i=0;i<features.length;i++){
-      if(features[i].properties.start){
+      // don't show features without time information
+      if((typeof features[i].properties.start == 'undefined') && (typeof features[i].properties.end == 'undefined')){
+        features[i].geometry = null;
+        continue;
+      }
+      if(typeof features[i].properties.start != 'undefined'){
         maxtime = Math.max(maxtime, features[i].properties.start);
         mintime = Math.min(mintime, features[i].properties.start);
       }
-      if(features[i].properties.end){
+      if(typeof features[i].properties.end != 'undefined'){
         maxtime = Math.max(maxtime, features[i].properties.end);
         mintime = Math.min(mintime, features[i].properties.end);
       }
@@ -282,7 +290,7 @@ $(document).ready(function(){
         features[i].geometry.setStyle({ color: features[i].properties.fill, opacity: 0.65 });
       }
       bindDetails( features[i].geometry, features[i].properties );
-      map.addLayer( features[i].geometry );
+      //map.addLayer( features[i].geometry );
     }
     map.fitBounds( new L.LatLngBounds( new L.LatLng(minlat, minlng), new L.LatLng(maxlat, maxlng) ) );
 
