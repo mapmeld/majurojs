@@ -427,8 +427,8 @@ var init = exports.init = function (config) {
             endstamp = timepolys[t].end;
           }
           kmlpts += '		<TimeSpan>\n';
-          kmlpts += '			<begin>' + startstamp + '</begin>\n';
-          kmlpts += '			<end>' + endstamp + '</end>\n';
+          kmlpts += '			<begin>' + startstamp.toISOString() + '</begin>\n';
+          kmlpts += '			<end>' + endstamp.toISOString() + '</end>\n';
           kmlpts += '		</TimeSpan>\n';
           kmlpts += '		<description>Begins ' + startstamp + ', ends ' + endstamp + '</description>\n';
         }
