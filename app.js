@@ -192,13 +192,13 @@ var init = exports.init = function (config) {
     if(req.body.address){
       savedata["address"] = req.body.address;
     }
-    if(req.body.start){
+    if(typeof req.body.start != 'undefined'){
       savedata["start"] = req.body.start * 1;
     }
     if(req.body.startyr){
       savedata["start"] = (new Date("January 10, " + req.body.startyr)) * 1;
     }
-    if(req.body.end){
+    if(typeof req.body.end != 'undefined'){
       savedata["end"] = req.body.end * 1;
     }
     poly = new timepoly.TimePoly( savedata );
@@ -420,9 +420,12 @@ var init = exports.init = function (config) {
         kmlpts += '		<styleUrl>' + ( timepolys[t].style || '#poly' ) + '</styleUrl>\n';
 
         // time-enabled KML?
-        if(timepolys[t].start){
+        if(typeof timepolys[t].start != 'undefined' && timepolys[t].start !== null){
           var startstamp = timepolys[t].start;
-          var endstamp = timepolys[t].end || (new Date());
+          var endstamp = new Date();
+          if(typeof timepolys[t].end != 'undefined' && timepolys[t].end !== null){
+            endstamp = timepolys[t].end;
+          }
           kmlpts += '		<TimeSpan>\n';
           kmlpts += '			<begin>' + startstamp + '</begin>\n';
           kmlpts += '			<end>' + endstamp + '</end>\n';
@@ -465,10 +468,10 @@ var init = exports.init = function (config) {
         if(timepolys[t].address){
           proplist["address"] = timepolys[t].address;
         }
-        if(timepolys[t].start){
+        if(typeof timepolys[t].start != 'undefined' && timepolys[t].start !== null){
           proplist["start"] = timepolys[t].start * 1;
         }
-        if(timepolys[t].end){
+        if(typeof timepolys[t].end != 'undefined' && timepolys[t].end !== null){
           proplist["end"] = timepolys[t].end * 1;
         }
         timepolys[t] = {
