@@ -221,13 +221,13 @@ var init = exports.init = function (config) {
   
   // experimental /timeclusters view
   app.get('/timeclusters', function(req, res){
-    res.render('timeclusters', { ctrlat: req.query.ctrlat, ctrlng: req.query.ctrlng, src: (req.query.src || ""), customgeo: req.query.customgeo });
+    res.render('timeclusters', { src: (req.query.src || ""), customgeo: req.query.customgeo });
   });
   app.get('/timeclusters/:customgeo', function(req, res){
-    res.render('timeclusters', { ctrlat: req.query.ctrlat, ctrlng: req.query.ctrlng, src: "", customgeo: req.params.customgeo });
+    res.render('timeclusters', { src: "", customgeo: req.params.customgeo });
   });
   app.get('/timeclusters/:src/:customgeo', function(req, res){
-    res.render('timeclusters', { ctrlat: req.query.ctrlat, ctrlng: req.query.ctrlng, src: req.params.src, customgeo: req.params.customgeo });
+    res.render('timeclusters', { src: req.params.src, customgeo: req.params.customgeo });
   });
 
   // show map in 3D

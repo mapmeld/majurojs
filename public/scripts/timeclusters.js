@@ -1,5 +1,6 @@
 $(document).ready(function(){
   var width = 1276, height = 644;
+  var ctrlat, ctrlng, geoscale;
   var color = d3.scale.category20();
   var force = d3.layout.force()
     .charge(-200)
@@ -32,6 +33,47 @@ $(document).ready(function(){
   for(decade in decadeColors){
     decadeColors[decade] = "rgb(" + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + ")";
   }
+  
+  // center each tract on its dot (calculate centroid using area and list of points)
+  // calculation based on jsFiddle shown in http://stackoverflow.com/questions/4814675/find-center-point-of-a-polygon-in-js
+  var poly_area = function(pts){
+    var area=0;
+    var nPts = pts.length;
+    var j=nPts-1;
+    var p1, p2;
+    for(var i=0;i<nPts;j=i++){
+      p1={x: pts[i][0], y: pts[i][1] };
+      p2={x: pts[j][0], y: pts[j][1] };
+      area+=p1.x*p2.y;
+      area-=p1.y*p2.x;
+    }
+    area/=2;
+    return area;
+  };
+
+  var centroid = function(poly, mytimer){
+    var pts = poly.coordinates[0];
+    var nPts = pts.length;
+    var x=0;
+    var y=0;
+    var f, p1, p2;
+    var j=nPts-1;
+    for(var i=0;i<nPts;j=i++){
+      p1={x: pts[i][0], y: pts[i][1] };
+      p2={x: pts[j][0], y: pts[j][1] };
+      f=p1.x*p2.y-p2.x*p1.y;
+      x+=(p1.x+p2.x)*f;
+      y+=(p1.y+p2.y)*f;
+    }
+    f=poly_area(pts)*6;
+    if(typeof mytimer != 'undefined'){
+      return [ (x/f - ctrlng) * mytimer / 200 + ctrlng, (y/f - ctrlat) * mytimer / 200 + ctrlat ];
+    }
+    else{
+      return [ x/f, y/f ];
+    }
+  };
+  
   var graph;
 
   d3.json("/timeline-at/" + customgeo, function(error, gj){
@@ -125,11 +167,25 @@ $(document).ready(function(){
       geometries: gj,
       links: []
     };
+
+    // calculate centroid and scale
+    var minlat = 90;
+    var maxlat = -90;
+    var minlng = 180;
+    var maxlng = -180;
+
     for(var a=gj.features.length-1;a>=0;a--){
       if(typeof gj.features[a].properties.start == 'undefined'){
         gj.features.splice(a, 1);
         continue;
       }
+
+      var ctr = centroid(parcels.features[t].geometry);
+      minlat = Math.min(minlat, ctr[1]);
+      maxlat = Math.max(maxlat, ctr[1]);
+      minlng = Math.min(minlng, ctr[0]);
+      maxlng = Math.max(maxlng, ctr[0]);
+
       gj.features[a].properties.INDEX = a;
       graph.nodes.push({
         group: a,
@@ -152,6 +208,11 @@ $(document).ready(function(){
       }
       gj.features[a].properties.color = decadeColors[ Math.floor(myyear / 10) + "0" ];
     }
+    
+    ctrlat = (minlat + maxlat) / 2;
+    ctrlng = (minlng + maxlng) / 2;
+    geoscale = 17000000 / (Math.max(maxlng - minlng, 1.5 * (maxlat - minlat)) / 0.01967949560602733);
+    
     force
       .nodes(graph.nodes.reverse())
       .links(graph.links)
@@ -161,45 +222,10 @@ $(document).ready(function(){
       .data(graph.nodes)
       .enter().append("path")
       .data(graph.geometries.features)
-      .attr("d", geopath.projection( d3.geo.mercator().scale(24000000).center([ctrlng, ctrlat]) ) )
+      .attr("d", geopath.projection( d3.geo.mercator().scale(geoscale).center([ctrlng, ctrlat]) ) )
       .style("fill", function(d) { return d.properties.color; })
       .attr("class", "node mapnode")
       .call(force.drag);
-
-    // center each tract on its dot (calculate centroid using area and list of points)
-    // calculation based on jsFiddle shown in http://stackoverflow.com/questions/4814675/find-center-point-of-a-polygon-in-js
-    var poly_area = function(pts){
-      var area=0;
-      var nPts = pts.length;
-      var j=nPts-1;
-      var p1, p2;
-      for(var i=0;i<nPts;j=i++){
-        p1={x: pts[i][0], y: pts[i][1] };
-        p2={x: pts[j][0], y: pts[j][1] };
-        area+=p1.x*p2.y;
-        area-=p1.y*p2.x;
-      }
-      area/=2;
-      return area;
-    };
-
-    var centroid = function(poly, mytimer){
-      var pts = poly.coordinates[0];
-      var nPts = pts.length;
-      var x=0;
-      var y=0;
-      var f, p1, p2;
-      var j=nPts-1;
-      for(var i=0;i<nPts;j=i++){
-        p1={x: pts[i][0], y: pts[i][1] };
-        p2={x: pts[j][0], y: pts[j][1] };
-        f=p1.x*p2.y-p2.x*p1.y;
-        x+=(p1.x+p2.x)*f;
-        y+=(p1.y+p2.y)*f;
-      }
-      f=poly_area(pts)*6;
-      return [ (x/f - ctrlng) * mytimer / 200 + ctrlng, (y/f - ctrlat) * mytimer / 200 + ctrlat ];
-    };
     
     // create control circles
     var node = svg.selectAll("circle.node")
@@ -248,7 +274,7 @@ $(document).ready(function(){
         if(mytimer <= 200){
           mytimer++;
           for(var t=0;t<tracts[0].length;t++){
-            d3.select(tracts[0][t]).attr("d", geopath.projection( d3.geo.mercator().scale(24000000).center( centroid(graph.geometries.features[t].geometry, mytimer) ) ) );
+            d3.select(tracts[0][t]).attr("d", geopath.projection( d3.geo.mercator().scale(geoscale).center( centroid(graph.geometries.features[t].geometry, mytimer) ) ) );
           }
           if(mytimer == 200){
             node.style("display", "block");
