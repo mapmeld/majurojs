@@ -201,6 +201,16 @@ $(document).ready(function(){
       return [ (x/f - ctrlng) * mytimer / 200 + ctrlng, (y/f - ctrlat) * mytimer / 200 + ctrlat ];
     };
     
+    // create control circles
+    var node = svg.selectAll("circle.node")
+      .data(graph.nodes)
+      .enter().append("circle")
+      .attr("class", function(d){ return "node d" + d.name })
+      .attr("r", 5)
+      .style("fill", function(d) { return color(d.group); })
+      .style("display", "none")
+      .call(force.drag);
+
     // create decade labels
     for(decade in decades){      
       svg.append("text")
@@ -211,15 +221,6 @@ $(document).ready(function(){
         .style("text-shadow", "2px 2px #fff")
         .style("display", "none");
     }
-    
-    var node = svg.selectAll("circle.node")
-      .data(graph.nodes)
-      .enter().append("circle")
-      .attr("class", function(d){ return "node d" + d.name })
-      .attr("r", 5)
-      .style("fill", function(d) { return color(d.group); })
-      .style("display", "none")
-      .call(force.drag);
 
     // start polygons in map form
     var moveTracts = false;
