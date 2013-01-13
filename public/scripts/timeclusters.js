@@ -45,7 +45,7 @@ $(document).ready(function(){
     }
     x /= pts.length - 1;
     y /= pts.length - 1;
-    if(mytimer || time_end){
+    if(mytimer){
       return [ (x - ctrlng) * mytimer / 200 + ctrlng, (y - ctrlat) * mytimer / 200 + ctrlat ];
     }
     else{
