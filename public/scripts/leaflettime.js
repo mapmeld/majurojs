@@ -341,7 +341,7 @@ $(document).ready(function(){
         src_credits = ".westsacramento";
         break;
     }
-    $(src_credits).css({ "display": "block" });
+    $(src_credits).css({ "display": "inline" });
     if(src_credits.length){
       $("#createyours").attr("href", "/draw/" + src_credits.replace(".",""));
     }

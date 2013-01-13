@@ -163,7 +163,7 @@ $(document).ready(function(){
         continue;
       }
 
-      var ctr = centroid(parcels.features[t].geometry);
+      var ctr = centroid(gj.features[t].geometry);
       minlat = Math.min(minlat, ctr[1]);
       maxlat = Math.max(maxlat, ctr[1]);
       minlng = Math.min(minlng, ctr[0]);
