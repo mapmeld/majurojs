@@ -434,5 +434,8 @@ $(document).ready(function(){
     set_time_period( mintime );
 
   });
-
 });
+
+function showDataSource(){
+  $("#creditmessage").modal("toggle");
+}
