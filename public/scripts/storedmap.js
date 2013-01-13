@@ -101,6 +101,9 @@ $(document).ready(function(){
         break;
     }
     $(src_credits).css({ "display": "block" });
+    if(src_credits.length){
+      $("#createyours").attr("href", "/draw/" + src_credits.replace(".","");
+    }
 
     //console.log(polys);
     var maxlat = -90;

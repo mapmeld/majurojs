@@ -257,6 +257,95 @@ $(document).ready(function(){
   }
 
   $.getJSON('/timeline-at/' + customgeo, function(timepolys){
+    var src = timepolys.source;
+    var src_credits = "";
+    switch(src){
+      case "allegheny":
+      case "pittsburgh":
+        src_credits = ".allegheny";
+        break;
+      case "austin":
+        src_credits = ".austin";
+        break;
+      case "baltimore":
+        src_credits = ".baltimore";
+        break;
+      case "bloomington":
+        src_credits = ".bloomington";
+        break;
+      case "boston":
+        src_credits = ".boston";
+        break;
+      case "boulder":
+        src_credits = ".boulder";
+        break;
+      case "chapelhill":
+        src_credits = ".chapelhill";
+        break;
+      case "chicago":
+        src_credits = ".chicago";
+        break;
+      case "clark":
+        src_credits = ".clark";
+        break;
+      case "kitsap":
+        src_credits = ".kitsap";
+        break;
+      case "lancaster":
+        src_credits = ".lancaster";
+        break;
+      case "midland":
+        src_credits = ".midland";
+        break;
+      case "nanaimo":
+        src_credits = ".nanaimo";
+        break;
+      case "oakland":
+        src_credits = ".oakland";
+        break;
+      case "petaluma":
+        src_credits = ".petaluma";
+        break;
+      case "philadelphia":
+        src_credits = ".philadelphia";
+        break;
+      case "raleigh":
+      case "wake":
+        src_credits = ".raleigh";
+        break;
+      case "roundrock":
+        src_credits = ".roundrock";
+        break;
+      case "sanfrancisco":
+        src_credits = ".sanfrancisco";
+        break;
+      case "savannah":
+      case "chatham":
+      case "sagis":
+        src_credits = ".savannah";
+        break;
+      case "seattle":
+        src_credits = ".seattle";
+        break;
+      case "smith":
+      case "tyler":
+        src_credits = ".smith";
+        break;
+      case "spokane":
+        src_credits = ".spokane";
+        break;
+      case "steamboatsprings":
+        src_credits = ".steamboatsprings";
+        break;
+      case "westsacramento":
+        src_credits = ".westsacramento";
+        break;
+    }
+    $(src_credits).css({ "display": "block" });
+    if(src_credits.length){
+      $("#createyours").attr("href", "/draw/" + src_credits.replace(".","");
+    }
+
     features = timepolys.features;
     building_pop = new L.Popup();
     
