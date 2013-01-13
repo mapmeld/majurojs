@@ -169,7 +169,7 @@ d3.json(jsonData, function (err, footprints) {
     }
     $(src_credits).css({ "display": "block" });
     if(src_credits.length){
-      $("#createyours").attr("href", "/draw/" + src_credits.replace(".","");
+      $("#createyours").attr("href", "/draw/" + src_credits.replace(".",""));
     }
   }
   catch(e){}

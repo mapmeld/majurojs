@@ -142,7 +142,7 @@ $(document).ready(function(){
     }
     $(src_credits).css({ "display": "block" });
     if(src_credits.length){
-      $("#createyours").attr("href", "/draw/" + src_credits.replace(".","");
+      $("#createyours").attr("href", "/draw/" + src_credits.replace(".",""));
     }
 
     graph = {
