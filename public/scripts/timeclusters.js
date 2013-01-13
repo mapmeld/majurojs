@@ -140,7 +140,7 @@ $(document).ready(function(){
         src_credits = ".westsacramento";
         break;
     }
-    $(src_credits).css({ "display": "block" });
+    $(src_credits).css({ "display": "inline" });
     if(src_credits.length){
       $("#createyours").attr("href", "/draw/" + src_credits.replace(".",""));
     }
@@ -163,7 +163,7 @@ $(document).ready(function(){
         continue;
       }
 
-      var ctr = centroid(gj.features[t].geometry);
+      var ctr = centroid(gj.features[a].geometry);
       minlat = Math.min(minlat, ctr[1]);
       maxlat = Math.max(maxlat, ctr[1]);
       minlng = Math.min(minlng, ctr[0]);
