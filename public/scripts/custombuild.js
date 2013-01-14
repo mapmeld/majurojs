@@ -74,8 +74,8 @@ var city_options = {
     time: false
   },
   oakland: {
-    lat: 37.795135,
-    lng: -122.255173,
+    lat: 37.810055,
+    lng: -122.263648,
     zoom: 14,
     time: false
   },
