@@ -414,7 +414,7 @@ $(document).ready(function(){
       // Every quarter-second (300 ms) increment the time period
       // When the end is reached, call clearInterval to stop the animation.
       playStep = window.setInterval(function() {
-        if (step * 1 < codeToTime( $("#filter").slider('option', 'max') ) * 1) {
+        if (step * 1 <= codeToTime( $("#filter").slider('option', 'max') ) * 1) {
           set_time_period( 1 * (new Date("January 1, " + step)) );
           $("#filter").slider('value', 1 * (new Date("January 1, " + step)));
           step++;
