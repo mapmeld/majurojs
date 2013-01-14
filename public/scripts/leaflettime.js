@@ -391,13 +391,17 @@ $(document).ready(function(){
       max: maxtime,
       value: mintime,
       slide: function (event, ui) {
+        if(playStep){
+          window.clearInterval(playStep);
+          playStep = null;
+        }
         set_time_period(ui.value);
       }
     });
 
     var play = controls.appendChild(document.createElement('a'));
     var stop = controls.appendChild(document.createElement('a'));
-    var playStep;
+    var playStep = null;
 
     var myd = document.createElement("strong");
     myd.id = "mydate";
@@ -410,6 +414,7 @@ $(document).ready(function(){
     play.innerHTML = '<i class="icon-play-circle icon-white"></i> Play';
     play.className = "btn btn-success";
     play.onclick = function(){
+      if(playStep){ return; }
       var step = codeToTime( $("#filter").slider('value') ) * 1;
       // Every quarter-second (300 ms) increment the time period
       // When the end is reached, call clearInterval to stop the animation.
@@ -421,6 +426,7 @@ $(document).ready(function(){
         }
         else {
           window.clearInterval(playStep);
+          playStep = null;
         }
       }, 300);
     };
@@ -429,6 +435,7 @@ $(document).ready(function(){
     stop.innerHTML = '<i class="icon-stop icon-white"></i> Stop';
     stop.onclick = function(){
       window.clearInterval(playStep);
+      playStep = null;
     };
     
     set_time_period( mintime );
