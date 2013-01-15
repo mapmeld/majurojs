@@ -247,7 +247,8 @@ var init = exports.init = function (config) {
       customgeo: req.body.customgeo,
       edited: JSON.parse(req.body.edited),
       name: req.body.name,
-      info: req.body.info
+      info: req.body.info,
+      satellite: req.body.satellite
     });
     mymap.save(function (err){
       res.send({ saveid: mymap._id });
@@ -258,7 +259,11 @@ var init = exports.init = function (config) {
   app.get('/savemap', function(req, res){
     savemap.SaveMap.findById(req.query.id, function(err, mymap){
       if(err){ return res.send(err); }
-      res.render('savemap', { "id": req.query.id, "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ), "name": (mymap.name || ""), "info": (mymap.info || "") });
+      var satellite = false;
+      if(mymap.satellite){
+        satellite = mymap.satellite;
+      }
+      res.render('savemap', { "id": req.query.id, "satellite": satellite, "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ), "name": (mymap.name || ""), "info": (mymap.info || "") });
     });
   });
   app.get('/savemap.*', function(req, res){
@@ -339,7 +344,11 @@ var init = exports.init = function (config) {
   app.get('/savemap/:id', function(req, res){
     savemap.SaveMap.findById(req.params.id, function(err, mymap){
       if(err){ return res.send(err); }
-      res.render('savemap', { "id": req.params.id, "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ), "name": (mymap.name || ""), "info": (mymap.info || "") });
+      var satellite = false;
+      if(mymap.satellite){
+        satellite = mymap.satellite;
+      }
+      res.render('savemap', { "id": req.params.id, "satellite": satellite, "customgeo": mymap.customgeo, "edited": JSON.stringify( mymap.edited ), "name": (mymap.name || ""), "info": (mymap.info || "") });
     });
   });
   

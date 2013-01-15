@@ -167,7 +167,7 @@ $(document).ready(function(){
   L.control.pan().addTo(map);
   L.control.zoom().addTo(map);
   var toner = 'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png';
-  var tonerAttrib = 'Map data &copy; 2013 OpenStreetMap contributors, Tiles by Stamen Design';
+  var tonerAttrib = 'Map data &copy;2013 OpenStreetMap contributors, Tiles &copy;2013 Stamen Design';
   terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
   map.addLayer(terrainLayer);
   
@@ -310,6 +310,9 @@ $(document).ready(function(){
       }
     });
   }
+
+  // satellite maps unchecked by default
+  $("#savemapsat")[0].checked = false;
 });
 function addPolyEdit(polyindex){
   //poly.bindPopup("<input type='hidden' id='selectedid' value='" + footprints.length + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value=''/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'></textarea><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");
@@ -521,7 +524,9 @@ function saveMap(){
       arredited[ arredited.length-1 ].description = footprints[editShape].description;
     }
   });
-  $.post("/savemap", { customgeo: customgeo, edited: JSON.stringify(arredited), name: $("#savemapname").val(), info: $("#savemapinfotext").val() }, function(data){
+  // satellite maps checked?
+  var sat = $("#savemapsat")[0].checked;
+  $.post("/savemap", { customgeo: customgeo, satellite: sat, edited: JSON.stringify(arredited), name: $("#savemapname").val(), info: $("#savemapinfotext").val() }, function(data){
     window.location = "/savemap/" + data.saveid;
   });
 }

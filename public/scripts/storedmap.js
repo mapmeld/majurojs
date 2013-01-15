@@ -8,10 +8,18 @@ $(document).ready(function(){
   map.attributionControl.setPrefix('');
   L.control.pan().addTo(map);
   L.control.zoom().addTo(map);
-  var toner = 'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png';
-  var tonerAttrib = 'Map data &copy; 2013 OpenStreetMap contributors, Tiles by Stamen Design';
-  terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
-  map.addLayer(terrainLayer);
+  if(!satellite){
+    var toner = 'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png';
+    var tonerAttrib = 'Map data &copy;2013 OpenStreetMap contributors, Tiles &copy;2013 Stamen Design';
+    terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
+    map.addLayer(terrainLayer);
+  }
+  else{
+    var sat = 'https://tiles.mapbox.com/v3/mapmeld.map-a6ineq7y/{z}/{x}/{y}.png?updated=65f7243';
+    var satAttrib = 'Map data &copy;2013 OpenStreetMap contributors, Tiles &copy;2013 MapBox';
+    satLayer = new L.TileLayer(sat, {maxZoom: 18, attribution: satAttrib});
+    map.addLayer(satLayer);
+  }
   map.setView(new L.LatLng(32.076175,-81.095238), 14);
 
   // load same customgeo used to generate this map
@@ -104,8 +112,6 @@ $(document).ready(function(){
     if(src_credits.length){
       $("#createyours").attr("href", "/draw/" + src_credits.replace(".",""));
     }
-
-    //console.log(polys);
     var maxlat = -90;
     var minlat = 90;
     var maxlng = -180;

@@ -92,6 +92,10 @@ body
         input.x-large#savemapname(type="text", value="")
         h4 Info (optional)
         textarea#savemapinfotext(rows="5", cols="36")
+        h4 Map Background
+        label
+          input#savemapsat(type="checkbox")
+          span Satellite Map
     div.modal-footer
       a.btn.btn-inverse(href="#", onclick="$('#savemapinfo').modal('toggle');") Cancel
       a#savemaplink.btn.btn-primary(href="#", onclick="saveMap()") Save

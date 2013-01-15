@@ -6,7 +6,8 @@ var SaveMapSchema = new Schema({
   customgeo: String, // id of the CustomGeo used to collect buildings
   edited: Array, // list of building ids, names, details, colors if a building was edited
   name: String, // optional title for the map
-  info: String // optional info about the map
+  info: String, // optional info about the map
+  satellite: Boolean // if true, savemap should use MapBox Satellite tiles
 });
 
 var SaveMap = mongoose.model('SaveMap', SaveMapSchema);
