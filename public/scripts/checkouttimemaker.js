@@ -284,10 +284,10 @@ function postGeo(format){
       }
       centerlng /= pts.length;
       if(src){
-        window.location = "/explore3d/" + src + "/" + data.id + "?lat=" + minlat.toFixed(6) + "&lng=" + centerlng.toFixed(6);
+        window.location = "/explore3d/" + src + "/" + data.id;
       }
       else{
-        window.location = "/explore3d/" + data.id + "?lat=" + minlat.toFixed(6) + "&lng=" + centerlng.toFixed(6);
+        window.location = "/explore3d/" + data.id;
       }
     }
     else if(format == "geojson"){

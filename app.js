@@ -232,13 +232,13 @@ var init = exports.init = function (config) {
 
   // show map in 3D
   app.get('/explore3d', function(req, res){
-    res.render('explore3d', { src: (req.query.src || ""), customgeo: req.query.customgeo, lng: req.query.lng, lat: req.query.lat });
+    res.render('explore3d', { src: (req.query.src || ""), customgeo: req.query.customgeo });
   });
   app.get('/explore3d/:customgeo', function(req, res){
-    res.render('explore3d', { src: "", customgeo: req.params.customgeo, lng: req.query.lng, lat: req.query.lat });
+    res.render('explore3d', { src: "", customgeo: req.params.customgeo });
   });
   app.get('/explore3d/:src/:customgeo', function(req, res){
-    res.render('explore3d', { src: req.params.src, customgeo: req.params.customgeo, lng: req.query.lng, lat: req.query.lat });
+    res.render('explore3d', { src: req.params.src, customgeo: req.params.customgeo });
   });
   
   // store map details as a SaveMap

@@ -10,17 +10,18 @@ head
   script(type='text/javascript', src='/scripts/jquery-1.7.1.min.js')
   script(type='text/javascript', src='/scripts/bootstrap.min.js')
 body
-  script(type="text/javascript") var home=[ #{lng} - 0.001, #{lat} + 0.0035 ]; var customgeo = "#{customgeo}"; var src = "#{src}";
+  script(type="text/javascript") var customgeo = "#{customgeo}"; var src = "#{src}";
   script(src="/scripts/explore3d.js", type="text/javascript")
   div.layer
   div
     canvas(width="1276", height="644")
   div.popover
-    h3 3D View
+    h3 3D View 
     p
       span Adapted from Brian Mount's&nbsp;
       a(href="http://b.aguacat.es/anatine/_design/funbun/index.html", target="_blank") D3 example
       span .
+    p Road data &copy;2013 OpenStreetMap contributors; Tiles &copy;2013 Stamen Design.
     p
       span Buildings data downloaded from&nbsp;
       a.allegheny(href="#", onclick="showDataSource()") Allegheny County

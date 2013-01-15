@@ -1,18 +1,14 @@
-//var home = [-81.0954,32.0782];
-//var TILE_URL = "http://tile.stamen.com/toner-labels/"
-
-//home[0] -= 0.005; // subtract from longitude
-//home[1] += 0.005; // add to latitude
 
 function getURLParameter(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+}
+
+var home = null;
+if(getURLParameter("lat") && getURLParameter("lng")){
+  home = [ getURLParameter("lng") * 1.0 - 0.001, getURLParameter("lat") * 1.0 + 0.0035 ];
 }
 
 var TILE_URL = "http://tile.stamen.com/toner/"
-
-var proj = d3.geo.mercator()
-    .center(home)
-    .scale(Math.pow(2,27));
 
 var width = window.innerWidth*3,
     height = window.innerHeight*3
@@ -20,13 +16,9 @@ var width = window.innerWidth*3,
 var tile = d3.geo.tile()
     .size([width, height]);
 
-var zoom = d3.behavior.zoom()
-    .scale(proj.scale())
-    .translate(proj([0,0]))
-    .on("zoom", zoomed);
+var proj, zoom;
 
-var map = d3.select("body")
-//    .call(zoom);
+var map = d3.select("body");
 
 var layer = map.append("div")
     .attr("class", "layer");
@@ -35,7 +27,7 @@ camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight,
 camera.position.set(width/2, -height/2, 500); // gen
 camera.position.set(1180, -1500, 300);
 camera.target = new THREE.Vector3(0, 0, 0);
-camera.rotation.x += Math.PI/4
+camera.rotation.x += Math.PI/3;
 renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -59,9 +51,7 @@ function floorTile (url, d, t) {
   var tc = THREE.ImageUtils.loadTexture( url, function (evt) {
     renderer.render(scene, camera);
   })
-  //var material = new THREE.MeshBasicMaterial({
-  var material = new THREE.MeshLambertMaterial({
-    map: tc, color: 0xffffff })
+  var material = new THREE.MeshLambertMaterial({ map: tc, color: 0xffffff })
   var plane = new THREE.Mesh(new THREE.PlaneGeometry(256, 256), material);
   plane.position.x = 128 + (tile().translate[0] + d[0])*256
   plane.position.y = -128 + (tile().translate[1] + d[1])*(-256)
@@ -79,9 +69,12 @@ function v(x,y,z) {
 
 var meshes = []; // for later rotations etc
 
-function loadBuildings (jsonData) {
-d3.json(jsonData, function (err, footprints) {
-  if (err) { console.log(err); return; }
+function loadBuildings(err, footprints) {
+  if(err){
+    console.log(err);
+    return;
+  }
+  // add credit
   try{
     var src = footprints.source;
     var src_credits = "";
@@ -167,13 +160,49 @@ d3.json(jsonData, function (err, footprints) {
         src_credits = ".westsacramento";
         break;
     }
-    $(src_credits).css({ "display": "block" });
+    $(src_credits).css({ "display": "inline" });
     if(src_credits.length){
       $("#createyours").attr("href", "/draw/" + src_credits.replace(".",""));
     }
   }
   catch(e){}
   var footprints = footprints.features;
+
+  if(!home){
+    // calculate center from GeoJSON features
+    var centroid = function(poly){
+      var pts=poly.coordinates[0];
+      var x = 0;
+      var y = 0;
+      for(var p=0;p<pts.length-1;p++){
+        x += pts[p][0] * 1.0;
+        y += pts[p][1] * 1.0;
+      }
+      x /= pts.length - 1;
+      y /= pts.length - 1;
+      return [ x, y ];
+    };
+    var minlat = 90;
+    var avglng = 0;
+    for(var f=0;f<footprints.length;f++){
+      var ctr = centroid(footprints[f].geometry);
+      avglng += ctr[0];
+      minlat = Math.min(minlat, ctr[1]);
+    }
+    avglng /= footprints.length;
+    home = [ avglng - 0.001,  minlat + 0.002 ];
+    //console.log(home);
+  }
+
+  proj = d3.geo.mercator()
+    .center(home)
+    .scale(Math.pow(2,27));
+
+  zoom = d3.behavior.zoom()
+    .scale(proj.scale())
+    .translate(proj([0,0]))
+    .on("zoom", zoomed);
+
   var floorGeom;
   footprints.forEach(function (e0, i0, c0) {
     floorGeom = []
@@ -182,34 +211,34 @@ d3.json(jsonData, function (err, footprints) {
       floorGeom.push(
         v2d(scrnCoord[0], (-1)*scrnCoord[1])
       )
-    })
+    });
 
-    var footprintshape2d = new THREE.Shape(floorGeom)
+    var footprintshape2d = new THREE.Shape(floorGeom);
     var footprintExtrudable = new THREE.ExtrudeGeometry(footprintshape2d, {
-              // height given + constant by inspection
-              amount: (e0.properties.height || 25)*1.3, height: 0,
-              bevelEnabled: false,
-              material: 0, extrudeMaterial: 1
-            })
-  var frontMaterial = new THREE.MeshLambertMaterial( { color: 0x3f3f48, wireframe: false } );
-	var sideMaterial = new THREE.MeshLambertMaterial( { color: 0xf8fbbb, wireframe: false } );
-  var materialArray = [ frontMaterial, sideMaterial ];
+      // height given or placeholder value
+      amount: (e0.properties.height || 25)*1.3, height: 0,
+      bevelEnabled: false,
+      material: 0, extrudeMaterial: 1
+    });
+    var frontMaterial = new THREE.MeshLambertMaterial( { color: 0x3f3f48, wireframe: false } );
+    var sideMaterial = new THREE.MeshLambertMaterial( { color: 0xf8fbbb, wireframe: false } );
+	var materialArray = [ frontMaterial, sideMaterial ];
 	footprintExtrudable.materials = materialArray;
-  var bldg = new THREE.Mesh( footprintExtrudable, new THREE.MeshFaceMaterial() );
-  scene.add(bldg);
-  meshes.push(bldg)
-  })
-})
+
+    var bldg = new THREE.Mesh( footprintExtrudable, new THREE.MeshFaceMaterial() );
+    scene.add(bldg);
+    meshes.push(bldg)
+  });
+  
+  zoomed();
 }
 
-loadBuildings('/timeline-at/' + customgeo);
+d3.json('/timeline-at/' + customgeo, loadBuildings);
 
 container = document.createElement('div');
 document.body.appendChild(container);
 container.appendChild(renderer.domElement);
 renderer.render(scene, camera);
-
-zoomed();
 
 function zoomed() {
   var tiles = tile
@@ -218,7 +247,7 @@ function zoomed() {
       ();
 
   var image = layer
-    .selectAll(".tile")
+      .selectAll(".tile")
       .data(tiles, function(d) { return d; });
 
   image.exit()
@@ -229,108 +258,73 @@ function zoomed() {
       .attr("hidden", function(d) {
         floorTile(TILE_URL + d[2] + "/" + d[0] + "/" + d[1] + ".png", d, tile);
         return "";
-      })
+      });
 }
 
 function animate() {
   renderer.render(scene, camera);
   requestAnimationFrame( animate );
 }
-animate()
-
-// console.log type position debug
-// var dsumx = 0, dsumy=0;
+animate();
 
 function keydown(event){
-	var delta = 16;
-	event = event || window.event;
-	var keycode = event.keyCode;
-	switch(keycode){
-		case 37 : //left arrow
-			event.preventDefault();
-			camera.position.x -= delta;
-			break;
-		case 38 : // up arrow
-			event.preventDefault();
-			camera.position.y += delta;
-			break;
-		case 39 : // right arrow
-			//event.preventDefault();
-			camera.position.x += delta;
-			break;
-		case 40 : //down arrow
-			event.preventDefault();
-			camera.position.y -= delta;
-			break;
-		case 190 : //
-			event.preventDefault();
-			camera.position.z += delta;
-			break;
-		case 188 : //
-			event.preventDefault();
-			camera.position.z -= delta;
-			break;
-		case 89 : //
-			event.preventDefault();
-			camera.rotation.y = camera.rotation.y + Math.PI/100;
-			break;
-		case 88 : //
-			event.preventDefault();
-			camera.rotation.x = camera.rotation.x + Math.PI/100;
-			break;
-		case 90 : //
-			event.preventDefault();
-			camera.rotation.z = camera.rotation.z + Math.PI/100;
-			break;
-		case 55 : //
-			event.preventDefault();
-			camera.rotation.y = camera.rotation.y - Math.PI/100;
-			break;
-		case 68 : //
-			event.preventDefault();
-			camera.rotation.x = camera.rotation.x - Math.PI/100;
-			break;
-		case 83 : //
-			event.preventDefault();
-			camera.rotation.z = camera.rotation.z - Math.PI/100;
-			break;
-      /* for repositioning tiles visually with: [, ], ;, and ' keys
-		case 221 : // ]
-			event.preventDefault();
-      tileTextures.forEach(function (t) {
-        t.position.x += delta;
-      })
-      dsumx+=delta
-			break;
-		case 219 : // [
-			event.preventDefault();
-      tileTextures.forEach(function (t) {
-        t.position.x -= delta;
-      })
-      dsumx-=delta;
-			break;
-		case 186 : // ;
-			event.preventDefault();
-      tileTextures.forEach(function (t) {
-        t.position.y += delta;
-      })
-      dsumy+=delta
-			break;
-		case 222 : // '
-			event.preventDefault();
-      tileTextures.forEach(function (t) {
-        t.position.y -= delta;
-      })
-      dsumy-=delta;
+  var delta = 16;
+  event = event || window.event;
+  var keycode = event.keyCode;
+  switch(keycode){
+    case 37 : //left arrow
+      event.preventDefault();
+      camera.position.x -= delta;
       break;
-      */
-	}
-  //console.log(dsumx, dsumy)
-	camera.updateProjectionMatrix();
+    case 38 : // up arrow
+      event.preventDefault();
+      camera.position.y += delta;
+      break;
+    case 39 : // right arrow
+      event.preventDefault();
+      camera.position.x += delta;
+      break;
+    case 40 : //down arrow
+      event.preventDefault();
+      camera.position.y -= delta;
+      break;
+    case 190 : //
+      event.preventDefault();
+      camera.position.z += delta;
+      break;
+    case 188 : //
+      event.preventDefault();
+      camera.position.z -= delta;
+      break;
+    case 89 : //
+      event.preventDefault();
+      camera.rotation.y = camera.rotation.y + Math.PI/100;
+      break;
+    case 88 : //
+      event.preventDefault();
+      camera.rotation.x = camera.rotation.x + Math.PI/100;
+      break;
+    case 90 : //
+      event.preventDefault();
+      camera.rotation.z = camera.rotation.z + Math.PI/100;
+      break;
+    case 55 : //
+      event.preventDefault();
+      camera.rotation.y = camera.rotation.y - Math.PI/100;
+      break;
+    case 68 : //
+      event.preventDefault();
+      camera.rotation.x = camera.rotation.x - Math.PI/100;
+      break;
+    case 83 : //
+      event.preventDefault();
+      camera.rotation.z = camera.rotation.z - Math.PI/100;
+      break;
+  }
+  camera.updateProjectionMatrix();
   renderer.render( scene, camera );
-  zoomed()
+  zoomed();
 }
-
 document.addEventListener('keydown',keydown,false);
 
 function showDataSource(){

@@ -56,7 +56,7 @@ Rendering 3D buildings with D3.js and three.js is an option for users of Firefox
 
 A 3D View is available directly from the neighborhood-drawing map on MajuroJS.org, or at <em>USERNAME.github.com/majurojs/3d</em> after you fork this repo.
 
-<strong>Customization</strong>: Put your buildings data into mybuild.geojson, then use Github's online editing to set /3d/3dscene.js to the center of your map.
+<strong>Customization</strong>: Put your buildings data into mybuild.geojson.
 
 <strong>Tips</strong>: Use arrow keys to pan, < and > to zoom, d and x to tilt, z and s to roll.
 
