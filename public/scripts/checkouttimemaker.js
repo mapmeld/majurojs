@@ -208,6 +208,20 @@ $(document).ready(function(){
 
     lat = ctrmrk.getLatLng().lat;
     lng = ctrmrk.getLatLng().lng;
+    
+    // re-center the center marker when editing occurs
+    footprint.on('edit', function(e){
+      var latlngs = footprint.getLatLngs();
+      var avglat = 0;
+      var avglng = 0;
+      for(var pt=0;pt<latlngs.length;pt++){
+        avglat += latlngs[pt].lat;
+        avglng += latlngs[pt].lng;
+      }
+      lat = avglat / latlngs.length;
+      lng = avglng / latlngs.length;
+      ctrmrk.setLatLng(new L.LatLng(lat,lng));
+    });
   });
   // re-center the center marker when editing occurs
   footprint.on('edit', function(e){
@@ -217,7 +231,7 @@ $(document).ready(function(){
     for(var pt=0;pt<latlngs.length;pt++){
       avglat += latlngs[pt].lat;
       avglng += latlngs[pt].lng;
-	}
+    }
     lat = avglat / latlngs.length;
     lng = avglng / latlngs.length;
     ctrmrk.setLatLng(new L.LatLng(lat,lng));
