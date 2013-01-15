@@ -189,6 +189,40 @@ $(document).ready(function(){
   footprint = new L.Polygon( wll, { color: "#00f", fillOpacity: 0.3, opacity: 0.65 } );
   footprint.editing.enable();
   map.addLayer(footprint);
+  
+  // add a draggable marker to translate the shape
+  lat -= 0.003;
+  lng -= 0.004;
+  var ctrmrk = new L.marker(new L.LatLng(lat,lng), { draggable: true });
+  ctrmrk.on('dragend', function(e){
+    var latdiff = ctrmrk.getLatLng().lat - lat;
+    var lngdiff = ctrmrk.getLatLng().lng - lng;
+    var latlngs = footprint.getLatLngs();
+    for(var pt=0;pt<latlngs.length;pt++){
+      latlngs[pt] = new L.LatLng( latlngs[pt].lat + latdiff, latlngs[pt].lng + lngdiff );
+    }
+    map.removeLayer(footprint);
+    footprint = new L.Polygon( latlngs, { color: "#00f", fillOpacity: 0.3, opacity: 0.65 } );
+    footprint.editing.enable();
+    map.addLayer(footprint);
+
+    lat = ctrmrk.getLatLng().lat;
+    lng = ctrmrk.getLatLng().lng;
+  });
+  // re-center the center marker when editing occurs
+  footprint.on('edit', function(e){
+    var latlngs = footprint.getLatLngs();
+    var avglat = 0;
+    var avglng = 0;
+    for(var pt=0;pt<latlngs.length;pt++){
+      avglat += latlngs[pt].lat;
+      avglng += latlngs[pt].lng;
+	}
+    lat = avglat / latlngs.length;
+    lng = avglng / latlngs.length;
+    ctrmrk.setLatLng(new L.LatLng(lat,lng));
+  });
+  map.addLayer(ctrmrk);
 });
 
 function llserial(latlngs){
