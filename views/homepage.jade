@@ -1,7 +1,7 @@
 head
   meta(charset="utf-8")
   meta(name="author", content="Nick Doiron @mapmeld")
-  meta(name="description", content="Instant, intuitive neighborhood maps of 15 cities. Ready to download to Google Earth or store in the cloud. Open source platform for open civic data.")
+  meta(name="description", content="Instant, intuitive neighborhood maps of 18 cities. Ready to download to Google Earth or store in the cloud. Open source platform for open civic data.")
   title Majuro.js
   link(href="/stylesheets/style.css", rel="stylesheet", type="text/css")
   link(href='http://fonts.googleapis.com/css?family=Alfa+Slab+One', rel='stylesheet', type='text/css')
@@ -62,57 +62,78 @@ body(data-spy="scroll", data-target=".subnav", data-offset="100")
 
             li
               h3 Data for Download
-              p Download your map for Google Earth, share a KML or GeoJSON file, or set up your own site on Github Pages.
+              p Download your map for Google Earth and other programs in KML or GeoJSON format.
               img(src="images/in_earth.png", width="400", style="margin-left:150px;")
               br
+            
+            li
+              h3 Data Visualization
+              p With a Github account, you can set up your own website based on&nbsp;
+              a(href="http://github.com/mapmeld/majurojs", target="_blank") MajuroJS's Github Pages
+              span .
+              //
+                img(src="", width="400", style="margin-left:150px;")
+
+              p Cities with time information (Chicago and Midland) can make timelines and D3 time-clusters.
+              //
+                img(src="", width="400", style="margin-left:150px;")
         
         h3 No projections, time series tools, or geoprocessing. Just data that works.
         div#finish_line_cont
       
       div#cities.main_cont
         h1 Cities
-        p You can download buildings in 15 cities and counties!
-        p Some sources include addresses, build dates, and height of buildings. You'll get that data, too.
-        ul#citylist
-          li
-            a(href="/draw/pittsburgh") Allegheny County (Pittsburgh), PA
-          li
-            a(href="/draw/austin") Austin, TX
-          li
-            a(href="/draw/baltimore") Baltimore, MD
-          li
-            a(href="/draw/bloomington") Bloomington, IN
-          li
-            a(href="/draw/boston") Boston, MA
-          li
-            a(href="/draw/savannah") Chatham County (Savannah), GA
-          li
-            a(href="/draw/chicago") Chicago, IL&nbsp;
-            span + (address, build date, height)
-          li
-            a(href="/draw/kitsap") Kitsap County, WA&nbsp;
-            span + (height)
-          //
-            li
-              a(href="/draw/midland") Midland, TX *&nbsp;
-              span + (build date, height)
-          li
-            a(href="/draw/oakland") Oakland (partial), CA
-          li
-            a(href="/draw/petaluma") Petaluma, CA
-          li
-            a(href="/draw/philadelphia") Philadelphia, PA
-          li
-            a(href="/draw/sanfrancisco") San Francisco, CA&nbsp;
-            span + (height)
-          li
-            a(href="/draw/seattle") Seattle, WA
-          li
-            a(href="/draw/steamboatsprings") Steamboat Springs, CO&nbsp;
-            span + (name)
-          li
-            a(href="/draw/westsacramento") West Sacramento, CA
-        p Buildings data was collected under open data licenses. There is no official endorsement or maintenance of this site by these cities and counties.
+        p You can download buildings in 18 cities, towns, and counties!
+        p Some sources include addresses, build dates, and height of buildings.
+        table
+          tr
+            td
+              ul#citylist
+                li
+                  a(href="/draw/pittsburgh") Allegheny County (Pittsburgh), PA
+                li
+                  a(href="/draw/austin") Austin, TX
+                li
+                  a(href="/draw/baltimore") Baltimore, MD
+                li
+                  a(href="/draw/bloomington") Bloomington, IN
+                li
+                  a(href="/draw/boston") Boston, MA
+                li
+                  a(href="/draw/chapelhill") Chapel Hill, NC
+                li
+                  a(href="/draw/savannah") Chatham County (Savannah), GA
+                li
+                  a(href="/draw/chicago") Chicago, IL&nbsp;
+                  span + (address, build date, height)
+                li
+                  a(href="/draw/kitsap") Kitsap County, WA&nbsp;
+                  span + (height)
+                li
+                  a(href="/draw/midland") Midland, TX&nbsp;
+                  span + (build date, height)
+                li
+                  a(href="/draw/oakland") Oakland (partial), CA
+                li
+                  a(href="/draw/petaluma") Petaluma, CA
+                li
+                  a(href="/draw/philadelphia") Philadelphia, PA
+                li
+                  a(href="/draw/roundrock") Round Rock, TX
+                li
+                  a(href="/draw/sanfrancisco") San Francisco, CA&nbsp;
+                  span + (height)
+                li
+                  a(href="/draw/seattle") Seattle, WA
+                li
+                  a(href="/draw/steamboatsprings") Steamboat Springs, CO&nbsp;
+                  span + (name)
+                li
+                  a(href="/draw/westsacramento") West Sacramento, CA
+            td
+              img(width="300", height="500", src="http://maps.googleapis.com/maps/api/staticmap?size=300x500&sensor=false&markers=color:blue|Boston,MA|Philadelphia,PA|West%20Sacramento,CA|Seattle,WA|Kitsap%20County,WA|Midland,TX|Chapel%20Hill,NC|Round%20Rock,TX|Austin,TX|Steamboat%20Springs,CO|Baltimore,MD|San%20Francisco,CA|Oakland,CA|Petaluma,CA|Chicago,IL|Savannah,GA|Bloomington,IN|Pittsburgh,PA", alt="map of all locations")
+        
+        p Buildings data was collected under open data licenses. There is no official endorsement or maintenance of this site by these cities, towns, and counties.
         
         div#finish_line_cont
 
@@ -138,7 +159,12 @@ body(data-spy="scroll", data-target=".subnav", data-offset="100")
               p
                 span An updated version is available by selecting 'timeline' on&nbsp;
                 a(href="/draw/chicago") majurojs.org/draw/chicago
-        
+            li
+              h4 Recent Maps
+              p
+                span You can see up to 20 maps made in the last 24 hours on the&nbsp;
+                a(href="/regions/recent") Recent Regions Page.
+
         div#finish_line_cont
 
       div#faq.main_cont
