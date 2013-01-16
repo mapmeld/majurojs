@@ -191,9 +191,16 @@ $(document).ready(function(){
   map.addLayer(footprint);
   
   // add a draggable marker to translate the shape
-  lat -= 0.003;
+  lat -= 0.001;
   lng -= 0.004;
-  var ctrmrk = new L.marker(new L.LatLng(lat,lng), { draggable: true });
+
+  var ctrIcon = new L.Icon({
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    shadowSize: [0, 0],
+    iconUrl: "/images/4-way-arrow.png"
+  });
+  var ctrmrk = new L.marker(new L.LatLng(lat,lng), { draggable: true, icon: ctrIcon });
   ctrmrk.on('dragend', function(e){
     var latdiff = ctrmrk.getLatLng().lat - lat;
     var lngdiff = ctrmrk.getLatLng().lng - lng;
