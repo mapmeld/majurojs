@@ -261,9 +261,10 @@ function zoomed() {
       });
 }
 
+var animationId;
 function animate() {
+  animationId = requestAnimationFrame( animate );
   renderer.render(scene, camera);
-  requestAnimationFrame( animate );
 }
 animate();
 
@@ -323,7 +324,7 @@ function keydown(event){
   }
   camera.updateProjectionMatrix();
   renderer.render( scene, camera );
-  zoomed();
+  cancelAnimationFrame(animationId);
 }
 document.addEventListener('keydown',keydown,false);
 
