@@ -243,6 +243,12 @@ var init = exports.init = function (config) {
   
   // store map details as a SaveMap
   app.post('/savemap', function(req, res){
+    if(req.body.satellite == "true"){
+      req.body.satellite = true;
+    }
+    else{
+      req.body.satellite = false;
+    }
     var mymap = new savemap.SaveMap({
       customgeo: req.body.customgeo,
       edited: JSON.parse(req.body.edited),

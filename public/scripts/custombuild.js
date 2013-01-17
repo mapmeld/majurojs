@@ -525,7 +525,10 @@ function saveMap(){
     }
   });
   // satellite maps checked?
-  var sat = $("#savemapsat")[0].checked;
+  var sat = "false";
+  if($("#savemapsat")[0].checked){
+    sat = "true";
+  }
   $.post("/savemap", { customgeo: customgeo, satellite: sat, edited: JSON.stringify(arredited), name: $("#savemapname").val(), info: $("#savemapinfotext").val() }, function(data){
     window.location = "/savemap/" + data.saveid;
   });
