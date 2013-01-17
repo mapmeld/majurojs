@@ -32,7 +32,7 @@ var city_options = {
     time: false
   },
   chapelhill: {
-    lat: 35.925661,
+    lat: 35.905181,
     lng: -79.032004,
     zoom: 14,
     time: false
