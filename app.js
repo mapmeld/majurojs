@@ -314,6 +314,11 @@ var init = exports.init = function (config) {
               for(var e=0;e<mymap.edited.length;e++){
                 if(mymap.edited[e].id == myid){
                   if(mymap.edited[e].color){
+                    if(mymap.edited[e].color == "erase"){
+                      // erase this polygon
+                      timepolys[t] = null;
+                      continue;
+                    }
                     timepolys[t].color = mymap.edited[e].color;
                     switch(mymap.edited[e].color){
                       case "#f00":
@@ -421,6 +426,11 @@ var init = exports.init = function (config) {
 
       var kmlpts = '';
       for(var t=0; t<timepolys.length; t++){
+        // skip erased polygons
+        if(timepolys[t] === null){
+          continue;
+        }
+      
         // create KML coordinate string
         var coordstring = [];
         for(var p=0;p<timepolys[t].points.length;p++){
@@ -470,6 +480,11 @@ var init = exports.init = function (config) {
     else{
       // GeoJSON output
       for(var t=0; t<timepolys.length; t++){
+        // skip erased polygons
+        if(timepolys[t] === null){
+          continue;
+        }
+
         var proplist = { };
         if(timepolys[t].name){
           proplist["name"] = timepolys[t].name;

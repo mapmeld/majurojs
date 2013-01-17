@@ -136,8 +136,15 @@ $(document).ready(function(){
 
       var poly = new L.polygon(coords, { weight: 2, color: "#0033ff" });
       var foundMatch = false;
+      var erased = false;
       for(var p=0;p<edited.length;p++){
         if(edited[p].id == myid){
+          // skip erased polygons
+          if(edited[p].color && edited[p].color == 'erase'){
+            erased = true;
+            edited.split(p,1);
+            break;
+          }
           foundMatch = true;
           if(edited[p].name || edited[p].description){
             poly.bindPopup( '<h3>' + (edited[p].name || '') + '</h3>' + describe( ( edited[p].description || '') ) );
@@ -152,11 +159,13 @@ $(document).ready(function(){
           break;
         }
       }
-      if(!foundMatch){
-        // unedited building
-        poly.setStyle({ clickable: false });
+      if(!erased){
+        if(!foundMatch){
+          // unedited building
+          poly.setStyle({ clickable: false });
+        }
+        map.addLayer(poly);
       }
-      map.addLayer(poly);
     }
     if(polys.features.length){
       map.fitBounds( new L.LatLngBounds( new L.LatLng(minlat, minlng), new L.LatLng(maxlat, maxlng) ) );
