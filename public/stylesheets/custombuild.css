@@ -16,11 +16,11 @@ body {
   position:absolute;
   top:0;
   bottom:0;
-  width:84%;
-  left:16%;
+  width:82%;
+  left:18%;
 }
 .span2{
-  width: 11%;
+  width: 15%;
 }
 .marker{
   vertical-align:middle;
@@ -43,7 +43,7 @@ ul li{
   border-bottom: 620px solid transparent;
   border-left: 36px solid #444;
   position: absolute;
-  left: 16%;
+  left: 18%;
   top: 0;
   z-index: 10;
 }
