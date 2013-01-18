@@ -74,7 +74,7 @@ var init = exports.init = function (config) {
   });
   
   // database fixes
-  app.post('/settime', function(req, res){
+  /*app.post('/settime', function(req, res){
     timepoly.TimePoly.findOne({ "ll": [ req.body.lng * 1.0, req.body.lat * 1.0 ] }).exec(function(err, poly){
       if(err){
         return res.send(err);
@@ -87,6 +87,14 @@ var init = exports.init = function (config) {
         res.send(err || "success");
       });
     });
+  });*/
+  app.get('/maintenance', function(req, res){
+    res.write('starting');
+    timePoly.TimePoly.find({ src: "midland" }).remove();
+    res.write('that was midland');
+    timePoly.TimePoly.find({ src: "allegheny" }).remove();    
+    res.write('and allegheny');
+    res.end();
   });
   
   app.post('/createregion', function(req, res){
