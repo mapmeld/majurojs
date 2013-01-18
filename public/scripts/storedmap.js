@@ -142,7 +142,7 @@ $(document).ready(function(){
           // skip erased polygons
           if(edited[p].color && edited[p].color == 'erase'){
             erased = true;
-            edited.split(p,1);
+            edited.splice(p,1);
             break;
           }
           foundMatch = true;
