@@ -61,7 +61,7 @@ var city_options = {
     zoom: 13,
     time: false
   },
-  midland: {
+  midlandtx: {
     lat: 31.998308,
     lng: -102.083141,
     zoom: 14,
