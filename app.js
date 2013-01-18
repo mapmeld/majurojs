@@ -137,7 +137,7 @@ var init = exports.init = function (config) {
   });*/
   
   app.get('/regions/recent', function(req, res){
-    var yesterday = (new Date() * 1) - 24 * 60 * 60 * 1000;
+    var yesterday = (new Date() * 1) - 86400000;
     customgeo.CustomGeo.find({'created': { "$gt": yesterday }}).limit(20).exec(function(err, recents){
       if(err){ return res.send(err); }
       res.render('geolist', { geos: recents });

@@ -229,6 +229,7 @@ $(document).ready(function(){
         case "lancaster":
           src_credits = ".lancaster";
           break;
+        case "midland":
         case "midlandtx":
           src_credits = ".midland";
           break;
