@@ -1,4 +1,4 @@
-var map, cnv, dragtype, building_pop;
+var map, cnv, pencilmark, dragtype, building_pop;
 var footprints = [ ];
 var city_options = {
   pittsburgh: {
@@ -315,7 +315,6 @@ $(document).ready(function(){
   // satellite maps unchecked by default
   $("#savemapsat")[0].checked = false;
 
-
   // skip scribble option if using IE_EDITOR
   if(typeof IE_EDITOR != "undefined" && IE_EDITOR){
     return;
@@ -330,6 +329,7 @@ $(document).ready(function(){
     width: "82%",
     height: "99%",
     top: "150%",
+    cursor: "none",
     bottom: 0
   });
   var cnvdraw = false;
@@ -337,6 +337,14 @@ $(document).ready(function(){
   cnv.height = cnv.offsetHeight;
   cnv.width = cnv.offsetWidth;
   var ctx;
+  
+  var pencilIcon = new L.Icon({
+    iconSize: [30, 30],
+    iconAnchor: [0, 30],
+    shadowSize: [0, 0],
+    iconUrl: "/images/pencil.png"
+  });
+  pencilmark = new L.marker(new L.LatLng(0,0), {icon: pencilIcon});
 
   $(cnv).mousedown(function(e){
     cnvpts = [ ];
@@ -356,9 +364,16 @@ $(document).ready(function(){
         cnvpts.push(cnvpt);
       }
     }
+    pencilmark.setLatLng( map.containerPointToLatLng(
+      new L.Point(
+        e.offsetX,
+        e.offsetY
+      )
+    ));
   });
   $(cnv).mouseup(function(e){
     cnvdraw = false;
+    map.removeLayer(pencilmark);
     var line = [ ];
     for(var pt=0;pt<cnvpts.length;pt++){
       line.push(map.containerPointToLatLng(
@@ -393,7 +408,8 @@ $(document).ready(function(){
 });
 
 function startPencil(){
-  $(cnv).css({ top: 0 });  
+  $(cnv).css({ top: 0 });
+  map.addLayer(pencilmark);
 }
 
 function addPolyEdit(polyindex){

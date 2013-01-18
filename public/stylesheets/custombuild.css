@@ -18,6 +18,7 @@ body {
   bottom:0;
   width:82%;
   left:18%;
+  border-left: 6px solid #444;
 }
 .span2{
   width: 15%;
