@@ -90,9 +90,9 @@ var init = exports.init = function (config) {
   });*/
   app.get('/maintenance', function(req, res){
     res.write('starting');
-    timePoly.TimePoly.find({ src: "midland" }).remove();
+    timepoly.TimePoly.find({ src: "midland" }).remove();
     res.write('that was midland');
-    timePoly.TimePoly.find({ src: "allegheny" }).remove();    
+    timepoly.TimePoly.find({ src: "allegheny" }).remove();    
     res.write('and allegheny');
     res.end();
   });
