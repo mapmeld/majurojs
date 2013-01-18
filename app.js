@@ -88,16 +88,15 @@ var init = exports.init = function (config) {
       });
     });
   });*/
-  app.get('/maintenance', function(req, res){
+  /*app.get('/maintenance', function(req, res){
     res.write('starting');
     timepoly.TimePoly.find({ src: "midland" }).remove();
     res.write('that was midland');
     timepoly.TimePoly.find({ src: "allegheny" }).remove();    
     res.write('and allegheny');
     res.end();
-  });
-  
-  app.post('/createregion', function(req, res){
+  });*/
+  /*app.post('/createregion', function(req, res){
     // POST /createregion with src = chicago
     // then POST /createregion with name = DISTRICT_NAME and geo = LAT1,LNG1|LAT2,LNG2
     if(req.body.start && req.body.start == "chicago"){
@@ -135,7 +134,7 @@ var init = exports.init = function (config) {
         });
       });
     }
-  });
+  });*/
   
   app.get('/regions/recent', function(req, res){
     var yesterday = (new Date() * 1) - 24 * 60 * 60 * 1000;
