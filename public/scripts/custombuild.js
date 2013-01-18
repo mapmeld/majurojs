@@ -1,4 +1,4 @@
-var map, dragtype, building_pop;
+var map, cnv, dragtype, building_pop;
 var footprints = [ ];
 var city_options = {
   pittsburgh: {
@@ -314,7 +314,88 @@ $(document).ready(function(){
 
   // satellite maps unchecked by default
   $("#savemapsat")[0].checked = false;
+
+
+  // skip scribble option if using IE_EDITOR
+  if(typeof IE_EDITOR != "undefined" && IE_EDITOR){
+    return;
+  }
+  
+  // canvas for scribble / convex hull coloring
+  cnv = document.createElement("canvas");
+  $(".row-fluid").append(cnv);
+  $(cnv).css({
+    position: "absolute",
+    left: "18%",
+    width: "82%",
+    height: "99%",
+    top: "150%",
+    bottom: 0
+  });
+  var cnvdraw = false;
+  var cnvpts = [];
+  cnv.height = cnv.offsetHeight;
+  cnv.width = cnv.offsetWidth;
+  var ctx;
+
+  $(cnv).mousedown(function(e){
+    cnvpts = [ ];
+    cnvdraw = true;
+    ctx = cnv.getContext('2d');
+    ctx.strokeStyle = "#f00";
+    ctx.strokeWidth = 2;
+    ctx.moveTo(e.offsetX, e.offsetY);
+  });
+
+  $(cnv).mousemove(function(e){
+    if(cnvdraw){
+      var cnvpt = e.offsetX + "," + e.offsetY;
+      if(cnvpts.indexOf(cnvpt) == -1){
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        cnvpts.push(cnvpt);
+      }
+    }
+  });
+  $(cnv).mouseup(function(e){
+    cnvdraw = false;
+    var line = [ ];
+    for(var pt=0;pt<cnvpts.length;pt++){
+      line.push(map.containerPointToLatLng(
+        new L.Point(
+          cnvpts[pt].split(',')[0],
+          cnvpts[pt].split(',')[1]
+        )
+      ));
+    }
+    var hull = getConvexHull(line);
+    var hull2 = [];
+    for(var pt=0;pt<hull.length;pt++){
+      hull2.push(hull[pt][0]);
+      hull2.push(hull[pt][1]);
+    }
+    //map.addLayer(new L.polygon(hull2));
+    for(var p=0;p<footprints.length;p++){
+      var poly = footprints[p].geo.getLatLngs();
+      for(var d=0;d<poly.length;d++){
+        if(shapeHoldsPt( hull2, poly[d] ) ){
+          footprints[p].color = "#f00";
+          footprints[p].geo.setStyle({ color: "#f00", opacity: 0.65, fillOpacity: 0.2 });
+          break;
+        }
+      }
+    }
+    setTimeout(function(){
+      $(cnv).css({ top: "150%" });
+      cnv.width = cnv.width;
+    }, 500);
+  });
 });
+
+function startPencil(){
+  $(cnv).css({ top: 0 });  
+}
+
 function addPolyEdit(polyindex){
   //poly.bindPopup("<input type='hidden' id='selectedid' value='" + footprints.length + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value=''/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'></textarea><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");
   footprints[polyindex].geo.on('click', function(e){
@@ -351,7 +432,7 @@ function saveDetail(){
     else{
       footprints[ id ].color = selcolor;
     }
-    footprints[ id ].geo.setStyle({ color: selcolor, opacity: 0.65 });
+    footprints[ id ].geo.setStyle({ color: selcolor, opacity: 0.65, fillOpacity: 0.2 });
   }
   map.closePopup();
 }
@@ -565,3 +646,99 @@ function zoomByAbout(e) {
 function showDataSource(){
   $("#creditmessage").modal("toggle");
 }
+
+// Convex Hull Code via Leaflet Marker Clusterer
+
+/* Copyright (c) 2012 the authors listed at the following URL, and/or
+the authors of referenced articles or incorporated external code:
+http://en.literateprograms.org/Quickhull_(Javascript)?action=history&offset=20120410175256
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Retrieved from: http://en.literateprograms.org/Quickhull_(Javascript)?oldid=18434
+*/
+
+var getDistant = function (cpt, bl) {
+  var vY = bl[1].lat - bl[0].lat,
+	  vX = bl[0].lng - bl[1].lng;
+  return (vX * (cpt.lat - bl[0].lat) + vY * (cpt.lng - bl[0].lng));
+};
+
+var findMostDistantPointFromBaseLine = function (baseLine, latLngs) {
+  var maxD = 0,
+	  maxPt = null,
+	  newPoints = [],
+	  i, pt, d;
+
+  for (var i = latLngs.length - 1; i >= 0; i--) {
+	pt = latLngs[i];
+	d = this.getDistant(pt, baseLine);
+    if (d > 0) {
+      newPoints.push(pt);
+	}
+	else {
+	  continue;
+	}
+	if (d > maxD) {
+	  maxD = d;
+	  maxPt = pt;
+	}
+  }
+  return { 'maxPoint': maxPt, 'newPoints': newPoints };
+};
+
+var buildConvexHull = function (baseLine, latLngs) {
+  var convexHullBaseLines = [],
+  t = this.findMostDistantPointFromBaseLine(baseLine, latLngs);
+
+  if (t.maxPoint) { // if there is still a point "outside" the base line
+	convexHullBaseLines = convexHullBaseLines.concat(
+	  this.buildConvexHull([baseLine[0], t.maxPoint], t.newPoints)
+	);
+	convexHullBaseLines = convexHullBaseLines.concat(
+	  this.buildConvexHull([t.maxPoint, baseLine[1]], t.newPoints)
+	);
+	return convexHullBaseLines;
+  }
+  else {  // if there is no more point "outside" the base line, the current base line is part of the convex hull
+    return [baseLine];
+  }
+};
+
+var getConvexHull = function (latLngs) {
+  //find first baseline
+  var maxLat = false, minLat = false,
+  maxPt = null, minPt = null,
+  i;
+  
+  for (var i = latLngs.length - 1; i >= 0; i--) {
+    var pt = latLngs[i];
+    if (maxLat === false || pt.lat > maxLat) {
+      maxPt = pt;
+      maxLat = pt.lat;
+    }
+    if (minLat === false || pt.lat < minLat) {
+      minPt = pt;
+      minLat = pt.lat;
+    }
+  }
+  var ch = [].concat(this.buildConvexHull([minPt, maxPt], latLngs), this.buildConvexHull([maxPt, minPt], latLngs));
+  return ch;
+};

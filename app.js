@@ -177,6 +177,9 @@ var init = exports.init = function (config) {
   app.get('/build/:src/:customgeo', function(req, res){
     res.render('custombuild', { src: req.params.src, customgeo: req.params.customgeo });
   });
+  app.get('/scribble/:src/:customgeo', function(req, res){
+    res.render('scribblebuild', { src: req.params.src, customgeo: req.params.customgeo });
+  });
 
   app.post('/timeline', function(req, res){
     // load this point into MongoDB
