@@ -43,10 +43,8 @@ body
                   a(href="#", onclick="downloadFile(0)") Google Earth / KML
                 li(style="list-style-type:none;margin-left:-25px;")
                   a(href="#", onclick="downloadFile(1)") GeoJSON
-              br
-            li(style="margin-left:-10px;list-style-type:none;")
-              a.btn.btn-success(href="#", onclick="startSave()") Save on MajuroJS.org
         br
+        a.btn.btn-success(href="#", onclick="startSave()") Save on MajuroJS.org
         br
         p
           span Data downloaded from&nbsp;
@@ -78,7 +76,7 @@ body
           br
           br
           span Source code on&nbsp;
-          a(href="https://github.com/mapmeld/majurojs") Github
+          a(href="https://github.com/mapmeld/majurojs", target="_blank") Github
         div.arrow-right
 
       div#map(ondragend="dragended(event)", ondrop="dropped(event)", ondragover="allowDrop(event)")
