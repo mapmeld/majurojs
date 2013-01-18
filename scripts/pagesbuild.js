@@ -73,6 +73,7 @@ function loadedPolys(polys){
       src_credits = ".lancaster";
       break;
     case "midland":
+    case "midlandtx":
       src_credits = ".midland";
       break;
     case "nanaimo":
@@ -235,10 +236,10 @@ function dropped(e){
           break;
       }
       if(setColor == "eraser"){
-        footprints[p].geo.setStyle({ opacity: 0.1 });
+        footprints[p].geo.setStyle({ opacity: 0.3, fillOpacity: 0.0001 });
         break;
       }
-      footprints[p].geo.setStyle({ color: setColor, opacity: 0.65 });
+      footprints[p].geo.setStyle({ color: setColor, opacity: 0.65, fillOpacity: 0.2 });
       break;
     }
   }
