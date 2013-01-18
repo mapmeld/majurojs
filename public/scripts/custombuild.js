@@ -352,22 +352,22 @@ $(document).ready(function(){
     ctx = cnv.getContext('2d');
     ctx.strokeStyle = "#f00";
     ctx.strokeWidth = 2;
-    ctx.moveTo(e.offsetX, e.offsetY);
+    ctx.moveTo(e.pageX - $("#map").offset().left, e.pageY - $("#map").offset().top);
   });
 
   $(cnv).mousemove(function(e){
     if(cnvdraw){
-      var cnvpt = e.offsetX + "," + e.offsetY;
+      var cnvpt = (e.pageX - $("#map").offset().left) + "," + (e.pageY - $("#map").offset().top);
       if(cnvpts.indexOf(cnvpt) == -1){
-        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.lineTo(e.pageX - $("#map").offset().left, e.pageY - $("#map").offset().top);
         ctx.stroke();
         cnvpts.push(cnvpt);
       }
     }
     pencilmark.setLatLng( map.containerPointToLatLng(
       new L.Point(
-        e.offsetX,
-        e.offsetY
+        e.pageX - $("#map").offset().left,
+        e.pageY - $("#map").offset().top
       )
     ));
   });
