@@ -82,3 +82,10 @@ ul li{
   vertical-align: top;
   margin-right: 10px;
 }
+.row-fluid{
+  user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+}

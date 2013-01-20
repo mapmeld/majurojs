@@ -315,8 +315,9 @@ $(document).ready(function(){
   // satellite maps unchecked by default
   $("#savemapsat")[0].checked = false;
 
-  // skip scribble option if using IE_EDITOR
+  // remove scribble option if using IE_EDITOR
   if(typeof IE_EDITOR != "undefined" && IE_EDITOR){
+    $("#pencil").css({ display: "none" });
     return;
   }
   
