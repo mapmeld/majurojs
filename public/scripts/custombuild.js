@@ -496,10 +496,10 @@ function dropped(e){
           break;
       }
       if(setColor == "eraser"){
-        footprints[p].geo.setStyle({ opacity: 0.3, fillOpacity: 0.0001 });
+        footprints[p].geo.setStyle({ opacity: 0.3, fillOpacity: 0.0001, dashArray: "4 8" });
         break;
       }
-      footprints[p].geo.setStyle({ color: setColor, opacity: 0.65, fillOpacity: 0.2 });
+      footprints[p].geo.setStyle({ color: setColor, opacity: 0.65, fillOpacity: 0.2, dashArray: "1 0" });
       break;
     }
   }
