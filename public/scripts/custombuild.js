@@ -303,7 +303,11 @@ $(document).ready(function(){
 
         var poly = new L.polygon(coords, { weight: 2 });
         map.addLayer(poly);
-        footprints.push({ id: avg.join(',') + "," + coords.length, geo: poly, name: "", description: "", color: "" });
+        var props = { };
+        if(typeof polys.features[f].properties != 'undefined'){
+          props = polys.features[f].properties;
+        }
+        footprints.push({ id: avg.join(',') + "," + coords.length, geo: poly, name: "", description: "", color: "", properties: props });
         addPolyEdit(footprints.length-1);
       }
       if(polys.features.length){
@@ -534,6 +538,13 @@ function downloadFile(format){
       for(var g=0;g<geopoints.length;g++){
         mypts.push( [ geopoints[g].lng, geopoints[g].lat ] );
       }
+      
+      // save custom and city-provided properties
+      var props = footprints[f].properties;
+      props.fill = footprints[f].geo.options.color;
+      props.name = footprints[f].name;
+      props.description = footprints[f].description;
+
       // create a feature
       var geo = {
         "type": "Feature",
@@ -541,11 +552,7 @@ function downloadFile(format){
           "type": "Polygon",
           "coordinates": [ mypts ]
         },
-        "properties": {
-          "fill": footprints[f].geo.options.color,
-          "name": footprints[f].name,
-          "description": footprints[f].description
-        }
+        "properties": props
       };
       geofeatures.push(geo);
     }
