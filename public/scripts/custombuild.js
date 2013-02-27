@@ -161,6 +161,7 @@ $(document).ready(function(){
     $(".exportmap").css({ "display": "none" });
     $(".dragdrop").css({ "display": "none" });
   }
+
   // make a Leaflet map
   map = new L.Map('map', { zoomControl: false, panControl: false });
   map.attributionControl.setPrefix('');
@@ -170,7 +171,7 @@ $(document).ready(function(){
   var tonerAttrib = 'Map data &copy;2013 OpenStreetMap contributors, Tiles &copy;2013 Stamen Design';
   terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
   map.addLayer(terrainLayer);
-  
+
   // center map based on city or county source
   if(src && city_options[ src ]){
     map.setView(new L.LatLng(city_options[ src ].lat, city_options[ src ].lng), city_options[ src ].zoom);  
@@ -178,143 +179,18 @@ $(document).ready(function(){
   else{
     map.setView(new L.LatLng(39.938435,-75.136528), 14);
   }
-  
+
+  // building popup
   building_pop = new L.Popup();
-  
-  if(customgeo){
-    // request building geo dynamically from server
-    var polysurl = '/timeline-at';
-    if(src){
-      polysurl += '/' + src;
-    }
-    polysurl += '/' + customgeo;
-    
-    $.getJSON(polysurl, function(polys){
 
-      // show the relevant city or county credit
-      src = polys.source;
-      var src_credits = "";
-      switch(src){
-        case "allegheny":
-        case "pittsburgh":
-          src_credits = ".allegheny";
-          break;
-        case "austin":
-          src_credits = ".austin";
-          break;
-        case "baltimore":
-          src_credits = ".baltimore";
-          break;
-        case "bloomington":
-          src_credits = ".bloomington";
-          break;
-        case "boston":
-          src_credits = ".boston";
-          break;
-        case "boulder":
-          src_credits = ".boulder";
-          break;
-        case "chapelhill":
-          src_credits = ".chapelhill";
-          break;
-        case "chicago":
-          src_credits = ".chicago";
-          break;
-        case "clark":
-          src_credits = ".clark";
-          break;
-        case "kitsap":
-          src_credits = ".kitsap";
-          break;
-        case "lancaster":
-          src_credits = ".lancaster";
-          break;
-        case "midland":
-        case "midlandtx":
-          src_credits = ".midland";
-          break;
-        case "nanaimo":
-          src_credits = ".nanaimo";
-          break;
-        case "oakland":
-          src_credits = ".oakland";
-          break;
-        case "petaluma":
-          src_credits = ".petaluma";
-          break;
-        case "philadelphia":
-          src_credits = ".philadelphia";
-          break;
-        case "raleigh":
-        case "wake":
-          src_credits = ".raleigh";
-          break;
-        case "roundrock":
-          src_credits = ".roundrock";
-          break;
-        case "sanfrancisco":
-          src_credits = ".sanfrancisco";
-          break;
-        case "savannah":
-        case "chatham":
-        case "sagis":
-          src_credits = ".savannah";
-          break;
-        case "seattle":
-          src_credits = ".seattle";
-          break;
-        case "smith":
-        case "tyler":
-          src_credits = ".smith";
-          break;
-        case "spokane":
-          src_credits = ".spokane";
-          break;
-        case "steamboatsprings":
-          src_credits = ".steamboatsprings";
-          break;
-        case "westsacramento":
-          src_credits = ".westsacramento";
-          break;
-      }
-      $(src_credits).css({ "display": "block" });
-    
-      //console.log(polys);
-      var maxlat = -90;
-      var minlat = 90;
-      var maxlng = -180;
-      var minlng = 180;
-      for(var f=0;f<polys.features.length;f++){
-        var coords = polys.features[f].geometry.coordinates[0];
-        var avg = [0, 0];
-        for(var c=0;c<coords.length;c++){
-          maxlat = Math.max(maxlat, coords[c][1]);
-          minlat = Math.min(minlat, coords[c][1]);
-          maxlng = Math.max(maxlng, coords[c][0]);
-          minlng = Math.min(minlng, coords[c][0]);
-          avg[0] += coords[c][0];
-          avg[1] += coords[c][1];  
-          coords[c] = new L.LatLng(coords[c][1], coords[c][0]);        
-        }
-        avg[0] /= coords.length;
-        avg[0] = avg[0].toFixed(6);
-        avg[1] /= coords.length;
-        avg[1] = avg[1].toFixed(6);
-
-        var poly = new L.polygon(coords, { weight: 2 });
-        map.addLayer(poly);
-        var props = { };
-        if(typeof polys.features[f].properties != 'undefined'){
-          props = polys.features[f].properties;
-        }
-        footprints.push({ id: avg.join(',') + "," + coords.length, geo: poly, name: "", description: "", color: "", properties: props });
-        addPolyEdit(footprints.length-1);
-      }
-      if(polys.features.length){
-        map.fitBounds( new L.LatLngBounds( new L.LatLng(minlat, minlng), new L.LatLng(maxlat, maxlng) ) );
-      }
-    });
+  // request building geo dynamically from server
+  var polysurl = '/timeline-at';
+  if(src){
+    polysurl += '/' + src;
   }
+  polysurl += '/' + customgeo;
+    
+  $.getJSON(polysurl, loadBuildings);
 
   // satellite maps unchecked by default
   $("#savemapsat")[0].checked = false;
@@ -412,14 +288,142 @@ $(document).ready(function(){
   });
 });
 
+function loadBuildings(polys){
+  // show the relevant city or county credit
+  src = polys.source;
+  var src_credits = "";
+  switch(src){
+    case "allegheny":
+    case "pittsburgh":
+      src_credits = ".allegheny";
+      break;
+    case "austin":
+      src_credits = ".austin";
+      break;
+    case "baltimore":
+      src_credits = ".baltimore";
+      break;
+    case "bloomington":
+      src_credits = ".bloomington";
+      break;
+    case "boston":
+      src_credits = ".boston";
+      break;
+    case "boulder":
+      src_credits = ".boulder";
+      break;
+    case "chapelhill":
+      src_credits = ".chapelhill";
+      break;
+    case "chicago":
+      src_credits = ".chicago";
+      break;
+    case "clark":
+      src_credits = ".clark";
+      break;
+    case "kitsap":
+      src_credits = ".kitsap";
+      break;
+    case "lancaster":
+      src_credits = ".lancaster";
+      break;
+    case "midland":
+    case "midlandtx":
+      src_credits = ".midland";
+      break;
+    case "nanaimo":
+      src_credits = ".nanaimo";
+      break;
+    case "oakland":
+      src_credits = ".oakland";
+      break;
+    case "petaluma":
+      src_credits = ".petaluma";
+      break;
+    case "philadelphia":
+      src_credits = ".philadelphia";
+      break;
+    case "raleigh":
+    case "wake":
+      src_credits = ".raleigh";
+      break;
+    case "roundrock":
+      src_credits = ".roundrock";
+      break;
+    case "sanfrancisco":
+      src_credits = ".sanfrancisco";
+      break;
+    case "savannah":
+    case "chatham":
+    case "sagis":
+      src_credits = ".savannah";
+      break;
+    case "seattle":
+      src_credits = ".seattle";
+      break;
+    case "smith":
+    case "tyler":
+      src_credits = ".smith";
+      break;
+    case "spokane":
+      src_credits = ".spokane";
+      break;
+    case "steamboatsprings":
+      src_credits = ".steamboatsprings";
+      break;
+    case "westsacramento":
+      src_credits = ".westsacramento";
+      break;
+  }
+  $(src_credits).css({ "display": "block" });
+
+  //console.log(polys);
+  var maxlat = -90;
+  var minlat = 90;
+  var maxlng = -180;
+  var minlng = 180;
+  for(var f=0;f<polys.features.length;f++){
+    var coords = polys.features[f].geometry.coordinates[0];
+    var avg = [0, 0];
+    for(var c=0;c<coords.length;c++){
+      maxlat = Math.max(maxlat, coords[c][1]);
+      minlat = Math.min(minlat, coords[c][1]);
+      maxlng = Math.max(maxlng, coords[c][0]);
+      minlng = Math.min(minlng, coords[c][0]);
+      avg[0] += coords[c][0];
+      avg[1] += coords[c][1];  
+      coords[c] = new L.LatLng(coords[c][1], coords[c][0]);        
+    }
+    avg[0] /= coords.length;
+    avg[0] = avg[0].toFixed(6);
+    avg[1] /= coords.length;
+    avg[1] = avg[1].toFixed(6);
+
+    var poly = new L.polygon(coords, { weight: 2 });
+    map.addLayer(poly);
+    var props = { };
+    if(typeof polys.features[f].properties != 'undefined'){
+      props = polys.features[f].properties;
+    }
+    footprints.push({ id: avg.join(',') + "," + coords.length, geo: poly, name: "", description: "", color: "", properties: props });
+    addPolyEdit(footprints.length-1);
+  }
+  if(polys.features.length){
+    map.fitBounds( new L.LatLngBounds( new L.LatLng(minlat, minlng), new L.LatLng(maxlat, maxlng) ) );
+  }
+}
+
 function startPencil(){
   $(cnv).css({ top: 0 });
   map.addLayer(pencilmark);
 }
 
 function addPolyEdit(polyindex){
-  //poly.bindPopup("<input type='hidden' id='selectedid' value='" + footprints.length + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value=''/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'></textarea><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");
   footprints[polyindex].geo.on('click', function(e){
+    building_pop.setLatLng( footprints[polyindex].geo.getBounds().getCenter() );
+    
+    var appendToEditor = "";
+    
     if(typeof IE_EDITOR != "undefined" && IE_EDITOR){
       // old IE: need to add color selector
       var selcolor;
@@ -429,19 +433,82 @@ function addPolyEdit(polyindex){
       else{
         selcolor = "#00f";
       }
-      building_pop.setLatLng( footprints[polyindex].geo.getBounds().getCenter() ).setContent("<input type='hidden' id='selectedid' value='" + polyindex + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value='" + replaceAll((footprints[polyindex].name || ""),"'","\\'") + "'/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'>" + replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;") + "</textarea><br/><select id='poly_color'>" + ("<option value='#f00'>red</option><option value='#ff5a00'>orange</option><option value='#0f0'>green</option><option value='#00f'>blue</option>").replace("value='" + selcolor + "'", "value='" + selcolor + "' selected='selected'") + "</select><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");    
+      appendToEditor += "<select id='poly_color'>" + ("<option value='#f00'>red</option><option value='#ff5a00'>orange</option><option value='#0f0'>green</option><option value='#00f'>blue</option>").replace("value='" + selcolor + "'", "value='" + selcolor + "' selected='selected'") + "</select><br/>";
+    }
+    
+    var build_id = "<input type='hidden' id='selectedid' value='" + polyindex + "'/><br/>";
+    var build_name = "<input id='poly_name' class='x-large' value='" + replaceAll((footprints[polyindex].name || ""),"'","\\'") + "' placeholder='Name'/><br/>";
+    var saveBtn = "<a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>";
+
+    var build_detail_tabs = "<div class='navbar'><div class='nav'><li class='texttab'><a href='#' onclick='detailTab(0);'>Tt</a></li><li class='phototab'><a href='#' onclick='detailTab(1);'>Photo</a></li><li class='videotab'><a href='#' onclick='detailTab(2);'>Video</a></li></div></div><br/>";
+    var detailInterface = "<div class='tabpane'>";
+    if(footprints[polyindex].description.indexOf("SETPIC:") == 0){
+      // embedded photo
+      detailInterface += "<div class='phototabpane'><strong>Embed picture</strong><br/><input placeholder='Image URL' value='" + replaceAll(replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;"),"SETPIC:","") + "'/></div>";
+      build_detail_tabs = build_detail_tabs.replace("phototab", "phototab active");
+    }
+    else if(footprints[polyindex].description.indexOf("SETVID:") == 0){
+      // embedded video
+      detailInterface += "<div class='videotabpane'><strong>Embed YouTube video</strong><br/><input placeholder='YouTube URL' value='" + replaceAll(replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;"),"SETVID:","") + "'/></div>";
+      build_detail_tabs = build_detail_tabs.replace("videotab", "videotab active");
     }
     else{
-      building_pop.setLatLng( footprints[polyindex].geo.getBounds().getCenter() ).setContent("<input type='hidden' id='selectedid' value='" + polyindex + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value='" + replaceAll((footprints[polyindex].name || ""),"'","\\'") + "'/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'>" + replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;") + "</textarea><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");
+      // text embed
+      detailInterface += "<div class='texttabpane'><textarea id='poly_detail' rows='6' cols='25' placeholder='Add Detail'>" + replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;") + "</textarea></div>";
+      build_detail_tabs = build_detail_tabs.replace("texttab", "texttab active");
     }
+    detailInterface += "</div>";
+    
+    building_pop.setContent(build_id + build_name + build_detail_tabs + detailInterface + appendToEditor + saveBtn);
     map.openPopup(building_pop);
   });
+}
+function detailTab(index){
+  $(".nav > li").removeClass("active");
+  switch(index){
+    case 0:
+      $(".texttab").addClass("active");
+      $(".texttabpane").css({ display: "block" });
+      $(".phototabpane").css({ display: "none" });
+      $(".videotabpane").css({ display: "none" });
+      if( !($(".texttabpane").length) ){
+        $(".tabpane").append( "<div class='texttabpane'><textarea id='poly_detail' rows='6' cols='25' placeholder='Add Detail'>" + replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;") + "</textarea></div>" );
+      }
+      break;
+    case 1:
+      $(".phototab").addClass("active");
+      $(".texttabpane").css({ display: "none" });
+      $(".phototabpane").css({ display: "block" });
+      $(".videotabpane").css({ display: "none" });
+      if( !($(".phototabpane").length) ){
+        $(".tabpane").append( "<div class='phototabpane'><strong>Embed picture</strong><br/><input placeholder='Image URL' value=''/></div>" );
+      }
+      break;
+    case 2:
+      $(".videotab").addClass("active");
+      $(".texttabpane").css({ display: "none" });
+      $(".phototabpane").css({ display: "none" });
+      $(".videotabpane").css({ display: "block" });
+      if( !($(".videotabpane").length) ){
+        $(".tabpane").append( "<div class='videotabpane'><strong>Embed YouTube video</strong><br/><input placeholder='YouTube URL' value=''/></div>" );
+      }
+      break;
+  }
 }
 function saveDetail(){
   // popup save
   var id = $('#selectedid').val() * 1;
   var name = $('#poly_name').val();
-  var description = $('#poly_detail').val();
+  var description = "";
+  if($('.texttab').hasClass('active')){
+    description = $('#poly_detail').val();
+  }
+  else if($('.phototab').hasClass('active')){
+    description = "SETPIC:" + $(".phototabpane input").val();
+  }
+  else if($('.videotab').hasClass('active')){
+    description = "SETVID:" + $(".videotabpane input").val();
+  }
   var selcolor;
   footprints[ id ].name = name;
   footprints[ id ].description = description;

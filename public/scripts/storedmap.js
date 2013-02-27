@@ -183,11 +183,14 @@ function describe(description){
   if((typeof description == 'undefined') || (!description)){
     return "";
   }
+  replaceAll(description, "SETPIC:", "photo:");
+  replaceAll(description, "SETVID:", "video:");  
+  
   // allow link:http://example.com
   while(description.indexOf("link:") > -1){
     description = description.split("link:");
     if(description[1].indexOf(" ") > -1){
-      description[1] = "<a href='" + description[1].split(" ")[0] + "'>" + description[1].split(" ")[0] + "</a> " + description[1].split(" ")[1];
+      description[1] = "<a href='" + description[1].split(" ")[0] + "'>" + description[1].split(" ")[0] + "</a> " + description[1].split(" ").slice(1);
     }
     else{
       description[1] = "<a href='" + description[1] + "'>" + description[1] + "</a>";
@@ -203,13 +206,25 @@ function describe(description){
   while(description.indexOf("photo:") > -1){
     description = description.split("photo:");
     if(description[1].indexOf(" ") > -1){
-      description[1] = "<br/><img src='" + description[1].split(" ")[0] + "' width='250'/><br/>" + description[1].split(" ")[1];
+      description[1] = "<br/><img src='" + description[1].split(" ")[0] + "' width='250'/><br/>" + description[1].split(" ").slice(1);
     }
     else{
       description[1] = "<br/><img src='" + description[1] + "' width='250'/>";
     }
     description = description.join("photo:");
     description = description.replace("photo:","");
+  }
+  // allow video:http://youtube.com/watch?v=t4oYs1aTD-4
+  while(description.indexOf("video:") > -1){
+    description = description.split("video:");
+    if(description[1].indexOf(" ") > -1){
+      description[1] = "<br/><embed>" + description[1].split(" ")[0] + "</embed><br/>" + description[1].split(" ").slice(1);
+    }
+    else{
+      description[1] = "<br/><embed>" + description[1] + "</embed>";
+    }
+    description = description.join("video:");
+    description = description.replace("video:","");
   }
   return '<p>' + description + '</p>';
 }
