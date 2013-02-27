@@ -419,16 +419,16 @@ var init = exports.init = function (config) {
     while(description.indexOf("video:") > -1){
       description = description.split("video:");
       if(description[1].indexOf(" ") > -1){
-        description[1] = "<br/><embed>" + description[1].split(" ")[0] + "</embed><br/>" + description[1].split(" ").slice(1);
+        description[1] = "<br/><iframe title='YouTube video player' width='425' height='349' src='" + description[1].split(" ")[0] + "' frameborder='0' allowfullscreen></iframe><br/>" + description[1].split(" ").slice(1);
       }
       else{
-        description[1] = "<br/><embed>" + description[1] + "</embed>";
+        description[1] = "<br/><iframe title='YouTube video player' width='425' height='349' src='" + description[1] + "' frameborder='0' allowfullscreen></iframe>";
       }
       description = description.join("video:");
       description = description.replace("video:","");
     }
     return description;
-  };
+  }
   
   var processTimepolys = function(timepolys, req, res, optname, optinfo){
     var src = "";
