@@ -154,8 +154,11 @@ function loadedPolys(polys){
   }
 }
 function addPolyEdit(polyindex){
-  //poly.bindPopup("<input type='hidden' id='selectedid' value='" + footprints.length + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value=''/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'></textarea><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");
   footprints[polyindex].geo.on('click', function(e){
+    building_pop.setLatLng( footprints[polyindex].geo.getBounds().getCenter() );
+    
+    var appendToEditor = "";
+    
     if(typeof IE_EDITOR != "undefined" && IE_EDITOR){
       // old IE: need to add color selector
       var selcolor;
@@ -165,19 +168,82 @@ function addPolyEdit(polyindex){
       else{
         selcolor = "#00f";
       }
-      building_pop.setLatLng( footprints[polyindex].geo.getBounds().getCenter() ).setContent("<input type='hidden' id='selectedid' value='" + polyindex + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value='" + replaceAll((footprints[polyindex].name || ""),"'","\\'") + "'/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'>" + replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;") + "</textarea><br/><select id='poly_color'>" + ("<option value='#f00'>red</option><option value='#ff5a00'>orange</option><option value='#0f0'>green</option><option value='#00f'>blue</option>").replace("value='" + selcolor + "'", "value='" + selcolor + "' selected='selected'") + "</select><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");    
+      appendToEditor += "<select id='poly_color'>" + ("<option value='#f00'>red</option><option value='#ff5a00'>orange</option><option value='#0f0'>green</option><option value='#00f'>blue</option>").replace("value='" + selcolor + "'", "value='" + selcolor + "' selected='selected'") + "</select><br/>";
+    }
+    
+    var build_id = "<input type='hidden' id='selectedid' value='" + polyindex + "'/><br/>";
+    var build_name = "<input id='poly_name' class='x-large' value='" + replaceAll((footprints[polyindex].name || ""),"'","\\'") + "' placeholder='Name'/><br/>";
+    var saveBtn = "<a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>";
+
+    var build_detail_tabs = "<div class='navbar'><div class='nav'><li class='texttab'><a href='#' onclick='detailTab(0);'>Tt</a></li><li class='phototab'><a href='#' onclick='detailTab(1);'>Photo</a></li><li class='videotab'><a href='#' onclick='detailTab(2);'>Video</a></li></div></div><br/>";
+    var detailInterface = "<div class='tabpane'>";
+    if(footprints[polyindex].description.indexOf("SETPIC:") == 0){
+      // embedded photo
+      detailInterface += "<div class='phototabpane'><strong>Embed picture</strong><br/><input placeholder='Image URL' value='" + replaceAll(replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;"),"SETPIC:","") + "'/></div>";
+      build_detail_tabs = build_detail_tabs.replace("phototab", "phototab active");
+    }
+    else if(footprints[polyindex].description.indexOf("SETVID:") == 0){
+      // embedded video
+      detailInterface += "<div class='videotabpane'><strong>Embed YouTube video</strong><br/><input placeholder='YouTube URL' value='" + replaceAll(replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;"),"SETVID:","") + "'/></div>";
+      build_detail_tabs = build_detail_tabs.replace("videotab", "videotab active");
     }
     else{
-      building_pop.setLatLng( footprints[polyindex].geo.getBounds().getCenter() ).setContent("<input type='hidden' id='selectedid' value='" + polyindex + "'/><label>Name</label><br/><input id='poly_name' class='x-large' value='" + replaceAll((footprints[polyindex].name || ""),"'","\\'") + "'/><br/><label>Add Detail</label><br/><textarea id='poly_detail' rows='6' cols='25'>" + replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;") + "</textarea><br/><a class='btn' onclick='saveDetail()' style='width:40%;'>Save</a>");
+      // text embed
+      detailInterface += "<div class='texttabpane'><textarea id='poly_detail' rows='6' cols='25' placeholder='Add Detail'>" + replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;") + "</textarea></div>";
+      build_detail_tabs = build_detail_tabs.replace("texttab", "texttab active");
     }
+    detailInterface += "</div>";
+    
+    building_pop.setContent(build_id + build_name + build_detail_tabs + detailInterface + appendToEditor + saveBtn);
     map.openPopup(building_pop);
   });
+}
+function detailTab(index){
+  $(".nav > li").removeClass("active");
+  switch(index){
+    case 0:
+      $(".texttab").addClass("active");
+      $(".texttabpane").css({ display: "block" });
+      $(".phototabpane").css({ display: "none" });
+      $(".videotabpane").css({ display: "none" });
+      if( !($(".texttabpane").length) ){
+        $(".tabpane").append( "<div class='texttabpane'><textarea id='poly_detail' rows='6' cols='25' placeholder='Add Detail'>" + replaceAll(replaceAll((footprints[polyindex].description || ""),"<","&lt;"),">","&gt;") + "</textarea></div>" );
+      }
+      break;
+    case 1:
+      $(".phototab").addClass("active");
+      $(".texttabpane").css({ display: "none" });
+      $(".phototabpane").css({ display: "block" });
+      $(".videotabpane").css({ display: "none" });
+      if( !($(".phototabpane").length) ){
+        $(".tabpane").append( "<div class='phototabpane'><strong>Embed picture</strong><br/><input placeholder='Image URL' value=''/></div>" );
+      }
+      break;
+    case 2:
+      $(".videotab").addClass("active");
+      $(".texttabpane").css({ display: "none" });
+      $(".phototabpane").css({ display: "none" });
+      $(".videotabpane").css({ display: "block" });
+      if( !($(".videotabpane").length) ){
+        $(".tabpane").append( "<div class='videotabpane'><strong>Embed YouTube video</strong><br/><input placeholder='YouTube URL' value=''/></div>" );
+      }
+      break;
+  }
 }
 function saveDetail(){
   // popup save
   var id = $('#selectedid').val() * 1;
   var name = $('#poly_name').val();
-  var description = $('#poly_detail').val();
+  var description = "";
+  if($('.texttab').hasClass('active')){
+    description = $('#poly_detail').val();
+  }
+  else if($('.phototab').hasClass('active')){
+    description = "SETPIC:" + $(".phototabpane input").val();
+  }
+  else if($('.videotab').hasClass('active')){
+    description = "SETVID:" + $(".videotabpane input").val();
+  }
   var selcolor;
   footprints[ id ].name = name;
   footprints[ id ].description = description;
@@ -189,7 +255,7 @@ function saveDetail(){
     else{
       footprints[ id ].color = selcolor;
     }
-    footprints[ id ].geo.setStyle({ color: selcolor, opacity: 0.65 });
+    footprints[ id ].geo.setStyle({ color: selcolor, opacity: 0.65, fillOpacity: 0.2 });
   }
   map.closePopup();
 }
