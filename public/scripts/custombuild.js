@@ -660,8 +660,8 @@ function describe(description){
   if((typeof description == 'undefined') || (!description)){
     return "";
   }
-  replaceAll(description, "SETPIC:", "photo:");
-  replaceAll(description, "SETVID:", "video:");  
+  description = replaceAll(description, "SETPIC:", "photo:");
+  description = replaceAll(description, "SETVID:", "video:");  
   
   // allow link:http://example.com
   while(description.indexOf("link:") > -1){
@@ -695,10 +695,10 @@ function describe(description){
   while(description.indexOf("video:") > -1){
     description = description.split("video:");
     if(description[1].indexOf(" ") > -1){
-      description[1] = "<br/><iframe title='YouTube video player' width='425' height='349' src='" + description[1].split(" ")[0] + "' frameborder='0' allowfullscreen></iframe><br/>" + description[1].split(" ").slice(1);
+      description[1] = "<br/><iframe title='YouTube video player' width='425' height='349' src='http://" + replaceAll(replaceAll(replaceAll(description[1].split(" ")[0], "http://",""). "https://", ""),"/watch?v=","/embed/") + "' frameborder='0' allowfullscreen></iframe><br/>" + description[1].split(" ").slice(1);
     }
     else{
-      description[1] = "<br/><iframe title='YouTube video player' width='425' height='349' src='" + description[1] + "' frameborder='0' allowfullscreen></iframe>";
+      description[1] = "<br/><iframe title='YouTube video player' width='425' height='349' src='http://" + replaceAll(replaceAll(replaceAll(description[1], "http://",""). "https://", ""),"/watch?v=","/embed/") + "' frameborder='0' allowfullscreen></iframe>";
     }
     description = description.join("video:");
     description = description.replace("video:","");
