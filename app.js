@@ -288,7 +288,7 @@ var init = exports.init = function (config) {
   });
   app.get('/savemap/:id.*', function(req, res){
     savemap.SaveMap.findById(req.params.id, function(err, mymap){
-      if(req.url.indexOf('.kml') > -1 || req.url.indexOf('.json') > -1){
+      if(req.url.indexOf('.kml') > -1 || req.url.indexOf('.json') > -1 || req.url.indexOf('.geojson') > -1){
         // return saved map as KML or GeoJSON
         // first, fetch custom geo area
         customgeo.CustomGeo.findById(mymap.customgeo, function(err, geo){
@@ -332,15 +332,22 @@ var init = exports.init = function (config) {
                     timepolys[t].color = mymap.edited[e].color;
                     switch(mymap.edited[e].color){
                       case "#f00":
+                      case "#ff0000":
+                      case "red":
                         timepolys[t].style = "#red_poly";
                         break;
                       case "#0f0":
+                      case "#00ff00":
+                      case "green":
                         timepolys[t].style = "#green_poly";
                         break;
                       case "#00f":
+                      case "#0000ff":
+                      case "blue":
                         timepolys[t].style = "#blue_poly";
                         break;
                       case "#ff5a00":
+                      case "orange":
                         timepolys[t].style = "#orange_poly";
                         break;
                     }
@@ -529,11 +536,17 @@ var init = exports.init = function (config) {
         if(typeof timepolys[t].end != 'undefined' && timepolys[t].end !== null){
           proplist["end"] = timepolys[t].end * 1;
         }
+        var fixcoords = timepolys[t].points;
+        for(var pt=0;pt<fixcoords.length;pt++){
+          if(fixcoords[pt].length == 3){
+            fixcoords[pt].splice(2);
+          }
+        }
         timepolys[t] = {
           "type": "Feature",
           "geometry": {
             "type": "Polygon",
-            "coordinates": [ timepolys[t].points ]
+            "coordinates": [ fixcoords ]
           },
           "properties": proplist
         };
