@@ -28,13 +28,14 @@ body
         p
           span Make your own maps with public building data!
           ul
-            li.dragdrop(style="margin-left:-10px;") Drag & drop to color buildings
+            li.dragdrop(style="margin-left:-10px;") Click the pencil, then draw on the map
               br
-              img.marker#marker_Red(src="/images/redmarker.png", title="Red", alt="Red", draggable="true", ondragstart="dragstarted(event);")
-              img.marker#marker_Blue(src="/images/bluemarker.png", title="Blue", alt="Blue", draggable="true", ondragstart="dragstarted(event);")
-              img.marker#marker_Green(src="/images/greenmarker.png", title="Green", alt="Green", draggable="true", ondragstart="dragstarted(event);")
-              img.marker#marker_Orange(src="/images/orangemarker.png", title="Orange", alt="Orange", draggable="true", ondragstart="dragstarted(event);")
-              img.marker#eraser(src="/images/eraser.png", title="Eraser", alt="Eraser", draggable="true", ondragstart="dragstarted(event);")
+              //
+                img.marker#marker_Red(src="/images/redmarker.png", title="Red", alt="Red", draggable="true", ondragstart="dragstarted(event);")
+                img.marker#marker_Blue(src="/images/bluemarker.png", title="Blue", alt="Blue", draggable="true", ondragstart="dragstarted(event);")
+                img.marker#marker_Green(src="/images/greenmarker.png", title="Green", alt="Green", draggable="true", ondragstart="dragstarted(event);")
+                img.marker#marker_Orange(src="/images/orangemarker.png", title="Orange", alt="Orange", draggable="true", ondragstart="dragstarted(event);")
+                img.marker#eraser(src="/images/eraser.png", title="Eraser", alt="Eraser", draggable="true", ondragstart="dragstarted(event);")
               img.marker#pencil(src="/images/pencil.png", title="Pencil", alt="Pencil", onclick="startPencil();", style="width:20px;")
 
             li(style="margin-left:-10px;") Click to add a description or photo to buildings
