@@ -215,6 +215,8 @@ $(document).ready(function(){
   });
   var cnvdraw = false;
   var cnvpts = [];
+  var cnvply = [];
+  var cnvplyrender = null;
   cnv.height = cnv.offsetHeight;
   cnv.width = cnv.offsetWidth;
   var ctx;
@@ -229,6 +231,8 @@ $(document).ready(function(){
 
   $(cnv).mousedown(function(e){
     cnvpts = [ ];
+    cnvply = [ ];
+    cnvplyrender = null;
     cnvdraw = true;
     ctx = cnv.getContext('2d');
     ctx.strokeStyle = "#f00";
@@ -237,6 +241,14 @@ $(document).ready(function(){
   });
 
   $(cnv).mousemove(function(e){
+    var platlng = map.containerPointToLatLng(
+      new L.Point(
+        e.pageX - $("#map").offset().left,
+        e.pageY - $("#map").offset().top
+      )
+    );
+    pencilmark.setLatLng(platlng);
+
     if(cnvdraw){
       var cnvpt = (e.pageX - $("#map").offset().left) + "," + (e.pageY - $("#map").offset().top);
       if(cnvpts.indexOf(cnvpt) == -1){
@@ -244,27 +256,38 @@ $(document).ready(function(){
         ctx.stroke();
         cnvpts.push(cnvpt);
       }
+      
+      // draw convex hull in real time
+      cnvply.push(platlng);
+    
+      if(cnvply.length >= 3){
+        //console.log('calculating hull');
+        var hull = getConvexHull(cnvply);
+        var hull2 = [];
+        for(var pt=0;pt<hull.length;pt++){
+          hull2.push(hull[pt][0]);
+          hull2.push(hull[pt][1]);
+        }
+        if(!cnvplyrender){
+          //console.log('creating hull');
+          cnvplyrender = new L.Polygon( hull2, { fillColor: "#cc33cc", weight: 0.1 } );
+          map.addLayer(cnvplyrender);
+        }
+        else{
+          //console.log('resetting hull');
+          cnvplyrender.setLatLngs( hull2 );
+        }
+      }
     }
-    pencilmark.setLatLng( map.containerPointToLatLng(
-      new L.Point(
-        e.pageX - $("#map").offset().left,
-        e.pageY - $("#map").offset().top
-      )
-    ));
   });
   $(cnv).mouseup(function(e){
     cnvdraw = false;
     map.removeLayer(pencilmark);
-    var line = [ ];
-    for(var pt=0;pt<cnvpts.length;pt++){
-      line.push(map.containerPointToLatLng(
-        new L.Point(
-          cnvpts[pt].split(',')[0],
-          cnvpts[pt].split(',')[1]
-        )
-      ));
+    if(cnvplyrender){
+      map.removeLayer(cnvplyrender);
     }
-    var hull = getConvexHull(line);
+
+    var hull = getConvexHull(cnvply);
     var hull2 = [];
     for(var pt=0;pt<hull.length;pt++){
       hull2.push(hull[pt][0]);
