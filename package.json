@@ -11,7 +11,7 @@
     , "bcrypt": ">=0.5.0"
     , "connect-mongo": "0.1.9"
     , "connect": ">= 1.8.5 < 2"
-    , "request": ">=0.10.0"
+    , "request": "=0.10.0"
     , "underscore": "1.1.x"
     , "oauth": "0.9.5"
     , "superagent": "0.4.x"
