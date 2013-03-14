@@ -50,8 +50,8 @@ var city_options = {
     time: false
   },
   honolulu: {
-    lat: 21.361173,
-    lng: -157.926836,
+    lat: 21.345345,
+    lng: -157.929196,
     zoom: 13,
     time: false
   },
