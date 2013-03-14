@@ -49,6 +49,12 @@ var city_options = {
     zoom: 14,
     time: false
   },
+  honolulu: {
+    lat: 21.361173,
+    lng: -157.926836,
+    zoom: 13,
+    time: false
+  },
   kitsap: {
     lat: 47.647661,
     lng: -122.641258,
