@@ -3,7 +3,7 @@
   , "version": "0.0.1"
   , "private": false
   , "dependencies": {
-      "express": "2.5.8"
+      "express": ">= 2.5.8"
     , "jade": ">= 0.0.1"
     , "mongoose-auth": ">=0.0.11"
     , "mongoose": ">=2.7.1"
@@ -11,7 +11,6 @@
     , "bcrypt": ">=0.5.0"
     , "connect-mongo": "0.1.9"
     , "connect": ">= 1.8.5 < 2"
-    , "request": ">=0.10.0"
     , "underscore": "1.1.x"
     , "oauth": "0.9.5"
     , "superagent": "0.4.x"
