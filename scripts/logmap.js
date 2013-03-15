@@ -35,6 +35,9 @@ function loadedPolys(polys){
     case "clark":
       src_credits = ".clark";
       break;
+    case "honolulu":
+      src_credits = ".honolulu";
+      break;
     case "kitsap":
       src_credits = ".kitsap";
       break;
