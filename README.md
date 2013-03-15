@@ -20,7 +20,7 @@ Step 4: Interact with any building to add a photo, description, or color-coding.
 
 <img src="http://i.imgur.com/566W8.png"/>
 
-<img src="http://i.imgur.com/WmhxI.png"/>
+<img src="http://i.imgur.com/woQftXt.png"/>
 
 # How to share your map
 
