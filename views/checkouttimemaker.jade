@@ -19,11 +19,11 @@ body
 
   div#sidebar
     div#timeline
-      h2 Majuro.js
+      h2 MajuroJS.org
       p
-        span Make your own interactive maps with buildings data!
+        span Instant interactive neighborhood maps
         br
-        span 1) Your city:
+        span 1) Select a city:&nbsp;&nbsp;&nbsp;
         select#cityselect(style="font-size:14pt;")
           option(value="pittsburgh") Allegheny County, PA
           option(value="austin") Austin, TX
@@ -51,18 +51,12 @@ body
         br
         span 3) Move points on the blue shape to cover your neighborhood.
         br
-        span 4) View as&nbsp;
-        a.visible(href="#", onclick="postGeo('html')") web map
-        span ,&nbsp;
-        a.visible.timeline(href="#", onclick="postGeo('time')") timeline
-        span.timeline ,&nbsp;
-        a.visible.timeline(href="#", onclick="postGeo('clusters')") timecluster
-        span.timeline ,&nbsp;
-        a.visible(href="#", onclick="postGeo('3d')") 3D view
-        span ,&nbsp;
-        a.visible(href="#", onclick="postGeo('geojson')") GeoJSON
-        span ,&nbsp;or&nbsp;
-        a.visible(href="#", onclick="postGeo('kml')") Google Earth / KML
+        a.btn.visible(href="#", onclick="postGeo('html')") web map
+        a.btn.visible.timeline(href="#", onclick="postGeo('time')") timeline
+        a.btn.visible.timeline(href="#", onclick="postGeo('clusters')") timecluster
+        a.btn.visible(href="#", onclick="postGeo('3d')") 3D view
+        a.btn.visible(href="#", onclick="postGeo('geojson')") GeoJSON
+        a.btn.visible(href="#", onclick="postGeo('kml')") Google Earth / KML
         span .
 
   script(type="text/javascript") var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-37457564-1']);_gaq.push(['_trackPageview']);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})();
