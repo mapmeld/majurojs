@@ -208,13 +208,14 @@ $(document).ready(function(){
   }
   
   // marker touch events for drag & drop
-  $(".marker").bind("touchstart", function(e){
+  
+  /*$(".marker").bind("touchstart", function(e){
     e.preventDefault();
     var orig = e.originalEvent;
     var x = orig.changedTouches[0].pageX;
     var y = orig.changedTouches[0].pageY;
     $(e.target).css({top: y, left: x});
-  });
+  });*/
   
   // canvas for scribble / convex hull coloring
   cnv = document.createElement("canvas");
@@ -245,6 +246,17 @@ $(document).ready(function(){
   pencilmark = new L.marker(new L.LatLng(0,0), {icon: pencilIcon});
 
   $(cnv).mousedown(function(e){
+    cnvpts = [ ];
+    cnvply = [ ];
+    cnvplyrender = null;
+    cnvdraw = true;
+    ctx = cnv.getContext('2d');
+    ctx.strokeStyle = "#f00";
+    ctx.strokeWidth = 2;
+    ctx.moveTo(e.pageX - $("#map").offset().left, e.pageY - $("#map").offset().top);
+  });
+
+  $(cnv).bind("touchstart", function(e){
     cnvpts = [ ];
     cnvply = [ ];
     cnvplyrender = null;
@@ -295,6 +307,48 @@ $(document).ready(function(){
       }
     }
   });
+  $(cnv).bind("touchmove", function(e){
+    var platlng = map.containerPointToLatLng(
+      new L.Point(
+        e.pageX - $("#map").offset().left,
+        e.pageY - $("#map").offset().top
+      )
+    );
+    pencilmark.setLatLng(platlng);
+
+    if(cnvdraw){
+      var cnvpt = (e.pageX - $("#map").offset().left) + "," + (e.pageY - $("#map").offset().top);
+      if(cnvpts.indexOf(cnvpt) == -1){
+        ctx.lineTo(e.pageX - $("#map").offset().left, e.pageY - $("#map").offset().top);
+        ctx.stroke();
+        cnvpts.push(cnvpt);
+      }
+      
+      // draw convex hull in real time
+      cnvply.push(platlng);
+    
+      if(cnvply.length >= 3){
+        //console.log('calculating hull');
+        var hull = getConvexHull(cnvply);
+        var hull2 = [];
+        for(var pt=0;pt<hull.length;pt++){
+          hull2.push(hull[pt][0]);
+          hull2.push(hull[pt][1]);
+        }
+        if(!cnvplyrender){
+          //console.log('creating hull');
+          cnvplyrender = new L.Polygon( hull2, { fillColor: "#cc33cc", weight: 0.1 } );
+          map.addLayer(cnvplyrender);
+        }
+        else{
+          //console.log('resetting hull');
+          cnvplyrender.setLatLngs( hull2 );
+        }
+      }
+    }
+  });
+
+
   $(cnv).mouseup(function(e){
     cnvdraw = false;
     map.removeLayer(pencilmark);
@@ -324,6 +378,37 @@ $(document).ready(function(){
       cnv.width = cnv.width;
     }, 500);
   });
+
+  $(cnv).bind("touchend", function(e){
+    cnvdraw = false;
+    map.removeLayer(pencilmark);
+    if(cnvplyrender){
+      map.removeLayer(cnvplyrender);
+    }
+
+    var hull = getConvexHull(cnvply);
+    var hull2 = [];
+    for(var pt=0;pt<hull.length;pt++){
+      hull2.push(hull[pt][0]);
+      hull2.push(hull[pt][1]);
+    }
+    //map.addLayer(new L.polygon(hull2));
+    for(var p=0;p<footprints.length;p++){
+      var poly = footprints[p].geo.getLatLngs();
+      for(var d=0;d<poly.length;d++){
+        if(shapeHoldsPt( hull2, poly[d] ) ){
+          footprints[p].color = "#f00";
+          footprints[p].geo.setStyle({ color: "#f00", opacity: 0.65, fillOpacity: 0.2 });
+          break;
+        }
+      }
+    }
+    setTimeout(function(){
+      $(cnv).css({ top: "150%" });
+      cnv.width = cnv.width;
+    }, 500);
+  });
+
 });
 
 function loadBuildings(polys){
