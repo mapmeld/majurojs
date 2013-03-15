@@ -207,6 +207,15 @@ $(document).ready(function(){
     return;
   }
   
+  // marker touch events for drag & drop
+  $(".marker").bind("touchstart", function(e){
+    e.preventDefault();
+    var orig = e.originalEvent;
+    var x = orig.changedTouches[0].pageX;
+    var y = orig.changedTouches[0].pageY;
+    $(e.target).css({top: y, left: x});
+  });
+  
   // canvas for scribble / convex hull coloring
   cnv = document.createElement("canvas");
   $(".row-fluid").append(cnv);
