@@ -15,7 +15,7 @@ $(document).ready(function(){
     map.addLayer(terrainLayer);
   }
   else{
-    var sat = 'https://a.tiles.mapbox.com/v3/mapmeld.map-a6ineq7y/{z}/{x}/{y}.png?updated=65f7243';
+    var sat = 'http://a.tiles.mapbox.com/v3/mapmeld.map-a6ineq7y/{z}/{x}/{y}.png?updated=65f7243';
     var satAttrib = 'Map data &copy;2013 OpenStreetMap contributors, Tiles &copy;2013 MapBox';
     satLayer = new L.TileLayer(sat, {maxZoom: 18, attribution: satAttrib});
     map.addLayer(satLayer);
