@@ -46,3 +46,6 @@ body {
 #timeline span.timeline{
   display: none;
 }
+select{
+  height: 32px;
+}
