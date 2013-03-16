@@ -110,8 +110,8 @@ var city_options = {
     time: false
   },
   sanfrancisco: {
-    lat: 37.77493,
-    lng: -122.419416,
+    lat: 37.791065,
+    lng: -122.404861,
     zoom: 14,
     time: false
   },
