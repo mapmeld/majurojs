@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <style type="text/css">
+html{ margin: 0; padding: 0; }
+body{ font-family: verdana, arial, sans-serif; width: 80%; margin-left: 10%; }
+p{ margin-top: 30px; margin-bottom: 10px; line-height: 18pt; }
+li{ margin-bottom:7px; }
+img{ margin-bottom:6px; margin-top:6px; }
+blockquote{ max-width: 50%; }
+  </style>
+</head>
+<body>
+<h1>Without Even Knowing</h1>
+
+<img src="http://i.imgur.com/VQTX2hB.png" style="max-width:400px;"/>
+<br/>
+<p>
+On the day after Christmas, my city-mapping project <a href="http://majurojs.org">Majuro.js</a> appeared on the front page of <a href="http://news.ycombinator.com">Hacker News</a>.
+It would be a few days before I found out, because I was out of internet, cell phone,
+or even radio contact on Arno Atoll, a razor-thin string of tropical islands in the Pacific
+Ocean.
+</p>
+
+<div style="clear:both;"></div>
+
+<div style="float:left;margin-right:10px;">
+<a href="http://eoimages.gsfc.nasa.gov/images/imagerecords/4000/4390/arno_ast_2002206_lrg.jpg">
+<img src="http://i.imgur.com/aQEKx7O.jpg" style="max-width:400px;"/>
+<br/>
+<i>Arno Atoll / NASA (click for larger image)</i>
+</a>
+<br/>
+<br/>
+<br/>
+<img src="http://i.imgur.com/NPOtfU9.png" style="max-width:400px;"/>
+<br/>
+<i>Dock on main island of Arno Atoll</i>
+<br/>
+<br/>
+<br/>
+<img src="http://i.imgur.com/ZN5JeA7.png" style="max-width:400px;"/>
+<br/>
+<i>Road to Ailinglukilap</i>
+<br/>
+<br/>
+<br/>
+<!--
+<img src="http://i.imgur.com/QalZAM7.png" style="max-width:400px;"/>
+<br/>
+<i>Looking toward Ine</i>
+<br/>
+<br/>
+<br/>
+<img src="http://i.imgur.com/gZiG8va.png" style="max-width:400px;"/>
+<br/>
+<i>Storm clouds in the ocean</i>
+<br/>
+<br/>
+<br/>
+<img src="http://i.imgur.com/h93CceP.png" style="max-width:400px;"/>
+<br/>
+<i>Thinnest part: road separating lagoon and ocean</i>
+<br/>
+<br/>
+<br/>
+-->
+</div>
+
+<hr/>
+<p>
+I only visited Arno for my Christmas vacation, away from the bustling capital of the
+Marshall Islands, Majuro. I went biking with a GPS, ate from pandanus and coconut trees, and stared up at the
+stars. I met a Japanese volunteer who lived out there for <em>two years</em>. She is tough
+as nails, and maybe saved my life. But that's another story.
+</p>
+<p>
+After I got back to the capital, I visited a hotel restaurant across the street from my
+apartment to use my national internet card. I found out through a friend's Tweet: "@mapmeld Saw you on HN!" I
+clicked the link, but Hacker News is often blocked in the Marshall Islands, so I got a 404.
+Through a mirror site, I was able to see the post was made by Hirvesh, who I
+didn't know and still don't know outside of GitHub. That part of the story remains a mystery.
+</p>
+<p>
+I remember walking home with a mix of sun-addled confusion and geeky excitement. I finally
+had something on Hacker News! And I missed it!
+</p>
+<p>
+A post on Hacker News gets pasted all over the link-sharing web, which was exciting, but
+I was looking for commentary or feedback. The best
+reviews were Hirvesh's own post on <a href="http://www.functionn.in/2012/12/majurojs-create-detailed-interactive.html#.UUOOxFtASLY">Functionn.in</a>
+and a Japanese-language article on <a href="http://www.moongift.jp/2013/01/20130102-3/">MoonGift.jp</a>.
+</p>
+<p>
+The downside was that my site wasn't ready. Only a few cities were uploaded, and two were still
+on their own Heroku instances, not linked from the homepage. Without Google Analytics, I
+couldn't measure traffic or users' understanding of the site. <a href="http://maconmaps.com/everything.html?table=lynmore&user=mapmeld&lat=32.787338&lng=-83.646888&z=17">A linked map</a>
+from <a href="http://codeforamerica.org">Code for America</a> did have analytics on,
+and recorded 550 unique visits to the link that week. I downloaded and mapped hundreds of
+user-drawn neighborhoods from my <a href="http://mongolab.com">MongoLab</a> database. It
+was encouraging that almost all users understood how to change the map selection.
+</p>
+<hr/>
+<p>
+By the time I was online, traffic was abating. Without an easy way to host or share their
+maps, without any indicator of which cities were ready, those who tried the site quickly
+moved on. I regretted being so unprepared, even if the visitors were unexpected. Mixed
+feelings. I decided to take steps to build up the site:
+</p>
+<h4>SaveMaps</h4>
+<p>
+I already had the code to store users' maps. I just needed a button to push. One of my
+first changes was to make saving a map, <a href="http://majurojs.org/savemap/50ee426c7765770200000001">like this</a>,
+quick and easy.
+</p>
+<img src="http://i.imgur.com/lAI66Ot.png"/>
+<br/>
+<h4>Cities</h4>
+<p>
+I quickly added links to the separate Philadelphia and Savannah sites on Heroku, and put
+a star next to missing cities, so users would know what was available. I would have to add
+to the main site slowly, through my sporadic island internet. On national WiFi cards,
+internet could cost 10 cents per megabyte. Uploads could fail. I wrote a Python script to
+shrink building KML maps into CSVs, and a script to load them into the database from
+another Heroku instance. A database write fails 1-3 times during a large upload, so
+each time I had internet access, I would find where the upload stopped and resume from
+there. Eventually I wrote a better script that could handle errors.
+</p>
+<p>
+I reached the free limit on my database before I could add another major city, like Chicago. MongoLab
+recommends that Heroku users download and re-upload the entire dataset to upgrade
+to a paid plan... which wasn't feasible from Majuro Atoll. After worrying over the
+problem for a couple of weeks, I deleted the entire database and started from scratch on
+a $20/month plan.
+</p>
+<img src="http://maps.googleapis.com/maps/api/staticmap?size=500x200&sensor=false&markers=color:blue|Honolulu,HI|Boston,MA|Philadelphia,PA|West%20Sacramento,CA|Seattle,WA|Springfield,OH|Raleigh,NC|Kitsap%20County,WA|Midland,TX|Chapel%20Hill,NC|Round%20Rock,TX|Austin,TX|Steamboat%20Springs,CO|Baltimore,MD|San%20Francisco,CA|Oakland,CA|Petaluma,CA|Chicago,IL|Savannah,GA|Bloomington,IN|Pittsburgh,PA" height="200"/>
+<br/>
+<p>
+By February I had the promised 15 cities for launch, and today the database has over 3.7
+million buildings from 21 cities and counties. There are ten more in the pipeline, plus
+the whole state of Massachusetts, but I don't have the storage space. The only dataset
+which I downloaded but can't process yet is a geodatabase from NYC.
+</p>
+<h4>Media Selector</h4>
+<p>
+I always could embed photos on buildings, but it wasn't discoverable by users. After
+downloading the Bootstrap docs and working on the problem offline, I put together a simple
+choice of text, photo, or video. This matches what users expect of a map pop-up, and it
+works well in Google Earth, too.
+</p>
+<img src="http://majurojs.org/images/click_editor.png" width="250"/>
+<br/>
+<h4>An Eraser</h4>
+<p>
+I added an eraser marker with code similar to other color-coded markers. When you drop an
+eraser on a building, it partially disappears. Then when you send the map to the cloud,
+or download a GeoJSON or KML, that building is left out of your map. Technically what you
+save is a diff, a list of any color changes or details that are attached to buildings.
+</p>
+<h4>GitHub Pages Visualizations</h4>
+<img src="http://i.imgur.com/Ag6cmr9.png" width="400"/>
+<img src="http://i.imgur.com/2UoOozv.png" width="250"/>
+<p>
+The default branch of <a href="https://github.com/mapmeld/majurojs">MajuroJS on GitHub</a>
+is the gh-pages branch, not the server-side master branch. It was important to me that a
+user could put a map on GitHub Pages without knowing git. Ideally a beginning
+user would fork the repo, and use GitHub's online editing to put their map into mybuild.geojson.
+</p>
+<p>
+I wrote or used open source code to derive several maps from the one mybuild.geojson file.
+For examples, see
+<a href="http://mapmeld.github.com/majurojs/">Standard Map</a>,
+<a href="http://mapmeld.github.com/majurojs/3d/">3D View</a>,
+<a href="http://mapmeld.github.com/majurojs/editor/">Editor</a>, and
+<a href="http://mapmeld.github.com/majurojs/gmaps/">Google Maps</a>.
+</p>
+<div style="clear:both;"></div>
+<hr/>
+<h3>Epilogue</h3>
+<p>
+I learned a lot in building up MajuroJS, with perhaps the most important lesson being:
+always be ready for a launch! You may not have a chance to talk to your first users.
+</p>
+<p>
+<a href="http://majurojs.org/draw/sanfrancisco">Make a map today</a> and let me know how it goes. GitHub
+users can <a href="https://github.com/mapmeld/majurojs/issues/new">add an issue</a>;
+Twitter users can tweet <a href="http://twitter.com/mapmeld">@mapmeld</a>.
+</p>
+<br/>
+<br/>
+- Nick Doiron - March 18, 2013
+<br/>
+<br/>
+</body>
+</html>
