@@ -127,16 +127,29 @@ $(document).ready(function(){
       avglng /= coords.length;
       var ctr = new google.maps.LatLng(avglat, avglng);
       var polyfill = (polys.features[f].properties.fill || "#0033ff");
-      var poly = new google.maps.Polygon({
-        map: map,
-        paths: [ coords ],
-        strokeColor: polyfill,
-        strokeOpacity: 0.5,
-        fillColor: polyfill,
-        fillOpacity: 0.3
-      });
+      var poly;
       if(polys.features[f].properties.name || polys.features[f].properties.description){
+        poly = new google.maps.Polygon({
+          map: map,
+          paths: [ coords ],
+          strokeColor: polyfill,
+          strokeOpacity: 0.5,
+          fillColor: polyfill,
+          fillOpacity: 0.3,
+          clickable: true
+        });
         bindPopup(poly, ctr, ('<h3>' + polys.features[f].properties.name + '</h3>' || ''), describe( polys.features[f].properties.description ) );
+      }
+      else{
+        poly = new google.maps.Polygon({
+          map: map,
+          paths: [ coords ],
+          strokeColor: polyfill,
+          strokeOpacity: 0.5,
+          fillColor: polyfill,
+          fillOpacity: 0.3,
+          clickable: false
+        });
       }
       if(ShowMapKey && !ShowUnusedColors){
         switch(polyfill){
