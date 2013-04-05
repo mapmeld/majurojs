@@ -38,7 +38,7 @@ Visitors to your map can download it in KML (for Google Earth) and GeoJSON forma
 
 While you're signed into Github and on github.com/USERNAME/majurojs, click on mybuild.geojson. Then click "Edit" above the text box to make it editable. Paste in the GeoJSON from your own map. If you're not sure how to copy the GeoJSON file, open it in Notepad (Windows) or TextEdit (Mac).
 
-Your map will appear at <a href="http://mapmeld.github.com/majurojs">USERNAME.github.com/majurojs</a>.
+Your map will appear at <a href="http://mapmeld.github.io/majurojs">USERNAME.github.io/majurojs</a>.
 
 # Visualizations
 
@@ -54,7 +54,7 @@ Rendering 3D buildings with D3.js and three.js is an option for users of Firefox
 
 <img src="http://i.imgur.com/aWWvI.png"/>
 
-A 3D View is available directly from the neighborhood-drawing map on MajuroJS.org, or at <em>USERNAME.github.com/majurojs/3d</em> after you fork this repo.
+A 3D View is available directly from the neighborhood-drawing map on MajuroJS.org, or at <em>USERNAME.github.io/majurojs/3d</em> after you fork this repo.
 
 <strong>Customization</strong>: Put your buildings data into mybuild.geojson.
 
@@ -62,7 +62,7 @@ A 3D View is available directly from the neighborhood-drawing map on MajuroJS.or
 
 ## Neighborhood Editor
 
-A mini map editor will appear at <em>USERNAME.github.com/majurojs/editor</em> after you fork this repo.
+A mini map editor will appear at <em>USERNAME.github.io/majurojs/editor</em> after you fork this repo.
 
 <strong>Customization</strong>: Put your buildings data into mybuild.geojson.
 
@@ -70,13 +70,13 @@ A mini map editor will appear at <em>USERNAME.github.com/majurojs/editor</em> af
 
 ## Google Maps Demo
 
-A Google Maps API view will be set up at <em>USERNAME.github.com/majurojs/gmaps</em> after you fork this repo.
+A Google Maps API view will be set up at <em>USERNAME.github.io/majurojs/gmaps</em> after you fork this repo.
 
 <strong>Customization</strong>: Put your buildings data into mybuild.geojson.
 
 ## Fisheye Map
 
-The fisheye map visualization wraps buildings around the center of the map based on logarithmic distance. It will be set up at <em>USERNAME.github.com/majurojs/logarithmic</em> after you fork this repo.
+The fisheye map visualization wraps buildings around the center of the map based on logarithmic distance. It will be set up at <em>USERNAME.github.io/majurojs/logarithmic</em> after you fork this repo.
 
 <strong>Customization</strong>: Put your buildings data into mybuild.geojson, and add ?center=LATITUDE,LONGITUDE to the end of the URL to change the center of the map.
 
