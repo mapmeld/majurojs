@@ -139,7 +139,16 @@ var init = exports.init = function (config) {
     var yesterday = (new Date() * 1) - 86400000;
     customgeo.CustomGeo.find({'created': { "$gt": yesterday }}).limit(20).exec(function(err, recents){
       if(err){ return res.send(err); }
-      res.render('geolist', { geos: recents });
+      if(recents.length < 10){
+        // fewer than 10 in the last day? just show the last 10
+        customgeo.CustomGeo.sort('-created').limit(20).exec(function(err, recents){
+          if(err){ return res.send(err); }
+          res.render('geolist', { geos: recents });
+        });
+      }
+      else{
+        res.render('geolist', { geos: recents });
+      }
     });
   });
   
