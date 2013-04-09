@@ -142,7 +142,7 @@ var init = exports.init = function (config) {
       if(recents.length < 10){
         // fewer than 10 in the last day? just show the last 10
         var lastmonth = (new Date() * 1) - 86400000 * 30;
-        customgeo.CustomGeo.find({ 'created': { "$gt": lastmonth } }).sort('-created').limit(20).exec(function(err, recents){
+        customgeo.CustomGeo.find({ 'created': { "$gt": lastmonth } }).sort('-created').limit(10).exec(function(err, recents){
           if(err){ return res.send(err); }
           res.render('geolist', { geos: recents });
         });
