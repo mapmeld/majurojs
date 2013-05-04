@@ -588,9 +588,10 @@ var init = exports.init = function (config) {
     }
   });
   app.get('/timeline-at/:src/:customgeo', function(req, res){
-    var reqgeo = req.params.customgeo.split(".")[0];
+    var reqgeo = req.params.customgeo;
     if(reqgeo.indexOf("[") == -1){
       // requesting geo by id
+      reqgeo = reqgeo.split(".")[0];
       customgeo.CustomGeo.findById(reqgeo, function(err, geo){
         if(err){
           return res.send(err);
@@ -609,6 +610,7 @@ var init = exports.init = function (config) {
     }
     else{
       // API request in form /timeline-at/:src/:polygon where polygon is [ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
+      reqgeo = replaceAll(reqgeo, " ","").substring(0, reqgeo.indexOf("]]") + 2);
       timepoly.TimePoly.find({ src: req.params.src, ll: { "$within": { "$polygon": JSON.parse(reqgeo) } } }).limit(10000).exec(function(err, timepolys){
         if(err){
           return res.send(err);
@@ -648,6 +650,21 @@ var init = exports.init = function (config) {
         processTimepolys(timepolys, req, res);
       });
     }
+  });
+  app.get('/timeline-at/:customgeo/:jsonp', function(req, res){
+    var reqgeo = req.params.customgeo;
+    // API request in form /timeline-at/:polygon/:jsonp where polygon is [ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
+    reqgeo = replaceAll(reqgeo, " ","").substring(0, reqgeo.indexOf("]]") + 2);
+    timepoly.TimePoly.find({ ll: { "$within": { "$polygon": JSON.parse(reqgeo) } } }).limit(10000).exec(function(err, timepolys){
+      if(err){
+        return res.send(err);
+      }
+      processTimepolys(timepolys, req, {
+        json: function(jsonobj){
+          res.send( req.params.jsonp + "(" + JSON.stringify(jsonobj) + ");" );
+        }
+      });
+    });
   });
 
   app.get('/auth', middleware.require_auth_browser, routes.index);
