@@ -651,7 +651,7 @@ var init = exports.init = function (config) {
       });
     }
   });
-  app.get('/timeline-at/:customgeo/:jsonp', function(req, res){
+  app.get('/timeline-at/:customgeo/jsonp/:jsonp', function(req, res){
     var reqgeo = req.params.customgeo;
     // API request in form /timeline-at/:polygon/:jsonp where polygon is [ [ lng1, lat1 ], [lng2, lat2], [lng3, lat3]... ]
     reqgeo = replaceAll(reqgeo, " ","").substring(0, reqgeo.indexOf("]]") + 2);
