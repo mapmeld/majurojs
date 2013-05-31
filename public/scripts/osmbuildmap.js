@@ -114,18 +114,21 @@ $(document).ready(function(){
     var maxlng = -180;
     var minlng = 180;
     for(var f=0;f<polys.features.length;f++){
-      var coords = polys.features[f].geometry.coordinates[0];
       var avg = [0, 0];
-      for(var c=0;c<coords.length;c++){
-        maxlat = Math.max(maxlat, coords[c][1]);
-        minlat = Math.min(minlat, coords[c][1]);
-        maxlng = Math.max(maxlng, coords[c][0]);
-        minlng = Math.min(minlng, coords[c][0]);
-        avg[0] += coords[c][0];
-        avg[1] += coords[c][1];
+      for(var c=0;c<polys.features[f].geometry.coordinates[0].length;c++){
+        maxlat = Math.max(maxlat, polys.features[f].geometry.coordinates[0][c][1]);
+        minlat = Math.min(minlat, polys.features[f].geometry.coordinates[0][c][1]);
+        maxlng = Math.max(maxlng, polys.features[f].geometry.coordinates[0][c][0]);
+        minlng = Math.min(minlng, polys.features[f].geometry.coordinates[0][c][0]);
+        avg[0] += polys.features[f].geometry.coordinates[0][c][0];
+        avg[1] += polys.features[f].geometry.coordinates[0][c][1];
         //coords[c] = new L.LatLng(coords[c][1], coords[c][0]);
-        coords[c].push( 100 ); // add a fixed height
+        polys.features[f].geometry.coordinates[0][c].push( 100 ); // add a fixed height
       }
+      
+      polys.features[f].properties = { "color": "rgb(255,200,150)" };
+      
+      /*
       avg[0] /= coords.length;
       avg[0] = avg[0].toFixed(6);
       avg[1] /= coords.length;
@@ -158,7 +161,8 @@ $(document).ready(function(){
         }
       }
       if(!erased){
-
+*/
+/*
         var geoJSONData = {
           "type": "FeatureCollection",
           "features": [{
@@ -173,15 +177,18 @@ $(document).ready(function(){
           }]
         };
         new L.BuildingsLayer().addTo(map).geoJSON(geoJSONData);
-
+*/
+/*
         if(!foundMatch){
           // unedited building
           //poly.setStyle({ clickable: false });
         }
       }
+      */
     }
     if(polys.features.length){
       map.fitBounds( new L.LatLngBounds( new L.LatLng(minlat, minlng), new L.LatLng(maxlat, maxlng) ) );
+      new L.BuildingsLayer().addTo(map).geoJSON(polys);
     }
     
   });
