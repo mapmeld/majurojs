@@ -8,18 +8,10 @@ $(document).ready(function(){
   map.attributionControl.setPrefix('');
   L.control.pan().addTo(map);
   L.control.zoom().addTo(map);
-  if(!satellite){
-    var toner = 'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png';
-    var tonerAttrib = 'Map data &copy;2013 OpenStreetMap contributors, Tiles &copy;2013 Stamen Design';
-    terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
-    map.addLayer(terrainLayer);
-  }
-  else{
-    var sat = 'http://a.tiles.mapbox.com/v3/mapmeld.map-a6ineq7y/{z}/{x}/{y}.png?updated=65f7243';
-    var satAttrib = 'Map data &copy;2013 OpenStreetMap contributors, Tiles &copy;2013 MapBox';
-    satLayer = new L.TileLayer(sat, {maxZoom: 18, attribution: satAttrib});
-    map.addLayer(satLayer);
-  }
+  var toner = 'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png';
+  var tonerAttrib = 'Map data &copy;2013 OpenStreetMap contributors, Tiles &copy;2013 Stamen Design';
+  terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
+  map.addLayer(terrainLayer);
   map.setView(new L.LatLng(32.076175,-81.095238), 14);
 
   // load same customgeo used to generate this map
@@ -117,7 +109,80 @@ $(document).ready(function(){
       $("#createyours").attr("href", "/draw/" + src_credits.replace(".",""));
     }
     
-    new L.BuildingsLayer().addTo(map).geoJSON(polys);
+    var maxlat = -90;
+    var minlat = 90;
+    var maxlng = -180;
+    var minlng = 180;
+    for(var f=0;f<polys.features.length;f++){
+      var coords = polys.features[f].geometry.coordinates[0];
+      var avg = [0, 0];
+      for(var c=0;c<coords.length;c++){
+        maxlat = Math.max(maxlat, coords[c][1]);
+        minlat = Math.min(minlat, coords[c][1]);
+        maxlng = Math.max(maxlng, coords[c][0]);
+        minlng = Math.min(minlng, coords[c][0]);
+        avg[0] += coords[c][0];
+        avg[1] += coords[c][1];
+        //coords[c] = new L.LatLng(coords[c][1], coords[c][0]);
+        coords[c].push( 100 ); // add a fixed height
+      }
+      avg[0] /= coords.length;
+      avg[0] = avg[0].toFixed(6);
+      avg[1] /= coords.length;
+      avg[1] = avg[1].toFixed(6);
+      var myid = avg.join(',') + "," + coords.length;
+
+      //var poly = new L.polygon(coords, { weight: 2, color: "#0033ff" });
+      var foundMatch = false;
+      var erased = false;
+      for(var p=0;p<edited.length;p++){
+        if(edited[p].id == myid){
+          // skip erased polygons
+          if(edited[p].color && edited[p].color == 'erase'){
+            erased = true;
+            edited.splice(p,1);
+            break;
+          }
+          foundMatch = true;
+          if(edited[p].name || edited[p].description){
+            //poly.bindPopup( '<h3>' + (edited[p].name || '') + '</h3>' + describe( ( edited[p].description || '') ) );
+          }
+          else{
+            //poly.setStyle({ clickable: false });
+          }
+          if(edited[p].color){
+            //poly.setStyle({ color: edited[p].color, opacity: 0.65 });
+          }
+          edited.splice(p,1);
+          break;
+        }
+      }
+      if(!erased){
+
+        var geoJSONData = {
+          "type": "FeatureCollection",
+          "features": [{
+            "type": "Feature",
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [ coords ]
+            },
+            "properties": {
+              "color": (edited[p].color || "")
+            }
+          }]
+        };
+        new L.BuildingsLayer().addTo(map).geoJSON(geoJSONData);
+
+        if(!foundMatch){
+          // unedited building
+          //poly.setStyle({ clickable: false });
+        }
+      }
+    }
+    if(polys.features.length){
+      map.fitBounds( new L.LatLngBounds( new L.LatLng(minlat, minlng), new L.LatLng(maxlat, maxlng) ) );
+    }
     
   });
 });
