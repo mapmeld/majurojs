@@ -19,14 +19,11 @@ head
 body
   div#sidebar(style="padding-left:20px;padding-top:8px;")
 
-    - if (name != "")
-      strong#name #{name}
-    - else
-      h2 MajuroJS
-
-    - if (info != "")
-      p#info #{info}
-
+    h2 MajuroJS
+    
+    p
+      a(href="http://osmbuildings.org", target="_blank") OSM Buildings
+      span &nbsp;3D visualization
     p
       span Data downloaded from&nbsp;
       a.allegheny(href="#", onclick="showDataSource()") Allegheny County
@@ -57,10 +54,10 @@ body
       a.westsacramento(href="#", onclick="showDataSource()") City of West Sacramento
       br
       span Save as&nbsp;
-      a(href="#", onclick="downloadFile(0)") Google Earth / KML
+      a(href="/timeline-at/#{customgeo}.kml") Google Earth / KML
       br
       span &nbsp;or&nbsp;
-      a(href="#", onclick="downloadFile(1)") GeoJSON
+      a(href="/timeline-at/#{customgeo}.geojson") GeoJSON
       br
       br
       span Make your own map at
