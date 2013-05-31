@@ -168,7 +168,7 @@ $(document).ready(function(){
               "coordinates": [ coords ]
             },
             "properties": {
-              "color": (edited[p].color || "")
+              "color": "" //(edited[p].color || "")
             }
           }]
         };
