@@ -259,6 +259,17 @@ var init = exports.init = function (config) {
   app.get('/explore3d/:src/:customgeo', function(req, res){
     res.render('explore3d', { src: req.params.src, customgeo: req.params.customgeo });
   });
+
+  // show map with OSM 3D library
+  app.get('/3d', function(req, res){
+    res.render('3d', { src: (req.query.src || ""), customgeo: req.query.customgeo });
+  });
+  app.get('/3d/:customgeo', function(req, res){
+    res.render('3d', { src: "", customgeo: req.params.customgeo });
+  });
+  app.get('/3d/:src/:customgeo', function(req, res){
+    res.render('3d', { src: req.params.src, customgeo: req.params.customgeo });
+  });
   
   // store map details as a SaveMap
   app.post('/savemap', function(req, res){
