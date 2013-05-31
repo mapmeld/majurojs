@@ -297,10 +297,12 @@ function postGeo(format){
       }
       centerlng /= pts.length;
       if(src){
-        window.location = "/explore3d/" + src + "/" + data.id;
+        //window.location = "/explore3d/" + src + "/" + data.id;
+        window.location = "/3d/" + src + "/" + data.id;
       }
       else{
-        window.location = "/explore3d/" + data.id;
+        //window.location = "/explore3d/" + data.id;
+        window.location = "/3d/" + src + "/" + data.id;
       }
     }
     else if(format == "geojson"){
