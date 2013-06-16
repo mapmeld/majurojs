@@ -55,8 +55,8 @@ function V(b,a){
     var colorOffset = [ intendedColor[0] * 1 - 125, intendedColor[1] * 1 - 125, intendedColor[2] * 1 - 125, intendedColor[3] * 1 ];
     //console.log(colorOffset);
     
-    for(var x=xmin; x<xmax; x++){
-	  for(var y=ymin; y<ymax; y++){
+    for(var x=xmin; x<xmax; x+=2){
+	  for(var y=ymin; y<ymax; y+=2){
 	    if(ptInPoly([x,y], pts)){
 	      var texturex = x % texture.width;
 	      var texturey = y % texture.height;
@@ -73,7 +73,19 @@ function V(b,a){
 	      // add transparency
 	      texturepixel.push( colorOffset[3] );
 	      K.fillStyle = "rgba(" + texturepixel.join(",") + ")";
-	      K.fillRect(x, y, 1, 1);
+	      
+	      var xsize = 1;
+	      var ysize = 1;
+	      if( ptInPoly([x+1,y], pts) ){
+	        xsize = 2;
+	        if( ptInPoly([x+1,y+1], pts) ){
+	          ysize = 2;
+	        }
+	      }
+	      else if( ptInPoly([x,y+1], pts) ){
+	        ysize = 2;
+	      }
+	      K.fillRect(x, y, xsize, ysize);
 	    }
 	  }
     }
