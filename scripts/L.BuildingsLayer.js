@@ -64,7 +64,7 @@ function V(b,a){
 	        Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 ] + colorOffset[0])),
 	        Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 + 1] + colorOffset[1])),
 	        Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 + 2] + colorOffset[2])),
-	        colorOffset[3]
+	        Math.round(colorOffset[3])
 	      ];
 	      K.fillStyle = "rgba(" + texturepixel.join(",") + ")";
 	      K.fillRect(x, y, 1, 1);
