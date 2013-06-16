@@ -147,7 +147,7 @@ function loadBuildings(polys){
 
   };
   //textureimg.src = "../images/treeblot.png";
-  textureimg.src = "../images/steel.png";
+  textureimg.src = "../images/steel2.png";
 }
 
 function replaceAll(src, oldr, newr){
