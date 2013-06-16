@@ -55,37 +55,19 @@ function V(b,a){
     var colorOffset = [ intendedColor[0] * 1 - 125, intendedColor[1] * 1 - 125, intendedColor[2] * 1 - 125, intendedColor[3] * 1 ];
     //console.log(colorOffset);
     
-    for(var x=xmin; x<xmax-1; x+=2){
-	  for(var y=ymin; y<ymax-1; y+=2){
+    for(var x=xmin; x<xmax; x++){
+	  for(var y=ymin; y<ymax; y++){
 	    if(ptInPoly([x,y], pts)){
-	      var texturex = x % texture.width;
-	      var texturey = y % texture.height;
+	      var texturex = (x-xmin) % texture.width;
+	      var texturey = (y-ymin) % texture.height;
 	      var texturepixel = [
-	        textureData.data[ texturey * 4 * texture.width + texturex * 4 ],
-	        textureData.data[ texturey * 4 * texture.width + texturex * 4 + 1],
-	        textureData.data[ texturey * 4 * texture.width + texturex * 4 + 2]
-	        //,
-	        //textureData.data[ texturey * 4 * texture.width + texturex * 4 + 3]
+	        Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 ] + colorOffset[0])),
+	        Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 + 1] + colorOffset[1])),
+	        Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 + 2] + colorOffset[2])),
+	        colorOffset[3]
 	      ];
-	      texturepixel[0] = Math.max(0, Math.min(255, texturepixel[0] + colorOffset[0]));
-	      texturepixel[1] = Math.max(0, Math.min(255, texturepixel[1] + colorOffset[1]));
-	      texturepixel[2] = Math.max(0, Math.min(255, texturepixel[2] + colorOffset[2]));
-	      // add transparency
-	      texturepixel.push( colorOffset[3] );
 	      K.fillStyle = "rgba(" + texturepixel.join(",") + ")";
-	      
-	      var xsize = 1;
-	      var ysize = 1;
-	      if( ptInPoly([x+1,y], pts) ){
-	        xsize = 2;
-	        if( ptInPoly([x+1,y+1], pts) ){
-	          ysize = 2;
-	        }
-	      }
-	      else if( ptInPoly([x,y+1], pts) ){
-	        ysize = 2;
-	      }
-	      K.fillRect(x, y, xsize, ysize);
+	      K.fillRect(x, y, 1, 1);
 	    }
 	  }
     }
