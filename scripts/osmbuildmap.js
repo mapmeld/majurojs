@@ -8,7 +8,7 @@ $(document).ready(function(){
   map.attributionControl.setPrefix('');
   L.control.pan().addTo(map);
   L.control.zoom().addTo(map);
-  var toner = 'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png';
+  var toner = 'http://{s}.tile.stamen.com/terrain/{z}/{x}/{y}.png';
   var tonerAttrib = 'Map data &copy;2013 OpenStreetMap contributors, Tiles &copy;2013 Stamen Design';
   terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
   map.addLayer(terrainLayer);
