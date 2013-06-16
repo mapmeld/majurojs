@@ -1,4 +1,4 @@
-var map, texture, textureData;
+var map, texture, textureData, texturewidth;
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
@@ -121,6 +121,7 @@ function loadBuildings(polys){
   textureimg.onload = function(){
     texture = document.createElement('canvas');
     texture.width = textureimg.width;
+    texturewidth = textureimg.width;
     texture.height = textureimg.height;
     texture.getContext('2d').drawImage(textureimg, 0, 0, textureimg.width, textureimg.height);
     textureData = texture.getContext('2d').getImageData(0, 0, texture.width, texture.height);
@@ -145,8 +146,8 @@ function loadBuildings(polys){
     }
 
   };
-  textureimg.src = "../images/treeblot.png";
-
+  //textureimg.src = "../images/treeblot.png";
+  textureimg.src = "../images/steel.png";
 }
 
 function replaceAll(src, oldr, newr){
