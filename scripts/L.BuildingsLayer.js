@@ -55,8 +55,8 @@ function V(b,a){
     var colorOffset = [ intendedColor[0] * 1 - 125, intendedColor[1] * 1 - 125, intendedColor[2] * 1 - 125, intendedColor[3] * 1 ];
     //console.log(colorOffset);
     
-    for(var x=xmin; x<xmax; x+=2){
-	  for(var y=ymin; y<ymax; y+=2){
+    for(var x=xmin; x<xmax-1; x+=2){
+	  for(var y=ymin; y<ymax-1; y+=2){
 	    if(ptInPoly([x,y], pts)){
 	      var texturex = x % texture.width;
 	      var texturey = y % texture.height;
