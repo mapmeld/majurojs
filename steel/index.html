@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <title>Majuro.js + OSM Buildings</title>
+    <link rel="stylesheet" href="../stylesheets/leaflet.css" type="text/css"/>
+    <link rel="stylesheet" href="../pancontrol/stylesheets/L.Control.Pan.css" type="text/css"/>
+    <!-- [if lte IE 8]
+      <link rel="stylesheet" href="../stylesheets/leaflet.ie.css" type="text/css"/>
+      <link rel="stylesheet" href="../pancontrol/stylesheets/L.Control.Pan.ie.css" type="text/css"/>
+    -->
+    <link href="../stylesheets/bootstrap-mini.css" rel="stylesheet" type="text/css"/>
+    <link href='../stylesheets/displaymap.css' rel='stylesheet' type='text/css'/>
+    <script type="text/javascript" src="../scripts/leaflet.js"></script>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../pancontrol/scripts/L.Control.Pan.js"></script>
+    <script type="text/javascript" src="../scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../scripts/L.BuildingsLayer.js"></script>
+    <script type="text/javascript" src="../scripts/osmbuildmap.js"></script>
+  </head>
+  <body>
+    <div id="sidebar" style="padding-left:20px;padding-top:8px;">
+      <h2>MajuroJS</h2>
+      <p>
+        <a href="http://osmbuildings.org" target="_blank">OSM Buildings</a>
+        <span>&nbsp;3D visualization</span>
+      </p>
+      <p>
+        <span>Data downloaded from&nbsp;</span>
+        <a class="allegheny" href="#" onclick="showDataSource()">Allegheny County</a>
+        <a class="austin" href="#" onclick="showDataSource()">City of Austin</a>
+        <a class="baltimore" href="#" onclick="showDataSource()">City of Baltimore</a>
+        <a class="bloomington" href="#" onclick="showDataSource()">City of Bloomington</a>
+        <a class="boston" href="#" onclick="showDataSource()">City of Boston</a>
+        <a class="boulder" href="#" onclick="showDataSource()">City of Boulder</a>
+        <a class="chapelhill" href="#" onclick="showDataSource()">Town of Chapel Hill</a>
+        <a class="chicago" href="#" onclick="showDataSource()">City of Chicago</a>
+        <a class="clark" href="#" onclick="showDataSource()">Clark County</a>
+        <a class="honolulu" href="#" onclick="showDataSource()">City &amp; County of Honolulu</a>
+        <a class="kitsap" href="#" onclick="showDataSource()">Kitsap County</a>
+        <a class="lancaster" href="#" onclick="showDataSource()">Lancaster County</a>
+        <a class="midland" href="#" onclick="showDataSource()">City of Midland</a>
+        <a class="nanaimo" href="#" onclick="showDataSource()">City of Nanaimo</a>
+        <a class="oakland" href="#" onclick="showDataSource()">City of Oakland</a>
+        <a class="petaluma" href="#" onclick="showDataSource()">City of Petaluma</a>
+        <a class="philadelphia" href="#" onclick="showDataSource()">City of Philadelphia</a>
+        <a class="raleigh" href="#" onclick="showDataSource()">City of Raleigh</a>
+        <a class="roundrock" href="#" onclick="showDataSource()">City of Round Rock</a>
+        <a class="sanfrancisco" href="#" onclick="showDataSource()">City and County of San Francisco</a>
+        <a class="savannah" href="#" onclick="showDataSource()">SAGIS</a>
+        <a class="seattle" href="#" onclick="showDataSource()">City of Seattle</a>
+        <a class="smith" href="#" onclick="showDataSource()">Smith County</a>
+        <a class="spokane" href="#" onclick="showDataSource()">City of Spokane</a>
+        <a class="steamboatsprings" href="#" onclick="showDataSource()">City of Steamboat Springs</a>
+        <a class="westsacramento" href="#" onclick="showDataSource()">City of West Sacramento</a>
+      </p>
+    </div>
+    <div id="map">
+    </div>
+    
+    <div id="creditmessage" class="modal hide fade">
+      <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Data Source</h3>
+      </div>
+      <div class="modal-body">
+        <p class="allegheny">
+          <span>Buildings data from Allegheny County, Pennsylvania via&nbsp;</span>
+          <a href="http://www.pasda.psu.edu/" target="_blank">PASDA</a>
+          <br/>
+          <a href="http://www.pasda.psu.edu/uci/FullMetadataDisplay.aspx?file=AlleghenyCounty_Footprints20080616.xml" target="_blank">Data Citation</a>
+        </p>
+        <p class="austin">
+          <span>Buildings data from the City of Austin, Texas via their</span>
+          <a href="ftp://ftp.ci.austin.tx.us/GIS-Data/Regional/coa_gis.html" target="_blank">GIS FTP site</a>
+          <span>set up by the Communications and Technology Department.</span>
+          <br/>
+          <span>A data disclaimer is written on the GIS FTP site.</span>
+        </p>
+        <p class="baltimore">
+          <span>Buildings data from the City of Baltimore, Maryland via the</span>
+          <a href="http://www.baltimorecity.gov/OfficeoftheMayor/MayoralOffices/InformationTechnology/EnterpriseGeographicInformationServices.aspx" target="_blank">Mayor's Office of Information Technology</a>.
+          <br/>
+          <a href="https://data.baltimorecity.gov/Geographic/Building-Footprint-Shape/deus-s85f" target="_blank">Released into Public Domain</a>.
+        </p>
+        <p class="bloomington">
+          <span>Buildings data from the City of Bloomington, Indiana via their website.</span>
+          <a href="http://bloomington.in.gov/documents/viewDocument.php?document_id=1870" target="_blank">Source</a>
+          <br/>
+          <a href="http://bloomington.in.gov/documents/viewDocument.php?document_id=709" target="_blank">Data Policy</a>
+        </p>
+        <p class="boston">
+          <span>Buildings data for the City of Boston via the&nbsp;</span>
+          <a href="http://www.bostonredevelopmentauthority.org/BRA_3D_Models/2D-download.html" target="_blank">Boston Redevelopment Authority</a>.
+          <br/>
+          <a href="http://www.bostonredevelopmentauthority.org/BRA_3D_Models/Index.html" target="_blank">Data Policy</a>
+        </p>
+        <p class="chapelhill">
+          <span>Buildings data for the Town of Chapel Hill, North Carolina via their website,&nbsp;</span>
+          <a href="http://townofchapelhill.org" target="_blank">TownOfChapelHill.org</a>.
+          <br/>
+          <a href="http://gis.townofchapelhill.org/download_data/" target="_blank">GIS Data Disclaimer</a>
+        </p>
+        <p class="chicago">
+          <span>Buildings data from the City of Chicago via&nbsp;</span>
+          <a href="https://data.cityofchicago.org/" target="_blank">data.cityofchicago.org</a>
+          <br/>
+          <a href="https://data.cityofchicago.org/Buildings/Building-Footprints/w2v3-isjw" target="_blank">Public Data</a>
+        </p>
+        <p class="clark">
+          <span>Buildings data from Clark County, Ohio via</span>
+          <a href="http://downloads.ddti.net/ClarkOH/" target="_blank">Digital Data Technologies, Inc.</a>
+        </p>
+        <p class="honolulu">
+          <span>Buildings data from Honolulu Land Information System (Holis), Department of Planning and Permitting, City and County of Honolulu.</span>
+          <br/>
+          <a href="http://gis.hicentral.com/PubWebsite/metadata.aspx" target="_blank">Data Download Page</a>
+        </p>
+        <p class="kitsap">
+          <span>Buildings data from Kitsap County, Washington via their&nbsp;</span>
+          <a href="http://www.kitsapgov.com/gis/" target="_blank">GIS portal</a>.
+          <br/>
+          <a href="http://www.kitsapgov.com/county/privacy.htm" target="_blank">Data Policy</a>
+        </p>
+        <p class="lancaster">
+          <span>Buildings data from Lancaster County, Pennsylvania via&nbsp;</span>
+          <a href="http://www.pasda.psu.edu/" target="_blank">PASDA</a>
+          <br/>
+          <a href="http://www.pasda.psu.edu/uci/LancasterAgreement.asp?File=http://www.pasda.psu.edu/lancco/data/LancasterCountyBuildings200812.zip" target="_blank">Data Use Policy</a>
+        </p>
+        <p class="midland">
+          <span>Buildings data from the City of Midland, Texas via</span>
+          <a href="http://www.midlandtexas.gov" target="_blank">MidlandTexas.gov</a>
+          <br/>
+          <a href="http://www.midlandtexas.gov/departments/development_serv/gis/gis_data.html" target="_blank">GIS Data Information Page</a>
+        </p>
+        <p class="nanaimo">
+          <span>Buildings data from Nanaimo, British Columbia, Canada. Available under a</span>
+          <a href="http://koordinates.com/layer/3200-building-footprint/" target="_blank">Creative Commons Attribution 2.5 license</a>.
+        </p>
+        <p class="oakland">
+          <span>Buildings data from the City of Oakland via&nbsp;</span>
+          <a href="http://www2.oaklandnet.com/Government/o/PBN/OurServices/Plans/DOWD008194" target="_blank">Broadway/Valdez District Specific Plan</a>.
+        </p>
+        <p class="petaluma">
+          <span>Buildings data from the City of Petaluma, California (and multiple online sources, not necessarily controlled by the City of Petaluma) via&nbsp;</span>
+          <a href="http://www.cityofpetaluma.net/cmgr/gis.html" target="_blank">CityOfPetaluma.net</a>
+          <br/>
+          <a href="http://www.cityofpetaluma.net/cmgr/gisdownloads.html" target="_blank">GIS Data Information Page</a>
+        </p>
+        <p class="philadelphia">
+          <span>Buildings data from the City of Philadelphia via&nbsp;</span>
+          <a href="http://www.opendataphilly.org/opendata/resource/6/buildings/" target="_blank">OpenDataPhilly.org</a>
+          <br/>
+          <a href="http://opendataphilly.org/faq/#five" target="_blank">Data Use Policy</a>
+        </p>
+        <p class="raleigh">
+          <span>Buildings data for the City of Raleigh, North Carolina via&nbsp;</span>
+          <a href="http://www.wakegov.com/gis/services/pages/data.aspx" target="_blank">Wake County's GIS page</a>
+          <br/>
+          <a href="http://www.wakegov.com/gis/services/Pages/metadata.aspx" target="_blank">Data Disclaimer</a>
+        </p>
+        <p class="roundrock">
+          <span>Buildings data from the City of Round Rock, Texas or its agents via&nbsp;</span>
+          <a href="http://www.roundrocktexas.gov" target="_blank">RoundRockTexas.gov</a>
+          <br/>
+          <a href="http://www.roundrocktexas.gov/home/index.asp?page=517" target="_blank">GIS Data Information Page</a>
+        </p>
+        <p class="sanfrancisco">
+          <span>Buildings data from the City and County of San Francisco, California via&nbsp;</span>
+          <a href="http://data.sfgov.org" target="_blank">data.sfgov.org</a>.
+          <br/>
+          <a href="https://data.sfgov.org/Facilities-and-Structures/Building-Footprints-Zipped-Shapefile-Format-/jezr-5bxm" target="_blank">Creative Commons Zero License</a>
+        </p>
+        <p class="savannah">
+          <span>Buildings data from the Metropolitan Planning Commission and Savannah Area GIS. Visit&nbsp;</span>
+          <a href="http://www.thempc.org/SAGIS.htm" target="_blank">thempc.org</a>
+          <span>&nbsp;and&nbsp;</span>
+          <a href="http://www.sagis.org" target="_blank">SAGIS.org</a>
+          <br/>
+          <a href="http://www.thempc.org/SAGIS/Q_Export/default.htm" target="_blank">Data Use Policy</a>
+        </p>
+        <p class="seattle">
+          <span>Buildings data from the City of Seattle via&nbsp;</span>
+          <a href="https://data.seattle.gov" target="_blank">data.seattle.gov</a>
+          <br/>
+          <a href="https://data.seattle.gov/dataset/2009-Building-Outlines/y7u8-vad7" target="_blank">Public Domain</a>
+        </p>
+        <p class="spokane">
+          <span>Buildings data from the City of Spokane via their&nbsp;</span>
+          <a href="http://www.spokanecity.org/services/gis/data/", target="_blank">GIS portal</a>.
+          <br/>
+          <a href="http://www.spokanecity.org/services/gis/disclaimer/" target="_blank">Data Disclaimer</a>
+        </p>
+        <p class="steamboatsprings">
+          <span>Buildings data from the City of Steamboat Springs, Colorado via their&nbsp;</span>
+          <a href="http://steamboatsprings.net/index.aspx?NID=210", target="_blank">GIS page</a>.
+        </p>
+        <p class="westsacramento">
+          <span>Buildings data from the City of West Sacramento, California via their</span>
+          <a href="http://www.cityofwestsacramento.org/services/gis/downloads.asp" target="_blank">GIS site</a>.
+          <br/>
+          <a href="http://maps.cityofwestsacramento.org/resources/documents/City%20Disclaimer.pdf" target="_blank">Data Disclaimer (PDF)</a>
+        </p>
+        <br/>
+        <span>There is no official endorsement or maintenance of this site by this city or county.</span>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary" href="#" onclick="$('.modal').modal('toggle');">Close</a>
+      </div>
+    </div>
+  </body>
+</html>
