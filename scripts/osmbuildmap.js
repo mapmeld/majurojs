@@ -137,7 +137,7 @@ function loadBuildings(polys){
         avg[1] += polys.features[f].geometry.coordinates[0][c][1];
         polys.features[f].geometry.coordinates[0][c].push( 100 ); // add a fixed height
       }
-      polys.features[f].properties = { "color": "rgb(125,125,125,230)" };
+      polys.features[f].properties = { "color": "rgba(125,125,125,230)" };
 
     }
     if(polys.features.length){
