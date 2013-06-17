@@ -34,45 +34,48 @@ function V(b,a){
     }
     K.closePath();
     a&&K.stroke();
-
-    var pts = [ ];
-    var xmin = b[0];
-    var xmax = b[0];
-    var ymin = b[1];
-    var ymax = b[1];
-    for(var pt=0;pt<b.length;pt+=2){
-      if(pt){
-        xmin = Math.min(xmin, b[pt]);
-        xmax = Math.max(xmax, b[pt]);
-        ymin = Math.min(ymin, b[pt+1]);
-        ymax = Math.max(ymax, b[pt+1]);
+    
+    if(!moving){
+      var pts = [ ];
+      var xmin = b[0];
+      var xmax = b[0];
+      var ymin = b[1];
+      var ymax = b[1];
+      for(var pt=0;pt<b.length;pt+=2){
+        if(pt){
+          xmin = Math.min(xmin, b[pt]);
+          xmax = Math.max(xmax, b[pt]);
+          ymin = Math.min(ymin, b[pt+1]);
+          ymax = Math.max(ymax, b[pt+1]);
+        }
+        pts.push( [ b[pt], b[pt+1] ] );
       }
-      pts.push( [ b[pt], b[pt+1] ] );
-    }
     
-    var intendedColor = K.fillStyle.replace("rgba(","").replace(")","").split(", ");    
-    //console.log(intendedColor);
-    var colorOffset = [ intendedColor[0] * 1 - 125, intendedColor[1] * 1 - 125, intendedColor[2] * 1 - 125, intendedColor[3] * 1 ];
-    //console.log(colorOffset);
+      var intendedColor = K.fillStyle.replace("rgba(","").replace(")","").split(", ");    
+      //console.log(intendedColor);
+      var colorOffset = [ intendedColor[0] * 1 - 125, intendedColor[1] * 1 - 125, intendedColor[2] * 1 - 125, intendedColor[3] * 1 ];
+      //console.log(colorOffset);
     
-    for(var x=xmin; x<xmax; x++){
-	  for(var y=ymin; y<ymax; y++){
-	    if(ptInPoly([x,y], pts)){
-	      var texturex = (x-xmin) % texture.width;
-	      var texturey = (y-ymin) % texture.height;
-	      var texturepixel = [
-	        Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 ] + colorOffset[0])),
-	        Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 + 1] + colorOffset[1])),
-	        Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 + 2] + colorOffset[2])),
-	        1 - (1 - colorOffset[3]) / 2
-	      ];
-	      K.fillStyle = "rgba(" + texturepixel.join(",") + ")";
-	      K.fillRect(x, y, 1, 1);
+      for(var x=xmin; x<xmax; x++){
+        for(var y=ymin; y<ymax; y++){
+	      if(ptInPoly([x,y], pts)){
+	        var texturex = (x-xmin) % texture.width;
+	        var texturey = (y-ymin) % texture.height;
+	        var texturepixel = [
+	          Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 ] + colorOffset[0])),
+	          Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 + 1] + colorOffset[1])),
+	          Math.max(0, Math.min(255, textureData.data[ texturey * 4 * texturewidth + texturex * 4 + 2] + colorOffset[2])),
+	          1 - (1 - colorOffset[3]) / 2
+	        ];
+	        K.fillStyle = "rgba(" + texturepixel.join(",") + ")";
+	        K.fillRect(x, y, 1, 1);
+	      }
 	    }
-	  }
+      }
     }
-    //K.putImageData(imgData, xmin, ymin);
-    //K.fill();
+    else{
+      K.fill();
+    }
   }
 }
 

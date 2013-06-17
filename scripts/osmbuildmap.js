@@ -1,4 +1,5 @@
 var map, texture, textureData, texturewidth;
+var moving = false;
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
@@ -13,6 +14,14 @@ $(document).ready(function(){
   terrainLayer = new L.TileLayer(toner, {maxZoom: 18, attribution: tonerAttrib});
   map.addLayer(terrainLayer);
   map.setView(new L.LatLng(32.076175,-81.095238), 14);
+  
+  // avoid texturing during map moves
+  map.on('movestart', function(e){
+    moving = true;
+  });
+  map.on('moveend', function(e){
+    moving = false;
+  });
 
   // load same customgeo used to generate this map
   $.getJSON('../mybuild.geojson', loadBuildings);
