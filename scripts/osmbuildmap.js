@@ -1,4 +1,4 @@
-var map, texture, textureData, texturewidth;
+var map, texture, textureData, texturewidth, buildLayer;
 var moving = false;
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
@@ -18,6 +18,10 @@ $(document).ready(function(){
   // avoid texturing during map moves
   map.on('movestart', function(e){
     moving = true;
+  });
+  map.on('zoomend', function(e){
+    moving = false;
+    buildLayer.setStyle({ "color": "rgba(125,125,125,0.95)" });
   });
   map.on('moveend', function(e){
     moving = false;
@@ -151,7 +155,7 @@ function loadBuildings(polys){
     }
     if(polys.features.length){
       map.fitBounds( new L.LatLngBounds( new L.LatLng(minlat, minlng), new L.LatLng(maxlat, maxlng) ) );
-      new L.BuildingsLayer().addTo(map).geoJSON(polys);
+      buildLayer = new L.BuildingsLayer().addTo(map).geoJSON(polys);
     }
 
   };
