@@ -21,7 +21,7 @@ $(document).ready(function(){
   });
   map.on('zoomend', function(e){
     moving = false;
-    buildLayer.setStyle({ "color": "rgba(125,125,125,0.95)" });
+    buildLayer.setStyle({ "wallColor": "rgba(125,125,125,0.95)" });
   });
   map.on('moveend', function(e){
     moving = false;
@@ -150,7 +150,7 @@ function loadBuildings(polys){
         avg[1] += polys.features[f].geometry.coordinates[0][c][1];
         polys.features[f].geometry.coordinates[0][c].push( 100 ); // add a fixed height
       }
-      polys.features[f].properties = { "color": "rgba(125,125,125,0.95)" };
+      polys.features[f].properties = { "wallColor": "rgba(125,125,125,0.95)" };
 
     }
     if(polys.features.length){
