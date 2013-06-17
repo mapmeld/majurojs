@@ -21,7 +21,7 @@ $(document).ready(function(){
   });
   map.on('zoomend', function(e){
     moving = false;
-    buildLayer.setStyle({ "wallColor": "rgba(125,125,125,0.95)" });
+    buildLayer.setStyle({ "wallColor": "rgba(125,125,125,0.95)", "roofColor": null });
   });
   map.on('moveend', function(e){
     moving = false;
