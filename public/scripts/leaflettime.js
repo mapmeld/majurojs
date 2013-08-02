@@ -73,6 +73,12 @@ var city_options = {
     zoom: 14,
     time: false
   },
+  nyc: {
+    lat: 40.713175,
+    lng: -73.952751,
+    zoom: 13,
+    time: true
+  },
   oakland: {
     lat: 37.810055,
     lng: -122.263648,
@@ -300,6 +306,9 @@ $(document).ready(function(){
         break;
       case "nanaimo":
         src_credits = ".nanaimo";
+        break;
+      case "nyc":
+        src_credits = ".nyc";
         break;
       case "oakland":
         src_credits = ".oakland";

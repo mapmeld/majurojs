@@ -73,6 +73,12 @@ var city_options = {
     zoom: 14,
     time: false
   },
+  nyc: {
+    lat: 40.713175,
+    lng: -73.952751,
+    zoom: 13,
+    time: true
+  },
   oakland: {
     lat: 37.795135,
     lng: -122.255173,
