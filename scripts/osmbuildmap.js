@@ -79,6 +79,9 @@ function loadBuildings(polys){
     case "nanaimo":
       src_credits = ".nanaimo";
       break;
+    case "nyc":
+      src_credits = ".nyc";
+      break;
     case "oakland":
       src_credits = ".oakland";
       break;
