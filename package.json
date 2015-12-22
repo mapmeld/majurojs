@@ -1,31 +1,29 @@
 {
-    "name": "MajuroJS"
-  , "version": "0.0.1"
-  , "private": false
-  , "dependencies": {
-      "express": ">= 2.5.8"
-    , "jade": ">= 0.0.1"
-    , "mongoose-auth": ">=0.0.11"
-    , "mongoose": ">=2.7.1"
-    , "everyauth": ">=0.2.30"
-    , "bcrypt": ">=0.5.0"
-    , "connect-mongo": ">=0.1.9"
-    , "connect": ">= 1.8.5 < 2"
-    , "underscore": "1.1.x"
-    , "oauth": "0.9.5"
-    , "superagent": "0.4.x"
-  },
-  "engines": {
-        "node": "0.8.X",
-        "npm":  "1.1.x"
+  "name": "MajuroJS",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "bcrypt": ">=0.5.0",
+    "body-parser": "^1.14.2",
+    "connect": ">= 1.8.5 < 2",
+    "connect-mongo": ">=0.1.9",
+    "cookie-parser": "^1.4.0",
+    "everyauth": ">=0.2.30",
+    "express": ">= 2.5.8",
+    "jade": ">= 0.0.1",
+    "mongoose": ">=2.7.1",
+    "mongoose-auth": ">=0.0.11",
+    "oauth": "0.9.5",
+    "superagent": "0.4.x",
+    "underscore": "1.1.x"
   },
   "devDependencies": {
-      "mocha": ">=0.11.0"
-    , "should": ">=0.5.1"
-    , "sinon": ">=1.3.1"
-    , "zombie": ">= 0.12.15"
+    "mocha": ">=0.11.0",
+    "should": ">=0.5.1",
+    "sinon": ">=1.3.1",
+    "zombie": ">= 0.12.15"
   },
   "scripts": {
-      "test": "mocha -R tap --ignore-leaks"
+    "test": "mocha -R tap --ignore-leaks"
   }
 }
